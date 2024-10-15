@@ -1,0 +1,26 @@
+speakeasyVersion: 1.418.4
+sources:
+    ArgotOpenAi-OAS:
+        sourceNamespace: argot-open-ai-oas
+        sourceRevisionDigest: sha256:737ca0ea5706d0f162f24e75d4b4a9dc0c338d99c374eb635506819a078c1ee5
+        sourceBlobDigest: sha256:775e42f6d15e01e8ea4c80496c1cbd34c86c6b95e5c87285c82f111eaa14fca4
+        tags:
+            - latest
+targets:
+    argot-open-ai:
+        source: ArgotOpenAi-OAS
+        sourceNamespace: argot-open-ai-oas
+        sourceRevisionDigest: sha256:737ca0ea5706d0f162f24e75d4b4a9dc0c338d99c374eb635506819a078c1ee5
+        sourceBlobDigest: sha256:775e42f6d15e01e8ea4c80496c1cbd34c86c6b95e5c87285c82f111eaa14fca4
+workflow:
+    workflowVersion: 1.0.0
+    sources:
+        ArgotOpenAi-OAS:
+            inputs:
+                - location: ../openai-openapi.yaml
+            registry:
+                location: registry.speakeasyapi.dev/argot/argot/argot-open-ai-oas
+    targets:
+        argot-open-ai:
+            target: typescript
+            source: ArgotOpenAi-OAS

@@ -1,0 +1,24 @@
+# Integrations
+
+## Example Usage
+
+```typescript
+import { Integrations } from "argot-open-ai/models/components";
+
+let value: Integrations = {
+  type: "wandb",
+  wandb: {
+    project: "my-wandb-project",
+    tags: [
+      "custom-tag",
+    ],
+  },
+};
+```
+
+## Fields
+
+| Field                                                                                                                                                                                                                                                                                            | Type                                                                                                                                                                                                                                                                                             | Required                                                                                                                                                                                                                                                                                         | Description                                                                                                                                                                                                                                                                                      |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `type`                                                                                                                                                                                                                                                                                           | *components.CreateFineTuningJobRequestType*                                                                                                                                                                                                                                                      | :heavy_check_mark:                                                                                                                                                                                                                                                                               | The type of integration to enable. Currently, only "wandb" (Weights and Biases) is supported.<br/>                                                                                                                                                                                               |
+| `wandb`                                                                                                                                                                                                                                                                                          | [components.CreateFineTuningJobRequestWandb](../../models/components/createfinetuningjobrequestwandb.md)                                                                                                                                                                                         | :heavy_check_mark:                                                                                                                                                                                                                                                                               | The settings for your integration with Weights and Biases. This payload specifies the project that<br/>metrics will be sent to. Optionally, you can set an explicit display name for your run, add tags<br/>to your run, and set a default entity (team, username, etc) to be associated with your run.<br/> |
