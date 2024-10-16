@@ -1,14 +1,15 @@
 workflowVersion: 1.0.0
+speakeasyVersion: latest
 sources:
-    ArgotOpenAi-OAS:
-        inputs:
-            - location: openai-openapi.yaml
-        registry:
-            location: registry.speakeasyapi.dev/argot/argot/argot-open-ai-oas
+  ArgotOpenAi-OAS:
+    inputs:
+      - location: openai-openapi.yaml
+    registry:
+      location: registry.speakeasyapi.dev/argot/argot/argot-open-ai-oas
 targets:
-    argot-open-ai:
-        target: typescript
-        source: ArgotOpenAi-OAS
-        publish:
-            npm:
-                token: $npm_token
+  argot-open-ai:
+    target: typescript
+    source: ArgotOpenAi-OAS
+    publish:
+      npm:
+        token: $npm_token
