@@ -5,8 +5,10 @@ management:
   docVersion: 2.3.0
   speakeasyVersion: 1.418.4
   generationVersion: 2.438.3
-  releaseVersion: 0.0.1
-  configChecksum: 85c8b6226eed3afbf81ed7c33461448a
+  releaseVersion: 0.0.2
+  configChecksum: 9c1e24c605719ffc54053920f6c091cc
+  repoURL: https://github.com/argotdev/speakeasy-sdk.git
+  installationURL: https://github.com/argotdev/speakeasy-sdk
 features:
   typescript:
     additionalDependencies: 0.1.0
@@ -1163,7 +1165,7 @@ examples:
         application/json: {"prompt": "A cute baby sea otter", "model": "dall-e-3", "n": 1, "quality": "standard", "response_format": "url", "size": "1024x1024", "style": "vivid", "user": "user-1234"}
       responses:
         "200":
-          application/json: {"created": 194679}
+          application/json: {"created": 194679, "data": []}
   createImageEdit:
     speakeasy-default-create-image-edit:
       requestBody:
