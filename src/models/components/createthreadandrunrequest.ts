@@ -531,7 +531,7 @@ export const CreateThreadAndRunRequest$inboundSchema: z.ZodType<
   max_completion_tokens: z.nullable(z.number().int()).optional(),
   truncation_strategy: TruncationObject$inboundSchema.optional(),
   tool_choice: AssistantsApiToolChoiceOption$inboundSchema.optional(),
-  parallel_tool_calls: z.boolean().default(true),
+  parallel_tool_calls: z.boolean().default(false),
   response_format: AssistantsApiResponseFormatOption$inboundSchema.optional(),
 }).transform((v) => {
   return remap$(v, {
