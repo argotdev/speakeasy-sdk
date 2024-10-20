@@ -590,7 +590,7 @@ export const CreateChatCompletionRequest$inboundSchema: z.ZodType<
   top_p: z.nullable(z.number().default(1)),
   tools: z.array(ChatCompletionTool$inboundSchema).optional(),
   tool_choice: ChatCompletionToolChoiceOption$inboundSchema.optional(),
-  parallel_tool_calls: z.boolean().default(false),
+  parallel_tool_calls: z.boolean().default(true),
   user: z.string().optional(),
   function_call: z.union([
     ChatCompletionFunctionCallOption$inboundSchema,

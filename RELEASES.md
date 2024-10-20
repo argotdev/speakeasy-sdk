@@ -17,3 +17,13 @@ Based on:
 - [typescript v0.0.3] .
 ### Releases
 - [NPM v0.0.3] https://www.npmjs.com/package/argot-open-ai/v/0.0.3 - .
+
+## 2024-10-20 20:08:43
+### Changes
+Based on:
+- OpenAPI Doc  
+- Speakeasy CLI 1.419.2 (2.438.15) https://github.com/speakeasy-api/speakeasy
+### Generated
+- [typescript v0.0.4] .
+### Releases
+- [NPM v0.0.4] https://www.npmjs.com/package/argot-open-ai/v/0.0.4 - .

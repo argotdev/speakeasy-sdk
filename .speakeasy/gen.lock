@@ -5,8 +5,8 @@ management:
   docVersion: 2.3.0
   speakeasyVersion: 1.419.2
   generationVersion: 2.438.15
-  releaseVersion: 0.0.3
-  configChecksum: d4cc895b07940add951b339f4dd15441
+  releaseVersion: 0.0.4
+  configChecksum: bcf34b7256bf00bee4ddd1dba527c05d
   repoURL: https://github.com/argotdev/speakeasy-sdk.git
   installationURL: https://github.com/argotdev/speakeasy-sdk
   published: true
