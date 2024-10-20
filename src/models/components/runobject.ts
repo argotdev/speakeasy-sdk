@@ -696,7 +696,7 @@ export const RunObject$inboundSchema: z.ZodType<
   max_completion_tokens: z.nullable(z.number().int()),
   truncation_strategy: TruncationObject$inboundSchema,
   tool_choice: AssistantsApiToolChoiceOption$inboundSchema,
-  parallel_tool_calls: z.boolean().default(true),
+  parallel_tool_calls: z.boolean().default(false),
   response_format: AssistantsApiResponseFormatOption$inboundSchema,
 }).transform((v) => {
   return remap$(v, {
