@@ -3,12 +3,13 @@ id: 61a4ac00-e7ed-4a10-9e0f-47f8aef9702c
 management:
   docChecksum: d96ad338ba3c4b1901b5d92a729b63d9
   docVersion: 2.3.0
-  speakeasyVersion: 1.418.4
-  generationVersion: 2.438.3
-  releaseVersion: 0.0.2
-  configChecksum: 9c1e24c605719ffc54053920f6c091cc
+  speakeasyVersion: 1.419.2
+  generationVersion: 2.438.15
+  releaseVersion: 0.0.3
+  configChecksum: d4cc895b07940add951b339f4dd15441
   repoURL: https://github.com/argotdev/speakeasy-sdk.git
   installationURL: https://github.com/argotdev/speakeasy-sdk
+  published: true
 features:
   typescript:
     additionalDependencies: 0.1.0

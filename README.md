@@ -45,25 +45,25 @@ The SDK can be installed with either [npm](https://www.npmjs.com/), [pnpm](https
 ### NPM
 
 ```bash
-npm add https://github.com/argotdev/speakeasy-sdk
+npm add argot-open-ai
 ```
 
 ### PNPM
 
 ```bash
-pnpm add https://github.com/argotdev/speakeasy-sdk
+pnpm add argot-open-ai
 ```
 
 ### Bun
 
 ```bash
-bun add https://github.com/argotdev/speakeasy-sdk
+bun add argot-open-ai
 ```
 
 ### Yarn
 
 ```bash
-yarn add https://github.com/argotdev/speakeasy-sdk zod
+yarn add argot-open-ai zod
 
 # Note that Yarn does not install peer dependencies automatically. You will need
 # to install zod as shown above.
