@@ -335,7 +335,7 @@ export type CreateChatCompletionRequest = {
   /**
    * Whether to enable [parallel function calling](/docs/guides/function-calling/parallel-function-calling) during tool use.
    */
-  parallelToolCalls?: boolean | undefined;
+  //parallelToolCalls?: boolean | undefined;
   /**
    * A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).
    *
