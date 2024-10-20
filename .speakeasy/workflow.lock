@@ -2,7 +2,7 @@ speakeasyVersion: 1.419.2
 sources:
     ArgotOpenAi-OAS:
         sourceNamespace: argot-open-ai-oas
-        sourceRevisionDigest: sha256:4752c26481f17da834b8c625233e2b81af530494b702001f41cb10e8c4b5f877
+        sourceRevisionDigest: sha256:a14f67eb2cabf63f73303b532aa095227bb699b17889ac14e3c5c00ffe2122dc
         sourceBlobDigest: sha256:bbab06460b3d531ea46c3b4e1c4b378dc258d69d352cb96aa91c6ab7f0427c5f
         tags:
             - latest
@@ -11,7 +11,7 @@ targets:
     argot-open-ai:
         source: ArgotOpenAi-OAS
         sourceNamespace: argot-open-ai-oas
-        sourceRevisionDigest: sha256:4752c26481f17da834b8c625233e2b81af530494b702001f41cb10e8c4b5f877
+        sourceRevisionDigest: sha256:a14f67eb2cabf63f73303b532aa095227bb699b17889ac14e3c5c00ffe2122dc
         sourceBlobDigest: sha256:bbab06460b3d531ea46c3b4e1c4b378dc258d69d352cb96aa91c6ab7f0427c5f
 workflow:
     workflowVersion: 1.0.0
