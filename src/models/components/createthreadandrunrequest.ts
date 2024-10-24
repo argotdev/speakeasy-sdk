@@ -206,10 +206,6 @@ export type CreateThreadAndRunRequest = {
    */
   toolChoice?: AssistantsApiToolChoiceOption | undefined;
   /**
-   * Whether to enable [parallel function calling](/docs/guides/function-calling/parallel-function-calling) during tool use.
-   */
-  parallelToolCalls?: boolean | undefined;
-  /**
    * Specifies the format that the model must output. Compatible with [GPT-4o](/docs/models/gpt-4o), [GPT-4 Turbo](/docs/models/gpt-4-turbo-and-gpt-4), and all GPT-3.5 Turbo models since `gpt-3.5-turbo-1106`.
    *
    * @remarks
@@ -531,7 +527,6 @@ export const CreateThreadAndRunRequest$inboundSchema: z.ZodType<
   max_completion_tokens: z.nullable(z.number().int()).optional(),
   truncation_strategy: TruncationObject$inboundSchema.optional(),
   tool_choice: AssistantsApiToolChoiceOption$inboundSchema.optional(),
-  parallel_tool_calls: z.boolean().default(true),
   response_format: AssistantsApiResponseFormatOption$inboundSchema.optional(),
 }).transform((v) => {
   return remap$(v, {
@@ -542,7 +537,6 @@ export const CreateThreadAndRunRequest$inboundSchema: z.ZodType<
     "max_completion_tokens": "maxCompletionTokens",
     "truncation_strategy": "truncationStrategy",
     "tool_choice": "toolChoice",
-    "parallel_tool_calls": "parallelToolCalls",
     "response_format": "responseFormat",
   });
 });
@@ -573,7 +567,6 @@ export type CreateThreadAndRunRequest$Outbound = {
   max_completion_tokens?: number | null | undefined;
   truncation_strategy?: TruncationObject$Outbound | undefined;
   tool_choice?: AssistantsApiToolChoiceOption$Outbound | undefined;
-  parallel_tool_calls: boolean;
   response_format?: AssistantsApiResponseFormatOption$Outbound | undefined;
 };
 
@@ -611,7 +604,6 @@ export const CreateThreadAndRunRequest$outboundSchema: z.ZodType<
   maxCompletionTokens: z.nullable(z.number().int()).optional(),
   truncationStrategy: TruncationObject$outboundSchema.optional(),
   toolChoice: AssistantsApiToolChoiceOption$outboundSchema.optional(),
-  parallelToolCalls: z.boolean().default(true),
   responseFormat: AssistantsApiResponseFormatOption$outboundSchema.optional(),
 }).transform((v) => {
   return remap$(v, {
@@ -622,7 +614,6 @@ export const CreateThreadAndRunRequest$outboundSchema: z.ZodType<
     maxCompletionTokens: "max_completion_tokens",
     truncationStrategy: "truncation_strategy",
     toolChoice: "tool_choice",
-    parallelToolCalls: "parallel_tool_calls",
     responseFormat: "response_format",
   });
 });

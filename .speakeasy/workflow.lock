@@ -1,9 +1,9 @@
-speakeasyVersion: 1.419.2
+speakeasyVersion: 1.421.1
 sources:
     ArgotOpenAi-OAS:
         sourceNamespace: argot-open-ai-oas
-        sourceRevisionDigest: sha256:a14f67eb2cabf63f73303b532aa095227bb699b17889ac14e3c5c00ffe2122dc
-        sourceBlobDigest: sha256:bbab06460b3d531ea46c3b4e1c4b378dc258d69d352cb96aa91c6ab7f0427c5f
+        sourceRevisionDigest: sha256:57762a25bf2b9db92394f493016221caac15a961a8b0d0daf781fbf169cf11de
+        sourceBlobDigest: sha256:1ac004496342b737f8cbb62c2de296ce98c3851f1082d3b6d73d7f312b6d247e
         tags:
             - latest
             - main
@@ -11,8 +11,8 @@ targets:
     argot-open-ai:
         source: ArgotOpenAi-OAS
         sourceNamespace: argot-open-ai-oas
-        sourceRevisionDigest: sha256:a14f67eb2cabf63f73303b532aa095227bb699b17889ac14e3c5c00ffe2122dc
-        sourceBlobDigest: sha256:bbab06460b3d531ea46c3b4e1c4b378dc258d69d352cb96aa91c6ab7f0427c5f
+        sourceRevisionDigest: sha256:57762a25bf2b9db92394f493016221caac15a961a8b0d0daf781fbf169cf11de
+        sourceBlobDigest: sha256:1ac004496342b737f8cbb62c2de296ce98c3851f1082d3b6d73d7f312b6d247e
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest

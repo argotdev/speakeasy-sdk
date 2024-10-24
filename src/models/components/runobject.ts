@@ -299,10 +299,6 @@ export type RunObject = {
    */
   toolChoice: AssistantsApiToolChoiceOption;
   /**
-   * Whether to enable [parallel function calling](/docs/guides/function-calling/parallel-function-calling) during tool use.
-   */
-  parallelToolCalls?: boolean | undefined;
-  /**
    * Specifies the format that the model must output. Compatible with [GPT-4o](/docs/models/gpt-4o), [GPT-4 Turbo](/docs/models/gpt-4-turbo-and-gpt-4), and all GPT-3.5 Turbo models since `gpt-3.5-turbo-1106`.
    *
    * @remarks
@@ -696,7 +692,6 @@ export const RunObject$inboundSchema: z.ZodType<
   max_completion_tokens: z.nullable(z.number().int()),
   truncation_strategy: TruncationObject$inboundSchema,
   tool_choice: AssistantsApiToolChoiceOption$inboundSchema,
-  parallel_tool_calls: z.boolean().default(true),
   response_format: AssistantsApiResponseFormatOption$inboundSchema,
 }).transform((v) => {
   return remap$(v, {
@@ -716,7 +711,6 @@ export const RunObject$inboundSchema: z.ZodType<
     "max_completion_tokens": "maxCompletionTokens",
     "truncation_strategy": "truncationStrategy",
     "tool_choice": "toolChoice",
-    "parallel_tool_calls": "parallelToolCalls",
     "response_format": "responseFormat",
   });
 });
@@ -752,7 +746,6 @@ export type RunObject$Outbound = {
   max_completion_tokens: number | null;
   truncation_strategy: TruncationObject$Outbound;
   tool_choice: AssistantsApiToolChoiceOption$Outbound;
-  parallel_tool_calls: boolean;
   response_format: AssistantsApiResponseFormatOption$Outbound;
 };
 
@@ -795,7 +788,6 @@ export const RunObject$outboundSchema: z.ZodType<
   maxCompletionTokens: z.nullable(z.number().int()),
   truncationStrategy: TruncationObject$outboundSchema,
   toolChoice: AssistantsApiToolChoiceOption$outboundSchema,
-  parallelToolCalls: z.boolean().default(true),
   responseFormat: AssistantsApiResponseFormatOption$outboundSchema,
 }).transform((v) => {
   return remap$(v, {
@@ -815,7 +807,6 @@ export const RunObject$outboundSchema: z.ZodType<
     maxCompletionTokens: "max_completion_tokens",
     truncationStrategy: "truncation_strategy",
     toolChoice: "tool_choice",
-    parallelToolCalls: "parallel_tool_calls",
     responseFormat: "response_format",
   });
 });

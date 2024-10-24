@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 61a4ac00-e7ed-4a10-9e0f-47f8aef9702c
 management:
-  docChecksum: d96ad338ba3c4b1901b5d92a729b63d9
+  docChecksum: c58ce1a8f4761676d0ec62b40ce3b5af
   docVersion: 2.3.0
-  speakeasyVersion: 1.419.2
+  speakeasyVersion: 1.421.1
   generationVersion: 2.438.15
-  releaseVersion: 0.0.4
-  configChecksum: bcf34b7256bf00bee4ddd1dba527c05d
+  releaseVersion: 0.0.5
+  configChecksum: 20495d52a63fb99b59bfcbbc62b92c6b
   repoURL: https://github.com/argotdev/speakeasy-sdk.git
   installationURL: https://github.com/argotdev/speakeasy-sdk
   published: true
