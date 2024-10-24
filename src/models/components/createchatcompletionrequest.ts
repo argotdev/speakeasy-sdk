@@ -333,10 +333,6 @@ export type CreateChatCompletionRequest = {
    */
   toolChoice?: ChatCompletionToolChoiceOption | undefined;
   /**
-   * Whether to enable [parallel function calling](/docs/guides/function-calling/parallel-function-calling) during tool use.
-   */
-  parallelToolCalls?: boolean | undefined;
-  /**
    * A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).
    *
    * @remarks
@@ -590,7 +586,6 @@ export const CreateChatCompletionRequest$inboundSchema: z.ZodType<
   top_p: z.nullable(z.number().default(1)),
   tools: z.array(ChatCompletionTool$inboundSchema).optional(),
   tool_choice: ChatCompletionToolChoiceOption$inboundSchema.optional(),
-  parallel_tool_calls: z.boolean().default(true),
   user: z.string().optional(),
   function_call: z.union([
     ChatCompletionFunctionCallOption$inboundSchema,
@@ -610,7 +605,6 @@ export const CreateChatCompletionRequest$inboundSchema: z.ZodType<
     "stream_options": "streamOptions",
     "top_p": "topP",
     "tool_choice": "toolChoice",
-    "parallel_tool_calls": "parallelToolCalls",
     "function_call": "functionCall",
   });
 });
@@ -641,7 +635,6 @@ export type CreateChatCompletionRequest$Outbound = {
   top_p: number | null;
   tools?: Array<ChatCompletionTool$Outbound> | undefined;
   tool_choice?: ChatCompletionToolChoiceOption$Outbound | undefined;
-  parallel_tool_calls: boolean;
   user?: string | undefined;
   function_call?:
     | ChatCompletionFunctionCallOption$Outbound
@@ -681,7 +674,6 @@ export const CreateChatCompletionRequest$outboundSchema: z.ZodType<
   topP: z.nullable(z.number().default(1)),
   tools: z.array(ChatCompletionTool$outboundSchema).optional(),
   toolChoice: ChatCompletionToolChoiceOption$outboundSchema.optional(),
-  parallelToolCalls: z.boolean().default(true),
   user: z.string().optional(),
   functionCall: z.union([
     ChatCompletionFunctionCallOption$outboundSchema,
@@ -701,7 +693,6 @@ export const CreateChatCompletionRequest$outboundSchema: z.ZodType<
     streamOptions: "stream_options",
     topP: "top_p",
     toolChoice: "tool_choice",
-    parallelToolCalls: "parallel_tool_calls",
     functionCall: "function_call",
   });
 });
