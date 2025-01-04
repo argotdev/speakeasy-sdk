@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
 import * as components from "../components/index.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type CreateProjectUserRequest = {
   /**
@@ -64,4 +67,22 @@ export namespace CreateProjectUserRequest$ {
   export const outboundSchema = CreateProjectUserRequest$outboundSchema;
   /** @deprecated use `CreateProjectUserRequest$Outbound` instead. */
   export type Outbound = CreateProjectUserRequest$Outbound;
+}
+
+export function createProjectUserRequestToJSON(
+  createProjectUserRequest: CreateProjectUserRequest,
+): string {
+  return JSON.stringify(
+    CreateProjectUserRequest$outboundSchema.parse(createProjectUserRequest),
+  );
+}
+
+export function createProjectUserRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateProjectUserRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateProjectUserRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateProjectUserRequest' from JSON`,
+  );
 }

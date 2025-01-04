@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   FunctionObject,
   FunctionObject$inboundSchema,
@@ -90,4 +93,22 @@ export namespace AssistantToolsFunction$ {
   export const outboundSchema = AssistantToolsFunction$outboundSchema;
   /** @deprecated use `AssistantToolsFunction$Outbound` instead. */
   export type Outbound = AssistantToolsFunction$Outbound;
+}
+
+export function assistantToolsFunctionToJSON(
+  assistantToolsFunction: AssistantToolsFunction,
+): string {
+  return JSON.stringify(
+    AssistantToolsFunction$outboundSchema.parse(assistantToolsFunction),
+  );
+}
+
+export function assistantToolsFunctionFromJSON(
+  jsonString: string,
+): SafeParseResult<AssistantToolsFunction, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AssistantToolsFunction$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AssistantToolsFunction' from JSON`,
+  );
 }

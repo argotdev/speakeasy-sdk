@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type DeleteProjectApiKeyRequest = {
   /**
@@ -63,4 +66,22 @@ export namespace DeleteProjectApiKeyRequest$ {
   export const outboundSchema = DeleteProjectApiKeyRequest$outboundSchema;
   /** @deprecated use `DeleteProjectApiKeyRequest$Outbound` instead. */
   export type Outbound = DeleteProjectApiKeyRequest$Outbound;
+}
+
+export function deleteProjectApiKeyRequestToJSON(
+  deleteProjectApiKeyRequest: DeleteProjectApiKeyRequest,
+): string {
+  return JSON.stringify(
+    DeleteProjectApiKeyRequest$outboundSchema.parse(deleteProjectApiKeyRequest),
+  );
+}
+
+export function deleteProjectApiKeyRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<DeleteProjectApiKeyRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => DeleteProjectApiKeyRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeleteProjectApiKeyRequest' from JSON`,
+  );
 }

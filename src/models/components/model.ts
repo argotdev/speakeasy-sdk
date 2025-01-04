@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The object type, which is always "model".
@@ -106,4 +109,18 @@ export namespace Model$ {
   export const outboundSchema = Model$outboundSchema;
   /** @deprecated use `Model$Outbound` instead. */
   export type Outbound = Model$Outbound;
+}
+
+export function modelToJSON(model: Model): string {
+  return JSON.stringify(Model$outboundSchema.parse(model));
+}
+
+export function modelFromJSON(
+  jsonString: string,
+): SafeParseResult<Model, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Model$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Model' from JSON`,
+  );
 }

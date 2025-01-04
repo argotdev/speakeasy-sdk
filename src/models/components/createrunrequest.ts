@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   AssistantsApiResponseFormatOption,
   AssistantsApiResponseFormatOption$inboundSchema,
@@ -175,6 +178,10 @@ export type CreateRunRequest = {
    */
   toolChoice?: AssistantsApiToolChoiceOption | undefined;
   /**
+   * Whether to enable [parallel function calling](/docs/guides/function-calling/parallel-function-calling) during tool use.
+   */
+  parallelToolCalls?: boolean | undefined;
+  /**
    * Specifies the format that the model must output. Compatible with [GPT-4o](/docs/models/gpt-4o), [GPT-4 Turbo](/docs/models/gpt-4-turbo-and-gpt-4), and all GPT-3.5 Turbo models since `gpt-3.5-turbo-1106`.
    *
    * @remarks
@@ -239,6 +246,24 @@ export namespace CreateRunRequestModel$ {
   export type Outbound = CreateRunRequestModel$Outbound;
 }
 
+export function createRunRequestModelToJSON(
+  createRunRequestModel: CreateRunRequestModel,
+): string {
+  return JSON.stringify(
+    CreateRunRequestModel$outboundSchema.parse(createRunRequestModel),
+  );
+}
+
+export function createRunRequestModelFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateRunRequestModel, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateRunRequestModel$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateRunRequestModel' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateRunRequestTools$inboundSchema: z.ZodType<
   CreateRunRequestTools,
@@ -280,6 +305,24 @@ export namespace CreateRunRequestTools$ {
   export type Outbound = CreateRunRequestTools$Outbound;
 }
 
+export function createRunRequestToolsToJSON(
+  createRunRequestTools: CreateRunRequestTools,
+): string {
+  return JSON.stringify(
+    CreateRunRequestTools$outboundSchema.parse(createRunRequestTools),
+  );
+}
+
+export function createRunRequestToolsFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateRunRequestTools, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateRunRequestTools$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateRunRequestTools' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateRunRequestMetadata$inboundSchema: z.ZodType<
   CreateRunRequestMetadata,
@@ -308,6 +351,24 @@ export namespace CreateRunRequestMetadata$ {
   export const outboundSchema = CreateRunRequestMetadata$outboundSchema;
   /** @deprecated use `CreateRunRequestMetadata$Outbound` instead. */
   export type Outbound = CreateRunRequestMetadata$Outbound;
+}
+
+export function createRunRequestMetadataToJSON(
+  createRunRequestMetadata: CreateRunRequestMetadata,
+): string {
+  return JSON.stringify(
+    CreateRunRequestMetadata$outboundSchema.parse(createRunRequestMetadata),
+  );
+}
+
+export function createRunRequestMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateRunRequestMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateRunRequestMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateRunRequestMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -341,6 +402,7 @@ export const CreateRunRequest$inboundSchema: z.ZodType<
   max_completion_tokens: z.nullable(z.number().int()).optional(),
   truncation_strategy: TruncationObject$inboundSchema.optional(),
   tool_choice: AssistantsApiToolChoiceOption$inboundSchema.optional(),
+  parallel_tool_calls: z.boolean().default(true),
   response_format: AssistantsApiResponseFormatOption$inboundSchema.optional(),
 }).transform((v) => {
   return remap$(v, {
@@ -352,6 +414,7 @@ export const CreateRunRequest$inboundSchema: z.ZodType<
     "max_completion_tokens": "maxCompletionTokens",
     "truncation_strategy": "truncationStrategy",
     "tool_choice": "toolChoice",
+    "parallel_tool_calls": "parallelToolCalls",
     "response_format": "responseFormat",
   });
 });
@@ -379,6 +442,7 @@ export type CreateRunRequest$Outbound = {
   max_completion_tokens?: number | null | undefined;
   truncation_strategy?: TruncationObject$Outbound | undefined;
   tool_choice?: AssistantsApiToolChoiceOption$Outbound | undefined;
+  parallel_tool_calls: boolean;
   response_format?: AssistantsApiResponseFormatOption$Outbound | undefined;
 };
 
@@ -414,6 +478,7 @@ export const CreateRunRequest$outboundSchema: z.ZodType<
   maxCompletionTokens: z.nullable(z.number().int()).optional(),
   truncationStrategy: TruncationObject$outboundSchema.optional(),
   toolChoice: AssistantsApiToolChoiceOption$outboundSchema.optional(),
+  parallelToolCalls: z.boolean().default(true),
   responseFormat: AssistantsApiResponseFormatOption$outboundSchema.optional(),
 }).transform((v) => {
   return remap$(v, {
@@ -425,6 +490,7 @@ export const CreateRunRequest$outboundSchema: z.ZodType<
     maxCompletionTokens: "max_completion_tokens",
     truncationStrategy: "truncation_strategy",
     toolChoice: "tool_choice",
+    parallelToolCalls: "parallel_tool_calls",
     responseFormat: "response_format",
   });
 });
@@ -440,4 +506,22 @@ export namespace CreateRunRequest$ {
   export const outboundSchema = CreateRunRequest$outboundSchema;
   /** @deprecated use `CreateRunRequest$Outbound` instead. */
   export type Outbound = CreateRunRequest$Outbound;
+}
+
+export function createRunRequestToJSON(
+  createRunRequest: CreateRunRequest,
+): string {
+  return JSON.stringify(
+    CreateRunRequest$outboundSchema.parse(createRunRequest),
+  );
+}
+
+export function createRunRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateRunRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateRunRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateRunRequest' from JSON`,
+  );
 }

@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type DeleteThreadRequest = {
   /**
@@ -54,4 +57,22 @@ export namespace DeleteThreadRequest$ {
   export const outboundSchema = DeleteThreadRequest$outboundSchema;
   /** @deprecated use `DeleteThreadRequest$Outbound` instead. */
   export type Outbound = DeleteThreadRequest$Outbound;
+}
+
+export function deleteThreadRequestToJSON(
+  deleteThreadRequest: DeleteThreadRequest,
+): string {
+  return JSON.stringify(
+    DeleteThreadRequest$outboundSchema.parse(deleteThreadRequest),
+  );
+}
+
+export function deleteThreadRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<DeleteThreadRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => DeleteThreadRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeleteThreadRequest' from JSON`,
+  );
 }

@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type RetrieveModelRequest = {
   /**
@@ -45,4 +48,22 @@ export namespace RetrieveModelRequest$ {
   export const outboundSchema = RetrieveModelRequest$outboundSchema;
   /** @deprecated use `RetrieveModelRequest$Outbound` instead. */
   export type Outbound = RetrieveModelRequest$Outbound;
+}
+
+export function retrieveModelRequestToJSON(
+  retrieveModelRequest: RetrieveModelRequest,
+): string {
+  return JSON.stringify(
+    RetrieveModelRequest$outboundSchema.parse(retrieveModelRequest),
+  );
+}
+
+export function retrieveModelRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<RetrieveModelRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RetrieveModelRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RetrieveModelRequest' from JSON`,
+  );
 }

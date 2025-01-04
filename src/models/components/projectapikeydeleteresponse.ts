@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export const ProjectApiKeyDeleteResponseObject = {
   OrganizationProjectApiKeyDeleted: "organization.project.api_key.deleted",
@@ -80,4 +83,24 @@ export namespace ProjectApiKeyDeleteResponse$ {
   export const outboundSchema = ProjectApiKeyDeleteResponse$outboundSchema;
   /** @deprecated use `ProjectApiKeyDeleteResponse$Outbound` instead. */
   export type Outbound = ProjectApiKeyDeleteResponse$Outbound;
+}
+
+export function projectApiKeyDeleteResponseToJSON(
+  projectApiKeyDeleteResponse: ProjectApiKeyDeleteResponse,
+): string {
+  return JSON.stringify(
+    ProjectApiKeyDeleteResponse$outboundSchema.parse(
+      projectApiKeyDeleteResponse,
+    ),
+  );
+}
+
+export function projectApiKeyDeleteResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<ProjectApiKeyDeleteResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ProjectApiKeyDeleteResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ProjectApiKeyDeleteResponse' from JSON`,
+  );
 }

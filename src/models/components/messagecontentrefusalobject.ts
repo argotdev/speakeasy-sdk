@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Always `refusal`.
@@ -87,4 +90,24 @@ export namespace MessageContentRefusalObject$ {
   export const outboundSchema = MessageContentRefusalObject$outboundSchema;
   /** @deprecated use `MessageContentRefusalObject$Outbound` instead. */
   export type Outbound = MessageContentRefusalObject$Outbound;
+}
+
+export function messageContentRefusalObjectToJSON(
+  messageContentRefusalObject: MessageContentRefusalObject,
+): string {
+  return JSON.stringify(
+    MessageContentRefusalObject$outboundSchema.parse(
+      messageContentRefusalObject,
+    ),
+  );
+}
+
+export function messageContentRefusalObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<MessageContentRefusalObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MessageContentRefusalObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MessageContentRefusalObject' from JSON`,
+  );
 }

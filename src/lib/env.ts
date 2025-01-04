@@ -13,11 +13,10 @@ export interface Env {
 }
 
 export const envSchema: z.ZodType<Env, z.ZodTypeDef, unknown> = z.object({
-  ARGOTOPENAI_API_KEY_AUTH: z.string(),
+  ARGOTOPENAI_API_KEY_AUTH: z.string().optional(),
 
-  ARGOTOPENAI_DEBUG: z.coerce.boolean(),
-})
-  .partial();
+  ARGOTOPENAI_DEBUG: z.coerce.boolean().optional(),
+});
 
 let envMemo: Env | undefined = undefined;
 /**

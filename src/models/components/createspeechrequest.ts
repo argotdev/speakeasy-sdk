@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export const CreateSpeechRequestModel2 = {
   Tts1: "tts-1",
@@ -131,6 +134,24 @@ export namespace CreateSpeechRequestModel$ {
   export type Outbound = CreateSpeechRequestModel$Outbound;
 }
 
+export function createSpeechRequestModelToJSON(
+  createSpeechRequestModel: CreateSpeechRequestModel,
+): string {
+  return JSON.stringify(
+    CreateSpeechRequestModel$outboundSchema.parse(createSpeechRequestModel),
+  );
+}
+
+export function createSpeechRequestModelFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateSpeechRequestModel, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateSpeechRequestModel$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateSpeechRequestModel' from JSON`,
+  );
+}
+
 /** @internal */
 export const Voice$inboundSchema: z.ZodNativeEnum<typeof Voice> = z.nativeEnum(
   Voice,
@@ -231,4 +252,22 @@ export namespace CreateSpeechRequest$ {
   export const outboundSchema = CreateSpeechRequest$outboundSchema;
   /** @deprecated use `CreateSpeechRequest$Outbound` instead. */
   export type Outbound = CreateSpeechRequest$Outbound;
+}
+
+export function createSpeechRequestToJSON(
+  createSpeechRequest: CreateSpeechRequest,
+): string {
+  return JSON.stringify(
+    CreateSpeechRequest$outboundSchema.parse(createSpeechRequest),
+  );
+}
+
+export function createSpeechRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateSpeechRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateSpeechRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateSpeechRequest' from JSON`,
+  );
 }

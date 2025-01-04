@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Always `auto`.
@@ -86,4 +89,24 @@ export namespace AutoChunkingStrategyRequestParam$ {
   export const outboundSchema = AutoChunkingStrategyRequestParam$outboundSchema;
   /** @deprecated use `AutoChunkingStrategyRequestParam$Outbound` instead. */
   export type Outbound = AutoChunkingStrategyRequestParam$Outbound;
+}
+
+export function autoChunkingStrategyRequestParamToJSON(
+  autoChunkingStrategyRequestParam: AutoChunkingStrategyRequestParam,
+): string {
+  return JSON.stringify(
+    AutoChunkingStrategyRequestParam$outboundSchema.parse(
+      autoChunkingStrategyRequestParam,
+    ),
+  );
+}
+
+export function autoChunkingStrategyRequestParamFromJSON(
+  jsonString: string,
+): SafeParseResult<AutoChunkingStrategyRequestParam, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AutoChunkingStrategyRequestParam$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AutoChunkingStrategyRequestParam' from JSON`,
+  );
 }

@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * `owner` or `member`
@@ -81,4 +84,22 @@ export namespace ProjectUserUpdateRequest$ {
   export const outboundSchema = ProjectUserUpdateRequest$outboundSchema;
   /** @deprecated use `ProjectUserUpdateRequest$Outbound` instead. */
   export type Outbound = ProjectUserUpdateRequest$Outbound;
+}
+
+export function projectUserUpdateRequestToJSON(
+  projectUserUpdateRequest: ProjectUserUpdateRequest,
+): string {
+  return JSON.stringify(
+    ProjectUserUpdateRequest$outboundSchema.parse(projectUserUpdateRequest),
+  );
+}
+
+export function projectUserUpdateRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ProjectUserUpdateRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ProjectUserUpdateRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ProjectUserUpdateRequest' from JSON`,
+  );
 }

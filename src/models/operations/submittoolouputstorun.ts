@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
 import * as components from "../components/index.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type SubmitToolOuputsToRunRequest = {
   /**
@@ -72,4 +75,24 @@ export namespace SubmitToolOuputsToRunRequest$ {
   export const outboundSchema = SubmitToolOuputsToRunRequest$outboundSchema;
   /** @deprecated use `SubmitToolOuputsToRunRequest$Outbound` instead. */
   export type Outbound = SubmitToolOuputsToRunRequest$Outbound;
+}
+
+export function submitToolOuputsToRunRequestToJSON(
+  submitToolOuputsToRunRequest: SubmitToolOuputsToRunRequest,
+): string {
+  return JSON.stringify(
+    SubmitToolOuputsToRunRequest$outboundSchema.parse(
+      submitToolOuputsToRunRequest,
+    ),
+  );
+}
+
+export function submitToolOuputsToRunRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<SubmitToolOuputsToRunRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => SubmitToolOuputsToRunRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'SubmitToolOuputsToRunRequest' from JSON`,
+  );
 }

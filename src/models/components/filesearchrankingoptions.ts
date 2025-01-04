@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The ranker to use for the file search. If not specified will use the `auto` ranker.
@@ -100,4 +103,22 @@ export namespace FileSearchRankingOptions$ {
   export const outboundSchema = FileSearchRankingOptions$outboundSchema;
   /** @deprecated use `FileSearchRankingOptions$Outbound` instead. */
   export type Outbound = FileSearchRankingOptions$Outbound;
+}
+
+export function fileSearchRankingOptionsToJSON(
+  fileSearchRankingOptions: FileSearchRankingOptions,
+): string {
+  return JSON.stringify(
+    FileSearchRankingOptions$outboundSchema.parse(fileSearchRankingOptions),
+  );
+}
+
+export function fileSearchRankingOptionsFromJSON(
+  jsonString: string,
+): SafeParseResult<FileSearchRankingOptions, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FileSearchRankingOptions$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FileSearchRankingOptions' from JSON`,
+  );
 }

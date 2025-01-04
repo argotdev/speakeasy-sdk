@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Always `image`.
@@ -106,6 +109,33 @@ export namespace RunStepDetailsToolCallsCodeOutputImageObjectImage$ {
     RunStepDetailsToolCallsCodeOutputImageObjectImage$Outbound;
 }
 
+export function runStepDetailsToolCallsCodeOutputImageObjectImageToJSON(
+  runStepDetailsToolCallsCodeOutputImageObjectImage:
+    RunStepDetailsToolCallsCodeOutputImageObjectImage,
+): string {
+  return JSON.stringify(
+    RunStepDetailsToolCallsCodeOutputImageObjectImage$outboundSchema.parse(
+      runStepDetailsToolCallsCodeOutputImageObjectImage,
+    ),
+  );
+}
+
+export function runStepDetailsToolCallsCodeOutputImageObjectImageFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  RunStepDetailsToolCallsCodeOutputImageObjectImage,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      RunStepDetailsToolCallsCodeOutputImageObjectImage$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'RunStepDetailsToolCallsCodeOutputImageObjectImage' from JSON`,
+  );
+}
+
 /** @internal */
 export const RunStepDetailsToolCallsCodeOutputImageObject$inboundSchema:
   z.ZodType<
@@ -151,4 +181,31 @@ export namespace RunStepDetailsToolCallsCodeOutputImageObject$ {
     RunStepDetailsToolCallsCodeOutputImageObject$outboundSchema;
   /** @deprecated use `RunStepDetailsToolCallsCodeOutputImageObject$Outbound` instead. */
   export type Outbound = RunStepDetailsToolCallsCodeOutputImageObject$Outbound;
+}
+
+export function runStepDetailsToolCallsCodeOutputImageObjectToJSON(
+  runStepDetailsToolCallsCodeOutputImageObject:
+    RunStepDetailsToolCallsCodeOutputImageObject,
+): string {
+  return JSON.stringify(
+    RunStepDetailsToolCallsCodeOutputImageObject$outboundSchema.parse(
+      runStepDetailsToolCallsCodeOutputImageObject,
+    ),
+  );
+}
+
+export function runStepDetailsToolCallsCodeOutputImageObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  RunStepDetailsToolCallsCodeOutputImageObject,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      RunStepDetailsToolCallsCodeOutputImageObject$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'RunStepDetailsToolCallsCodeOutputImageObject' from JSON`,
+  );
 }

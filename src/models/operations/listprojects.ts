@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type ListProjectsRequest = {
   /**
@@ -72,4 +75,22 @@ export namespace ListProjectsRequest$ {
   export const outboundSchema = ListProjectsRequest$outboundSchema;
   /** @deprecated use `ListProjectsRequest$Outbound` instead. */
   export type Outbound = ListProjectsRequest$Outbound;
+}
+
+export function listProjectsRequestToJSON(
+  listProjectsRequest: ListProjectsRequest,
+): string {
+  return JSON.stringify(
+    ListProjectsRequest$outboundSchema.parse(listProjectsRequest),
+  );
+}
+
+export function listProjectsRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ListProjectsRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ListProjectsRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListProjectsRequest' from JSON`,
+  );
 }

@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type ArchiveProjectRequest = {
   /**
@@ -54,4 +57,22 @@ export namespace ArchiveProjectRequest$ {
   export const outboundSchema = ArchiveProjectRequest$outboundSchema;
   /** @deprecated use `ArchiveProjectRequest$Outbound` instead. */
   export type Outbound = ArchiveProjectRequest$Outbound;
+}
+
+export function archiveProjectRequestToJSON(
+  archiveProjectRequest: ArchiveProjectRequest,
+): string {
+  return JSON.stringify(
+    ArchiveProjectRequest$outboundSchema.parse(archiveProjectRequest),
+  );
+}
+
+export function archiveProjectRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ArchiveProjectRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ArchiveProjectRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ArchiveProjectRequest' from JSON`,
+  );
 }

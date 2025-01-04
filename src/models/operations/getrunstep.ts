@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export const GetRunStepQueryParamInclude = {
   StepDetailsToolCallsWildcardFileSearchResultsWildcardContent:
@@ -115,4 +118,22 @@ export namespace GetRunStepRequest$ {
   export const outboundSchema = GetRunStepRequest$outboundSchema;
   /** @deprecated use `GetRunStepRequest$Outbound` instead. */
   export type Outbound = GetRunStepRequest$Outbound;
+}
+
+export function getRunStepRequestToJSON(
+  getRunStepRequest: GetRunStepRequest,
+): string {
+  return JSON.stringify(
+    GetRunStepRequest$outboundSchema.parse(getRunStepRequest),
+  );
+}
+
+export function getRunStepRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<GetRunStepRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => GetRunStepRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'GetRunStepRequest' from JSON`,
+  );
 }

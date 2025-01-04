@@ -4,8 +4,11 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { blobLikeSchema } from "../../types/blobs.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type CreateImageVariationRequestImage = {
   fileName: string;
@@ -133,6 +136,26 @@ export namespace CreateImageVariationRequestImage$ {
   export type Outbound = CreateImageVariationRequestImage$Outbound;
 }
 
+export function createImageVariationRequestImageToJSON(
+  createImageVariationRequestImage: CreateImageVariationRequestImage,
+): string {
+  return JSON.stringify(
+    CreateImageVariationRequestImage$outboundSchema.parse(
+      createImageVariationRequestImage,
+    ),
+  );
+}
+
+export function createImageVariationRequestImageFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateImageVariationRequestImage, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateImageVariationRequestImage$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateImageVariationRequestImage' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateImageVariationRequestModel2$inboundSchema: z.ZodNativeEnum<
   typeof CreateImageVariationRequestModel2
@@ -183,6 +206,26 @@ export namespace CreateImageVariationRequestModel$ {
   export const outboundSchema = CreateImageVariationRequestModel$outboundSchema;
   /** @deprecated use `CreateImageVariationRequestModel$Outbound` instead. */
   export type Outbound = CreateImageVariationRequestModel$Outbound;
+}
+
+export function createImageVariationRequestModelToJSON(
+  createImageVariationRequestModel: CreateImageVariationRequestModel,
+): string {
+  return JSON.stringify(
+    CreateImageVariationRequestModel$outboundSchema.parse(
+      createImageVariationRequestModel,
+    ),
+  );
+}
+
+export function createImageVariationRequestModelFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateImageVariationRequestModel, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateImageVariationRequestModel$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateImageVariationRequestModel' from JSON`,
+  );
 }
 
 /** @internal */
@@ -300,4 +343,24 @@ export namespace CreateImageVariationRequest$ {
   export const outboundSchema = CreateImageVariationRequest$outboundSchema;
   /** @deprecated use `CreateImageVariationRequest$Outbound` instead. */
   export type Outbound = CreateImageVariationRequest$Outbound;
+}
+
+export function createImageVariationRequestToJSON(
+  createImageVariationRequest: CreateImageVariationRequest,
+): string {
+  return JSON.stringify(
+    CreateImageVariationRequest$outboundSchema.parse(
+      createImageVariationRequest,
+    ),
+  );
+}
+
+export function createImageVariationRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateImageVariationRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateImageVariationRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateImageVariationRequest' from JSON`,
+  );
 }

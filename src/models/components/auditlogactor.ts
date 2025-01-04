@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   AuditLogActorApiKey,
   AuditLogActorApiKey$inboundSchema,
@@ -117,4 +120,18 @@ export namespace AuditLogActor$ {
   export const outboundSchema = AuditLogActor$outboundSchema;
   /** @deprecated use `AuditLogActor$Outbound` instead. */
   export type Outbound = AuditLogActor$Outbound;
+}
+
+export function auditLogActorToJSON(auditLogActor: AuditLogActor): string {
+  return JSON.stringify(AuditLogActor$outboundSchema.parse(auditLogActor));
+}
+
+export function auditLogActorFromJSON(
+  jsonString: string,
+): SafeParseResult<AuditLogActor, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AuditLogActor$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AuditLogActor' from JSON`,
+  );
 }

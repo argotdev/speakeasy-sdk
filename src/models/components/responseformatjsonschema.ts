@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The type of response format being defined: `json_schema`
@@ -112,6 +115,20 @@ export namespace JsonSchema$ {
   export type Outbound = JsonSchema$Outbound;
 }
 
+export function jsonSchemaToJSON(jsonSchema: JsonSchema): string {
+  return JSON.stringify(JsonSchema$outboundSchema.parse(jsonSchema));
+}
+
+export function jsonSchemaFromJSON(
+  jsonString: string,
+): SafeParseResult<JsonSchema, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => JsonSchema$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'JsonSchema' from JSON`,
+  );
+}
+
 /** @internal */
 export const ResponseFormatJsonSchema$inboundSchema: z.ZodType<
   ResponseFormatJsonSchema,
@@ -157,4 +174,22 @@ export namespace ResponseFormatJsonSchema$ {
   export const outboundSchema = ResponseFormatJsonSchema$outboundSchema;
   /** @deprecated use `ResponseFormatJsonSchema$Outbound` instead. */
   export type Outbound = ResponseFormatJsonSchema$Outbound;
+}
+
+export function responseFormatJsonSchemaToJSON(
+  responseFormatJsonSchema: ResponseFormatJsonSchema,
+): string {
+  return JSON.stringify(
+    ResponseFormatJsonSchema$outboundSchema.parse(responseFormatJsonSchema),
+  );
+}
+
+export function responseFormatJsonSchemaFromJSON(
+  jsonString: string,
+): SafeParseResult<ResponseFormatJsonSchema, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ResponseFormatJsonSchema$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ResponseFormatJsonSchema' from JSON`,
+  );
 }

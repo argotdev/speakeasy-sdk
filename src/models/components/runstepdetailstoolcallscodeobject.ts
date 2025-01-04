@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   RunStepDetailsToolCallsCodeOutputImageObject,
   RunStepDetailsToolCallsCodeOutputImageObject$inboundSchema,
@@ -129,6 +132,20 @@ export namespace Outputs$ {
   export type Outbound = Outputs$Outbound;
 }
 
+export function outputsToJSON(outputs: Outputs): string {
+  return JSON.stringify(Outputs$outboundSchema.parse(outputs));
+}
+
+export function outputsFromJSON(
+  jsonString: string,
+): SafeParseResult<Outputs, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Outputs$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Outputs' from JSON`,
+  );
+}
+
 /** @internal */
 export const CodeInterpreter$inboundSchema: z.ZodType<
   CodeInterpreter,
@@ -181,6 +198,22 @@ export namespace CodeInterpreter$ {
   export type Outbound = CodeInterpreter$Outbound;
 }
 
+export function codeInterpreterToJSON(
+  codeInterpreter: CodeInterpreter,
+): string {
+  return JSON.stringify(CodeInterpreter$outboundSchema.parse(codeInterpreter));
+}
+
+export function codeInterpreterFromJSON(
+  jsonString: string,
+): SafeParseResult<CodeInterpreter, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CodeInterpreter$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CodeInterpreter' from JSON`,
+  );
+}
+
 /** @internal */
 export const RunStepDetailsToolCallsCodeObject$inboundSchema: z.ZodType<
   RunStepDetailsToolCallsCodeObject,
@@ -230,4 +263,24 @@ export namespace RunStepDetailsToolCallsCodeObject$ {
     RunStepDetailsToolCallsCodeObject$outboundSchema;
   /** @deprecated use `RunStepDetailsToolCallsCodeObject$Outbound` instead. */
   export type Outbound = RunStepDetailsToolCallsCodeObject$Outbound;
+}
+
+export function runStepDetailsToolCallsCodeObjectToJSON(
+  runStepDetailsToolCallsCodeObject: RunStepDetailsToolCallsCodeObject,
+): string {
+  return JSON.stringify(
+    RunStepDetailsToolCallsCodeObject$outboundSchema.parse(
+      runStepDetailsToolCallsCodeObject,
+    ),
+  );
+}
+
+export function runStepDetailsToolCallsCodeObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<RunStepDetailsToolCallsCodeObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RunStepDetailsToolCallsCodeObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RunStepDetailsToolCallsCodeObject' from JSON`,
+  );
 }

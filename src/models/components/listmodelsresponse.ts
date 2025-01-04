@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   Model,
   Model$inboundSchema,
@@ -81,4 +84,22 @@ export namespace ListModelsResponse$ {
   export const outboundSchema = ListModelsResponse$outboundSchema;
   /** @deprecated use `ListModelsResponse$Outbound` instead. */
   export type Outbound = ListModelsResponse$Outbound;
+}
+
+export function listModelsResponseToJSON(
+  listModelsResponse: ListModelsResponse,
+): string {
+  return JSON.stringify(
+    ListModelsResponse$outboundSchema.parse(listModelsResponse),
+  );
+}
+
+export function listModelsResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<ListModelsResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ListModelsResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListModelsResponse' from JSON`,
+  );
 }

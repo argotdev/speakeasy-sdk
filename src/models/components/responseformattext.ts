@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The type of response format being defined: `text`
@@ -78,4 +81,22 @@ export namespace ResponseFormatText$ {
   export const outboundSchema = ResponseFormatText$outboundSchema;
   /** @deprecated use `ResponseFormatText$Outbound` instead. */
   export type Outbound = ResponseFormatText$Outbound;
+}
+
+export function responseFormatTextToJSON(
+  responseFormatText: ResponseFormatText,
+): string {
+  return JSON.stringify(
+    ResponseFormatText$outboundSchema.parse(responseFormatText),
+  );
+}
+
+export function responseFormatTextFromJSON(
+  jsonString: string,
+): SafeParseResult<ResponseFormatText, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ResponseFormatText$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ResponseFormatText' from JSON`,
+  );
 }

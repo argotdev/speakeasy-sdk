@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The object type, which is always `batch`.
@@ -230,6 +233,20 @@ export namespace BatchData$ {
   export type Outbound = BatchData$Outbound;
 }
 
+export function batchDataToJSON(batchData: BatchData): string {
+  return JSON.stringify(BatchData$outboundSchema.parse(batchData));
+}
+
+export function batchDataFromJSON(
+  jsonString: string,
+): SafeParseResult<BatchData, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => BatchData$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'BatchData' from JSON`,
+  );
+}
+
 /** @internal */
 export const Errors$inboundSchema: z.ZodType<Errors, z.ZodTypeDef, unknown> = z
   .object({
@@ -264,6 +281,20 @@ export namespace Errors$ {
   export const outboundSchema = Errors$outboundSchema;
   /** @deprecated use `Errors$Outbound` instead. */
   export type Outbound = Errors$Outbound;
+}
+
+export function errorsToJSON(errors: Errors): string {
+  return JSON.stringify(Errors$outboundSchema.parse(errors));
+}
+
+export function errorsFromJSON(
+  jsonString: string,
+): SafeParseResult<Errors, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Errors$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Errors' from JSON`,
+  );
 }
 
 /** @internal */
@@ -327,6 +358,20 @@ export namespace RequestCounts$ {
   export type Outbound = RequestCounts$Outbound;
 }
 
+export function requestCountsToJSON(requestCounts: RequestCounts): string {
+  return JSON.stringify(RequestCounts$outboundSchema.parse(requestCounts));
+}
+
+export function requestCountsFromJSON(
+  jsonString: string,
+): SafeParseResult<RequestCounts, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RequestCounts$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RequestCounts' from JSON`,
+  );
+}
+
 /** @internal */
 export const BatchMetadata$inboundSchema: z.ZodType<
   BatchMetadata,
@@ -355,6 +400,20 @@ export namespace BatchMetadata$ {
   export const outboundSchema = BatchMetadata$outboundSchema;
   /** @deprecated use `BatchMetadata$Outbound` instead. */
   export type Outbound = BatchMetadata$Outbound;
+}
+
+export function batchMetadataToJSON(batchMetadata: BatchMetadata): string {
+  return JSON.stringify(BatchMetadata$outboundSchema.parse(batchMetadata));
+}
+
+export function batchMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<BatchMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => BatchMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'BatchMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -479,4 +538,18 @@ export namespace Batch$ {
   export const outboundSchema = Batch$outboundSchema;
   /** @deprecated use `Batch$Outbound` instead. */
   export type Outbound = Batch$Outbound;
+}
+
+export function batchToJSON(batch: Batch): string {
+  return JSON.stringify(Batch$outboundSchema.parse(batch));
+}
+
+export function batchFromJSON(
+  jsonString: string,
+): SafeParseResult<Batch, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Batch$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Batch' from JSON`,
+  );
 }

@@ -14,8 +14,9 @@ generation:
     requestResponseComponentNamesFeb2024: true
   auth:
     oAuth2ClientCredentialsEnabled: false
+    oAuth2PasswordEnabled: false
 typescript:
-  version: 0.0.5
+  version: 0.1.0
   additionalDependencies:
     dependencies: {}
     devDependencies: {}
@@ -23,6 +24,8 @@ typescript:
   additionalPackageJSON: {}
   author: Speakeasy
   clientServerStatusCodesAsErrors: true
+  defaultErrorName: SDKError
+  enableReactQuery: false
   enumFormat: union
   envVarPrefix: ARGOTOPENAI
   flattenGlobalSecurity: true

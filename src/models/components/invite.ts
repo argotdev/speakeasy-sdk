@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The object type, which is always `organization.invite`
@@ -201,4 +204,18 @@ export namespace Invite$ {
   export const outboundSchema = Invite$outboundSchema;
   /** @deprecated use `Invite$Outbound` instead. */
   export type Outbound = Invite$Outbound;
+}
+
+export function inviteToJSON(invite: Invite): string {
+  return JSON.stringify(Invite$outboundSchema.parse(invite));
+}
+
+export function inviteFromJSON(
+  jsonString: string,
+): SafeParseResult<Invite, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Invite$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Invite' from JSON`,
+  );
 }

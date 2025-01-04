@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The type of the content part.
@@ -140,6 +143,27 @@ export namespace MessageContentImageUrlObjectImageUrl$ {
   export type Outbound = MessageContentImageUrlObjectImageUrl$Outbound;
 }
 
+export function messageContentImageUrlObjectImageUrlToJSON(
+  messageContentImageUrlObjectImageUrl: MessageContentImageUrlObjectImageUrl,
+): string {
+  return JSON.stringify(
+    MessageContentImageUrlObjectImageUrl$outboundSchema.parse(
+      messageContentImageUrlObjectImageUrl,
+    ),
+  );
+}
+
+export function messageContentImageUrlObjectImageUrlFromJSON(
+  jsonString: string,
+): SafeParseResult<MessageContentImageUrlObjectImageUrl, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      MessageContentImageUrlObjectImageUrl$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MessageContentImageUrlObjectImageUrl' from JSON`,
+  );
+}
+
 /** @internal */
 export const MessageContentImageUrlObject$inboundSchema: z.ZodType<
   MessageContentImageUrlObject,
@@ -185,4 +209,24 @@ export namespace MessageContentImageUrlObject$ {
   export const outboundSchema = MessageContentImageUrlObject$outboundSchema;
   /** @deprecated use `MessageContentImageUrlObject$Outbound` instead. */
   export type Outbound = MessageContentImageUrlObject$Outbound;
+}
+
+export function messageContentImageUrlObjectToJSON(
+  messageContentImageUrlObject: MessageContentImageUrlObject,
+): string {
+  return JSON.stringify(
+    MessageContentImageUrlObject$outboundSchema.parse(
+      messageContentImageUrlObject,
+    ),
+  );
+}
+
+export function messageContentImageUrlObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<MessageContentImageUrlObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MessageContentImageUrlObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MessageContentImageUrlObject' from JSON`,
+  );
 }

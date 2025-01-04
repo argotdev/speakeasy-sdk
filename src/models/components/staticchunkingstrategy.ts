@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type StaticChunkingStrategy = {
   /**
@@ -67,4 +70,22 @@ export namespace StaticChunkingStrategy$ {
   export const outboundSchema = StaticChunkingStrategy$outboundSchema;
   /** @deprecated use `StaticChunkingStrategy$Outbound` instead. */
   export type Outbound = StaticChunkingStrategy$Outbound;
+}
+
+export function staticChunkingStrategyToJSON(
+  staticChunkingStrategy: StaticChunkingStrategy,
+): string {
+  return JSON.stringify(
+    StaticChunkingStrategy$outboundSchema.parse(staticChunkingStrategy),
+  );
+}
+
+export function staticChunkingStrategyFromJSON(
+  jsonString: string,
+): SafeParseResult<StaticChunkingStrategy, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => StaticChunkingStrategy$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'StaticChunkingStrategy' from JSON`,
+  );
 }

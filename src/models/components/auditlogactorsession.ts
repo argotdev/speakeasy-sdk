@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   AuditLogActorUser,
   AuditLogActorUser$inboundSchema,
@@ -70,4 +73,22 @@ export namespace AuditLogActorSession$ {
   export const outboundSchema = AuditLogActorSession$outboundSchema;
   /** @deprecated use `AuditLogActorSession$Outbound` instead. */
   export type Outbound = AuditLogActorSession$Outbound;
+}
+
+export function auditLogActorSessionToJSON(
+  auditLogActorSession: AuditLogActorSession,
+): string {
+  return JSON.stringify(
+    AuditLogActorSession$outboundSchema.parse(auditLogActorSession),
+  );
+}
+
+export function auditLogActorSessionFromJSON(
+  jsonString: string,
+): SafeParseResult<AuditLogActorSession, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AuditLogActorSession$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AuditLogActorSession' from JSON`,
+  );
 }

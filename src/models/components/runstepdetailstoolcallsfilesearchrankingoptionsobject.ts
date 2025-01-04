@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The ranker used for the file search.
@@ -111,4 +114,31 @@ export namespace RunStepDetailsToolCallsFileSearchRankingOptionsObject$ {
   /** @deprecated use `RunStepDetailsToolCallsFileSearchRankingOptionsObject$Outbound` instead. */
   export type Outbound =
     RunStepDetailsToolCallsFileSearchRankingOptionsObject$Outbound;
+}
+
+export function runStepDetailsToolCallsFileSearchRankingOptionsObjectToJSON(
+  runStepDetailsToolCallsFileSearchRankingOptionsObject:
+    RunStepDetailsToolCallsFileSearchRankingOptionsObject,
+): string {
+  return JSON.stringify(
+    RunStepDetailsToolCallsFileSearchRankingOptionsObject$outboundSchema.parse(
+      runStepDetailsToolCallsFileSearchRankingOptionsObject,
+    ),
+  );
+}
+
+export function runStepDetailsToolCallsFileSearchRankingOptionsObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  RunStepDetailsToolCallsFileSearchRankingOptionsObject,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      RunStepDetailsToolCallsFileSearchRankingOptionsObject$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'RunStepDetailsToolCallsFileSearchRankingOptionsObject' from JSON`,
+  );
 }

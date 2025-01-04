@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   ChatCompletionMessageToolCall,
   ChatCompletionMessageToolCall$inboundSchema,
@@ -133,6 +136,33 @@ export namespace ChatCompletionRequestAssistantMessageContent$ {
   export type Outbound = ChatCompletionRequestAssistantMessageContent$Outbound;
 }
 
+export function chatCompletionRequestAssistantMessageContentToJSON(
+  chatCompletionRequestAssistantMessageContent:
+    ChatCompletionRequestAssistantMessageContent,
+): string {
+  return JSON.stringify(
+    ChatCompletionRequestAssistantMessageContent$outboundSchema.parse(
+      chatCompletionRequestAssistantMessageContent,
+    ),
+  );
+}
+
+export function chatCompletionRequestAssistantMessageContentFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  ChatCompletionRequestAssistantMessageContent,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ChatCompletionRequestAssistantMessageContent$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'ChatCompletionRequestAssistantMessageContent' from JSON`,
+  );
+}
+
 /** @internal */
 export const ChatCompletionRequestAssistantMessageRole$inboundSchema:
   z.ZodNativeEnum<typeof ChatCompletionRequestAssistantMessageRole> = z
@@ -193,6 +223,20 @@ export namespace FunctionCall$ {
   export const outboundSchema = FunctionCall$outboundSchema;
   /** @deprecated use `FunctionCall$Outbound` instead. */
   export type Outbound = FunctionCall$Outbound;
+}
+
+export function functionCallToJSON(functionCall: FunctionCall): string {
+  return JSON.stringify(FunctionCall$outboundSchema.parse(functionCall));
+}
+
+export function functionCallFromJSON(
+  jsonString: string,
+): SafeParseResult<FunctionCall, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FunctionCall$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FunctionCall' from JSON`,
+  );
 }
 
 /** @internal */
@@ -272,4 +316,25 @@ export namespace ChatCompletionRequestAssistantMessage$ {
     ChatCompletionRequestAssistantMessage$outboundSchema;
   /** @deprecated use `ChatCompletionRequestAssistantMessage$Outbound` instead. */
   export type Outbound = ChatCompletionRequestAssistantMessage$Outbound;
+}
+
+export function chatCompletionRequestAssistantMessageToJSON(
+  chatCompletionRequestAssistantMessage: ChatCompletionRequestAssistantMessage,
+): string {
+  return JSON.stringify(
+    ChatCompletionRequestAssistantMessage$outboundSchema.parse(
+      chatCompletionRequestAssistantMessage,
+    ),
+  );
+}
+
+export function chatCompletionRequestAssistantMessageFromJSON(
+  jsonString: string,
+): SafeParseResult<ChatCompletionRequestAssistantMessage, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ChatCompletionRequestAssistantMessage$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ChatCompletionRequestAssistantMessage' from JSON`,
+  );
 }

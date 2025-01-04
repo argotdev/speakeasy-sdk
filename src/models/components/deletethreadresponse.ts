@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export const DeleteThreadResponseObject = {
   ThreadDeleted: "thread.deleted",
@@ -79,4 +82,22 @@ export namespace DeleteThreadResponse$ {
   export const outboundSchema = DeleteThreadResponse$outboundSchema;
   /** @deprecated use `DeleteThreadResponse$Outbound` instead. */
   export type Outbound = DeleteThreadResponse$Outbound;
+}
+
+export function deleteThreadResponseToJSON(
+  deleteThreadResponse: DeleteThreadResponse,
+): string {
+  return JSON.stringify(
+    DeleteThreadResponse$outboundSchema.parse(deleteThreadResponse),
+  );
+}
+
+export function deleteThreadResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<DeleteThreadResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => DeleteThreadResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeleteThreadResponse' from JSON`,
+  );
 }

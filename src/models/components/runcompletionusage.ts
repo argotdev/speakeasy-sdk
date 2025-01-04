@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Usage statistics related to the run. This value will be `null` if the run is not in a terminal state (i.e. `in_progress`, `queued`, etc.).
@@ -75,4 +78,22 @@ export namespace RunCompletionUsage$ {
   export const outboundSchema = RunCompletionUsage$outboundSchema;
   /** @deprecated use `RunCompletionUsage$Outbound` instead. */
   export type Outbound = RunCompletionUsage$Outbound;
+}
+
+export function runCompletionUsageToJSON(
+  runCompletionUsage: RunCompletionUsage,
+): string {
+  return JSON.stringify(
+    RunCompletionUsage$outboundSchema.parse(runCompletionUsage),
+  );
+}
+
+export function runCompletionUsageFromJSON(
+  jsonString: string,
+): SafeParseResult<RunCompletionUsage, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RunCompletionUsage$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RunCompletionUsage' from JSON`,
+  );
 }

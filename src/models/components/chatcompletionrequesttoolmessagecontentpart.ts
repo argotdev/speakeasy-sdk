@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   ChatCompletionRequestMessageContentPartText,
   ChatCompletionRequestMessageContentPartText$inboundSchema,
@@ -46,4 +49,31 @@ export namespace ChatCompletionRequestToolMessageContentPart$ {
     ChatCompletionRequestToolMessageContentPart$outboundSchema;
   /** @deprecated use `ChatCompletionRequestToolMessageContentPart$Outbound` instead. */
   export type Outbound = ChatCompletionRequestToolMessageContentPart$Outbound;
+}
+
+export function chatCompletionRequestToolMessageContentPartToJSON(
+  chatCompletionRequestToolMessageContentPart:
+    ChatCompletionRequestToolMessageContentPart,
+): string {
+  return JSON.stringify(
+    ChatCompletionRequestToolMessageContentPart$outboundSchema.parse(
+      chatCompletionRequestToolMessageContentPart,
+    ),
+  );
+}
+
+export function chatCompletionRequestToolMessageContentPartFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  ChatCompletionRequestToolMessageContentPart,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ChatCompletionRequestToolMessageContentPart$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'ChatCompletionRequestToolMessageContentPart' from JSON`,
+  );
 }

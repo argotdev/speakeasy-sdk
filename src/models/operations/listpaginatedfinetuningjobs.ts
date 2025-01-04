@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type ListPaginatedFineTuningJobsRequest = {
   /**
@@ -53,4 +56,25 @@ export namespace ListPaginatedFineTuningJobsRequest$ {
     ListPaginatedFineTuningJobsRequest$outboundSchema;
   /** @deprecated use `ListPaginatedFineTuningJobsRequest$Outbound` instead. */
   export type Outbound = ListPaginatedFineTuningJobsRequest$Outbound;
+}
+
+export function listPaginatedFineTuningJobsRequestToJSON(
+  listPaginatedFineTuningJobsRequest: ListPaginatedFineTuningJobsRequest,
+): string {
+  return JSON.stringify(
+    ListPaginatedFineTuningJobsRequest$outboundSchema.parse(
+      listPaginatedFineTuningJobsRequest,
+    ),
+  );
+}
+
+export function listPaginatedFineTuningJobsRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ListPaginatedFineTuningJobsRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ListPaginatedFineTuningJobsRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListPaginatedFineTuningJobsRequest' from JSON`,
+  );
 }

@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   ChatCompletionStreamOptions,
   ChatCompletionStreamOptions$inboundSchema,
@@ -234,6 +237,26 @@ export namespace CreateCompletionRequestModel$ {
   export type Outbound = CreateCompletionRequestModel$Outbound;
 }
 
+export function createCompletionRequestModelToJSON(
+  createCompletionRequestModel: CreateCompletionRequestModel,
+): string {
+  return JSON.stringify(
+    CreateCompletionRequestModel$outboundSchema.parse(
+      createCompletionRequestModel,
+    ),
+  );
+}
+
+export function createCompletionRequestModelFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateCompletionRequestModel, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateCompletionRequestModel$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateCompletionRequestModel' from JSON`,
+  );
+}
+
 /** @internal */
 export const Prompt$inboundSchema: z.ZodType<Prompt, z.ZodTypeDef, unknown> = z
   .union([
@@ -275,6 +298,20 @@ export namespace Prompt$ {
   export type Outbound = Prompt$Outbound;
 }
 
+export function promptToJSON(prompt: Prompt): string {
+  return JSON.stringify(Prompt$outboundSchema.parse(prompt));
+}
+
+export function promptFromJSON(
+  jsonString: string,
+): SafeParseResult<Prompt, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Prompt$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Prompt' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateCompletionRequestStop$inboundSchema: z.ZodType<
   CreateCompletionRequestStop,
@@ -303,6 +340,26 @@ export namespace CreateCompletionRequestStop$ {
   export const outboundSchema = CreateCompletionRequestStop$outboundSchema;
   /** @deprecated use `CreateCompletionRequestStop$Outbound` instead. */
   export type Outbound = CreateCompletionRequestStop$Outbound;
+}
+
+export function createCompletionRequestStopToJSON(
+  createCompletionRequestStop: CreateCompletionRequestStop,
+): string {
+  return JSON.stringify(
+    CreateCompletionRequestStop$outboundSchema.parse(
+      createCompletionRequestStop,
+    ),
+  );
+}
+
+export function createCompletionRequestStopFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateCompletionRequestStop, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateCompletionRequestStop$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateCompletionRequestStop' from JSON`,
+  );
 }
 
 /** @internal */
@@ -426,4 +483,22 @@ export namespace CreateCompletionRequest$ {
   export const outboundSchema = CreateCompletionRequest$outboundSchema;
   /** @deprecated use `CreateCompletionRequest$Outbound` instead. */
   export type Outbound = CreateCompletionRequest$Outbound;
+}
+
+export function createCompletionRequestToJSON(
+  createCompletionRequest: CreateCompletionRequest,
+): string {
+  return JSON.stringify(
+    CreateCompletionRequest$outboundSchema.parse(createCompletionRequest),
+  );
+}
+
+export function createCompletionRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateCompletionRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateCompletionRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateCompletionRequest' from JSON`,
+  );
 }

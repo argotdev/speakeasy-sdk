@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type GetVectorStoreFileBatchRequest = {
   /**
@@ -63,4 +66,24 @@ export namespace GetVectorStoreFileBatchRequest$ {
   export const outboundSchema = GetVectorStoreFileBatchRequest$outboundSchema;
   /** @deprecated use `GetVectorStoreFileBatchRequest$Outbound` instead. */
   export type Outbound = GetVectorStoreFileBatchRequest$Outbound;
+}
+
+export function getVectorStoreFileBatchRequestToJSON(
+  getVectorStoreFileBatchRequest: GetVectorStoreFileBatchRequest,
+): string {
+  return JSON.stringify(
+    GetVectorStoreFileBatchRequest$outboundSchema.parse(
+      getVectorStoreFileBatchRequest,
+    ),
+  );
+}
+
+export function getVectorStoreFileBatchRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<GetVectorStoreFileBatchRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => GetVectorStoreFileBatchRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'GetVectorStoreFileBatchRequest' from JSON`,
+  );
 }

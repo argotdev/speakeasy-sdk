@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   AutoChunkingStrategyRequestParam,
   AutoChunkingStrategyRequestParam$inboundSchema,
@@ -103,6 +106,24 @@ export namespace ChunkingStrategy$ {
   export type Outbound = ChunkingStrategy$Outbound;
 }
 
+export function chunkingStrategyToJSON(
+  chunkingStrategy: ChunkingStrategy,
+): string {
+  return JSON.stringify(
+    ChunkingStrategy$outboundSchema.parse(chunkingStrategy),
+  );
+}
+
+export function chunkingStrategyFromJSON(
+  jsonString: string,
+): SafeParseResult<ChunkingStrategy, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ChunkingStrategy$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ChunkingStrategy' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateVectorStoreRequestMetadata$inboundSchema: z.ZodType<
   CreateVectorStoreRequestMetadata,
@@ -131,6 +152,26 @@ export namespace CreateVectorStoreRequestMetadata$ {
   export const outboundSchema = CreateVectorStoreRequestMetadata$outboundSchema;
   /** @deprecated use `CreateVectorStoreRequestMetadata$Outbound` instead. */
   export type Outbound = CreateVectorStoreRequestMetadata$Outbound;
+}
+
+export function createVectorStoreRequestMetadataToJSON(
+  createVectorStoreRequestMetadata: CreateVectorStoreRequestMetadata,
+): string {
+  return JSON.stringify(
+    CreateVectorStoreRequestMetadata$outboundSchema.parse(
+      createVectorStoreRequestMetadata,
+    ),
+  );
+}
+
+export function createVectorStoreRequestMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateVectorStoreRequestMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateVectorStoreRequestMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateVectorStoreRequestMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -204,4 +245,22 @@ export namespace CreateVectorStoreRequest$ {
   export const outboundSchema = CreateVectorStoreRequest$outboundSchema;
   /** @deprecated use `CreateVectorStoreRequest$Outbound` instead. */
   export type Outbound = CreateVectorStoreRequest$Outbound;
+}
+
+export function createVectorStoreRequestToJSON(
+  createVectorStoreRequest: CreateVectorStoreRequest,
+): string {
+  return JSON.stringify(
+    CreateVectorStoreRequest$outboundSchema.parse(createVectorStoreRequest),
+  );
+}
+
+export function createVectorStoreRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateVectorStoreRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateVectorStoreRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateVectorStoreRequest' from JSON`,
+  );
 }

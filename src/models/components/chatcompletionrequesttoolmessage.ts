@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   ChatCompletionRequestToolMessageContentPart,
   ChatCompletionRequestToolMessageContentPart$inboundSchema,
@@ -111,6 +114,33 @@ export namespace ChatCompletionRequestToolMessageContent$ {
   export type Outbound = ChatCompletionRequestToolMessageContent$Outbound;
 }
 
+export function chatCompletionRequestToolMessageContentToJSON(
+  chatCompletionRequestToolMessageContent:
+    ChatCompletionRequestToolMessageContent,
+): string {
+  return JSON.stringify(
+    ChatCompletionRequestToolMessageContent$outboundSchema.parse(
+      chatCompletionRequestToolMessageContent,
+    ),
+  );
+}
+
+export function chatCompletionRequestToolMessageContentFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  ChatCompletionRequestToolMessageContent,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ChatCompletionRequestToolMessageContent$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'ChatCompletionRequestToolMessageContent' from JSON`,
+  );
+}
+
 /** @internal */
 export const ChatCompletionRequestToolMessage$inboundSchema: z.ZodType<
   ChatCompletionRequestToolMessage,
@@ -165,4 +195,24 @@ export namespace ChatCompletionRequestToolMessage$ {
   export const outboundSchema = ChatCompletionRequestToolMessage$outboundSchema;
   /** @deprecated use `ChatCompletionRequestToolMessage$Outbound` instead. */
   export type Outbound = ChatCompletionRequestToolMessage$Outbound;
+}
+
+export function chatCompletionRequestToolMessageToJSON(
+  chatCompletionRequestToolMessage: ChatCompletionRequestToolMessage,
+): string {
+  return JSON.stringify(
+    ChatCompletionRequestToolMessage$outboundSchema.parse(
+      chatCompletionRequestToolMessage,
+    ),
+  );
+}
+
+export function chatCompletionRequestToolMessageFromJSON(
+  jsonString: string,
+): SafeParseResult<ChatCompletionRequestToolMessage, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ChatCompletionRequestToolMessage$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ChatCompletionRequestToolMessage' from JSON`,
+  );
 }

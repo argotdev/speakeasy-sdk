@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   ProjectServiceAccount,
   ProjectServiceAccount$inboundSchema,
@@ -109,4 +112,24 @@ export namespace ProjectServiceAccountListResponse$ {
     ProjectServiceAccountListResponse$outboundSchema;
   /** @deprecated use `ProjectServiceAccountListResponse$Outbound` instead. */
   export type Outbound = ProjectServiceAccountListResponse$Outbound;
+}
+
+export function projectServiceAccountListResponseToJSON(
+  projectServiceAccountListResponse: ProjectServiceAccountListResponse,
+): string {
+  return JSON.stringify(
+    ProjectServiceAccountListResponse$outboundSchema.parse(
+      projectServiceAccountListResponse,
+    ),
+  );
+}
+
+export function projectServiceAccountListResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<ProjectServiceAccountListResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ProjectServiceAccountListResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ProjectServiceAccountListResponse' from JSON`,
+  );
 }

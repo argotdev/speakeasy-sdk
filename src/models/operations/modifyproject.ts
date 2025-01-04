@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
 import * as components from "../components/index.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type ModifyProjectRequest = {
   /**
@@ -64,4 +67,22 @@ export namespace ModifyProjectRequest$ {
   export const outboundSchema = ModifyProjectRequest$outboundSchema;
   /** @deprecated use `ModifyProjectRequest$Outbound` instead. */
   export type Outbound = ModifyProjectRequest$Outbound;
+}
+
+export function modifyProjectRequestToJSON(
+  modifyProjectRequest: ModifyProjectRequest,
+): string {
+  return JSON.stringify(
+    ModifyProjectRequest$outboundSchema.parse(modifyProjectRequest),
+  );
+}
+
+export function modifyProjectRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyProjectRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ModifyProjectRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyProjectRequest' from JSON`,
+  );
 }

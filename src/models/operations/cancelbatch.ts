@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type CancelBatchRequest = {
   /**
@@ -54,4 +57,22 @@ export namespace CancelBatchRequest$ {
   export const outboundSchema = CancelBatchRequest$outboundSchema;
   /** @deprecated use `CancelBatchRequest$Outbound` instead. */
   export type Outbound = CancelBatchRequest$Outbound;
+}
+
+export function cancelBatchRequestToJSON(
+  cancelBatchRequest: CancelBatchRequest,
+): string {
+  return JSON.stringify(
+    CancelBatchRequest$outboundSchema.parse(cancelBatchRequest),
+  );
+}
+
+export function cancelBatchRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CancelBatchRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CancelBatchRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CancelBatchRequest' from JSON`,
+  );
 }

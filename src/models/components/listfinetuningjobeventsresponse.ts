@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   FineTuningJobEvent,
   FineTuningJobEvent$inboundSchema,
@@ -84,4 +87,24 @@ export namespace ListFineTuningJobEventsResponse$ {
   export const outboundSchema = ListFineTuningJobEventsResponse$outboundSchema;
   /** @deprecated use `ListFineTuningJobEventsResponse$Outbound` instead. */
   export type Outbound = ListFineTuningJobEventsResponse$Outbound;
+}
+
+export function listFineTuningJobEventsResponseToJSON(
+  listFineTuningJobEventsResponse: ListFineTuningJobEventsResponse,
+): string {
+  return JSON.stringify(
+    ListFineTuningJobEventsResponse$outboundSchema.parse(
+      listFineTuningJobEventsResponse,
+    ),
+  );
+}
+
+export function listFineTuningJobEventsResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<ListFineTuningJobEventsResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ListFineTuningJobEventsResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListFineTuningJobEventsResponse' from JSON`,
+  );
 }

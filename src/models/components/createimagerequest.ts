@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export const CreateImageRequestModel2 = {
   DallE2: "dall-e-2",
@@ -160,6 +163,24 @@ export namespace CreateImageRequestModel$ {
   export type Outbound = CreateImageRequestModel$Outbound;
 }
 
+export function createImageRequestModelToJSON(
+  createImageRequestModel: CreateImageRequestModel,
+): string {
+  return JSON.stringify(
+    CreateImageRequestModel$outboundSchema.parse(createImageRequestModel),
+  );
+}
+
+export function createImageRequestModelFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateImageRequestModel, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateImageRequestModel$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateImageRequestModel' from JSON`,
+  );
+}
+
 /** @internal */
 export const Quality$inboundSchema: z.ZodNativeEnum<typeof Quality> = z
   .nativeEnum(Quality);
@@ -311,4 +332,22 @@ export namespace CreateImageRequest$ {
   export const outboundSchema = CreateImageRequest$outboundSchema;
   /** @deprecated use `CreateImageRequest$Outbound` instead. */
   export type Outbound = CreateImageRequest$Outbound;
+}
+
+export function createImageRequestToJSON(
+  createImageRequest: CreateImageRequest,
+): string {
+  return JSON.stringify(
+    CreateImageRequest$outboundSchema.parse(createImageRequest),
+  );
+}
+
+export function createImageRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateImageRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateImageRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateImageRequest' from JSON`,
+  );
 }

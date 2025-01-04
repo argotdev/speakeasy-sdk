@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type RetrieveInviteRequest = {
   /**
@@ -54,4 +57,22 @@ export namespace RetrieveInviteRequest$ {
   export const outboundSchema = RetrieveInviteRequest$outboundSchema;
   /** @deprecated use `RetrieveInviteRequest$Outbound` instead. */
   export type Outbound = RetrieveInviteRequest$Outbound;
+}
+
+export function retrieveInviteRequestToJSON(
+  retrieveInviteRequest: RetrieveInviteRequest,
+): string {
+  return JSON.stringify(
+    RetrieveInviteRequest$outboundSchema.parse(retrieveInviteRequest),
+  );
+}
+
+export function retrieveInviteRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<RetrieveInviteRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RetrieveInviteRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RetrieveInviteRequest' from JSON`,
+  );
 }

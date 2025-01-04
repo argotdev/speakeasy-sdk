@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type RetrieveProjectUserRequest = {
   /**
@@ -63,4 +66,22 @@ export namespace RetrieveProjectUserRequest$ {
   export const outboundSchema = RetrieveProjectUserRequest$outboundSchema;
   /** @deprecated use `RetrieveProjectUserRequest$Outbound` instead. */
   export type Outbound = RetrieveProjectUserRequest$Outbound;
+}
+
+export function retrieveProjectUserRequestToJSON(
+  retrieveProjectUserRequest: RetrieveProjectUserRequest,
+): string {
+  return JSON.stringify(
+    RetrieveProjectUserRequest$outboundSchema.parse(retrieveProjectUserRequest),
+  );
+}
+
+export function retrieveProjectUserRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<RetrieveProjectUserRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RetrieveProjectUserRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RetrieveProjectUserRequest' from JSON`,
+  );
 }

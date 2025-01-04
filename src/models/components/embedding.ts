@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The object type, which is always "embedding".
@@ -99,4 +102,18 @@ export namespace Embedding$ {
   export const outboundSchema = Embedding$outboundSchema;
   /** @deprecated use `Embedding$Outbound` instead. */
   export type Outbound = Embedding$Outbound;
+}
+
+export function embeddingToJSON(embedding: Embedding): string {
+  return JSON.stringify(Embedding$outboundSchema.parse(embedding));
+}
+
+export function embeddingFromJSON(
+  jsonString: string,
+): SafeParseResult<Embedding, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Embedding$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Embedding' from JSON`,
+  );
 }

@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * `owner` or `reader`
@@ -86,4 +89,18 @@ export namespace InviteRequest$ {
   export const outboundSchema = InviteRequest$outboundSchema;
   /** @deprecated use `InviteRequest$Outbound` instead. */
   export type Outbound = InviteRequest$Outbound;
+}
+
+export function inviteRequestToJSON(inviteRequest: InviteRequest): string {
+  return JSON.stringify(InviteRequest$outboundSchema.parse(inviteRequest));
+}
+
+export function inviteRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<InviteRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => InviteRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'InviteRequest' from JSON`,
+  );
 }

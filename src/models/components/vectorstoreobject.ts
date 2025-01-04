@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   VectorStoreExpirationAfter,
   VectorStoreExpirationAfter$inboundSchema,
@@ -196,6 +199,20 @@ export namespace FileCounts$ {
   export type Outbound = FileCounts$Outbound;
 }
 
+export function fileCountsToJSON(fileCounts: FileCounts): string {
+  return JSON.stringify(FileCounts$outboundSchema.parse(fileCounts));
+}
+
+export function fileCountsFromJSON(
+  jsonString: string,
+): SafeParseResult<FileCounts, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FileCounts$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FileCounts' from JSON`,
+  );
+}
+
 /** @internal */
 export const VectorStoreObjectStatus$inboundSchema: z.ZodNativeEnum<
   typeof VectorStoreObjectStatus
@@ -245,6 +262,24 @@ export namespace VectorStoreObjectMetadata$ {
   export const outboundSchema = VectorStoreObjectMetadata$outboundSchema;
   /** @deprecated use `VectorStoreObjectMetadata$Outbound` instead. */
   export type Outbound = VectorStoreObjectMetadata$Outbound;
+}
+
+export function vectorStoreObjectMetadataToJSON(
+  vectorStoreObjectMetadata: VectorStoreObjectMetadata,
+): string {
+  return JSON.stringify(
+    VectorStoreObjectMetadata$outboundSchema.parse(vectorStoreObjectMetadata),
+  );
+}
+
+export function vectorStoreObjectMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<VectorStoreObjectMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => VectorStoreObjectMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'VectorStoreObjectMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -329,4 +364,22 @@ export namespace VectorStoreObject$ {
   export const outboundSchema = VectorStoreObject$outboundSchema;
   /** @deprecated use `VectorStoreObject$Outbound` instead. */
   export type Outbound = VectorStoreObject$Outbound;
+}
+
+export function vectorStoreObjectToJSON(
+  vectorStoreObject: VectorStoreObject,
+): string {
+  return JSON.stringify(
+    VectorStoreObject$outboundSchema.parse(vectorStoreObject),
+  );
+}
+
+export function vectorStoreObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<VectorStoreObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => VectorStoreObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'VectorStoreObject' from JSON`,
+  );
 }

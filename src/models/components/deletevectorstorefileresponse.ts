@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export const DeleteVectorStoreFileResponseObject = {
   VectorStoreFileDeleted: "vector_store.file.deleted",
@@ -81,4 +84,24 @@ export namespace DeleteVectorStoreFileResponse$ {
   export const outboundSchema = DeleteVectorStoreFileResponse$outboundSchema;
   /** @deprecated use `DeleteVectorStoreFileResponse$Outbound` instead. */
   export type Outbound = DeleteVectorStoreFileResponse$Outbound;
+}
+
+export function deleteVectorStoreFileResponseToJSON(
+  deleteVectorStoreFileResponse: DeleteVectorStoreFileResponse,
+): string {
+  return JSON.stringify(
+    DeleteVectorStoreFileResponse$outboundSchema.parse(
+      deleteVectorStoreFileResponse,
+    ),
+  );
+}
+
+export function deleteVectorStoreFileResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<DeleteVectorStoreFileResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => DeleteVectorStoreFileResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeleteVectorStoreFileResponse' from JSON`,
+  );
 }

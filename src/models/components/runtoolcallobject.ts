@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The type of tool call the output is required for. For now, this is always `function`.
@@ -108,6 +111,24 @@ export namespace RunToolCallObjectFunction$ {
   export type Outbound = RunToolCallObjectFunction$Outbound;
 }
 
+export function runToolCallObjectFunctionToJSON(
+  runToolCallObjectFunction: RunToolCallObjectFunction,
+): string {
+  return JSON.stringify(
+    RunToolCallObjectFunction$outboundSchema.parse(runToolCallObjectFunction),
+  );
+}
+
+export function runToolCallObjectFunctionFromJSON(
+  jsonString: string,
+): SafeParseResult<RunToolCallObjectFunction, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RunToolCallObjectFunction$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RunToolCallObjectFunction' from JSON`,
+  );
+}
+
 /** @internal */
 export const RunToolCallObject$inboundSchema: z.ZodType<
   RunToolCallObject,
@@ -148,4 +169,22 @@ export namespace RunToolCallObject$ {
   export const outboundSchema = RunToolCallObject$outboundSchema;
   /** @deprecated use `RunToolCallObject$Outbound` instead. */
   export type Outbound = RunToolCallObject$Outbound;
+}
+
+export function runToolCallObjectToJSON(
+  runToolCallObject: RunToolCallObject,
+): string {
+  return JSON.stringify(
+    RunToolCallObject$outboundSchema.parse(runToolCallObject),
+  );
+}
+
+export function runToolCallObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<RunToolCallObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RunToolCallObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RunToolCallObject' from JSON`,
+  );
 }

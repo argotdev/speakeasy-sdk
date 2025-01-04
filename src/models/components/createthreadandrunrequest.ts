@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   AssistantsApiResponseFormatOption,
   AssistantsApiResponseFormatOption$inboundSchema,
@@ -206,6 +209,10 @@ export type CreateThreadAndRunRequest = {
    */
   toolChoice?: AssistantsApiToolChoiceOption | undefined;
   /**
+   * Whether to enable [parallel function calling](/docs/guides/function-calling/parallel-function-calling) during tool use.
+   */
+  parallelToolCalls?: boolean | undefined;
+  /**
    * Specifies the format that the model must output. Compatible with [GPT-4o](/docs/models/gpt-4o), [GPT-4 Turbo](/docs/models/gpt-4-turbo-and-gpt-4), and all GPT-3.5 Turbo models since `gpt-3.5-turbo-1106`.
    *
    * @remarks
@@ -270,6 +277,26 @@ export namespace CreateThreadAndRunRequestModel$ {
   export type Outbound = CreateThreadAndRunRequestModel$Outbound;
 }
 
+export function createThreadAndRunRequestModelToJSON(
+  createThreadAndRunRequestModel: CreateThreadAndRunRequestModel,
+): string {
+  return JSON.stringify(
+    CreateThreadAndRunRequestModel$outboundSchema.parse(
+      createThreadAndRunRequestModel,
+    ),
+  );
+}
+
+export function createThreadAndRunRequestModelFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateThreadAndRunRequestModel, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateThreadAndRunRequestModel$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadAndRunRequestModel' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateThreadAndRunRequestTools$inboundSchema: z.ZodType<
   CreateThreadAndRunRequestTools,
@@ -309,6 +336,26 @@ export namespace CreateThreadAndRunRequestTools$ {
   export const outboundSchema = CreateThreadAndRunRequestTools$outboundSchema;
   /** @deprecated use `CreateThreadAndRunRequestTools$Outbound` instead. */
   export type Outbound = CreateThreadAndRunRequestTools$Outbound;
+}
+
+export function createThreadAndRunRequestToolsToJSON(
+  createThreadAndRunRequestTools: CreateThreadAndRunRequestTools,
+): string {
+  return JSON.stringify(
+    CreateThreadAndRunRequestTools$outboundSchema.parse(
+      createThreadAndRunRequestTools,
+    ),
+  );
+}
+
+export function createThreadAndRunRequestToolsFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateThreadAndRunRequestTools, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateThreadAndRunRequestTools$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadAndRunRequestTools' from JSON`,
+  );
 }
 
 /** @internal */
@@ -357,6 +404,33 @@ export namespace CreateThreadAndRunRequestCodeInterpreter$ {
   export type Outbound = CreateThreadAndRunRequestCodeInterpreter$Outbound;
 }
 
+export function createThreadAndRunRequestCodeInterpreterToJSON(
+  createThreadAndRunRequestCodeInterpreter:
+    CreateThreadAndRunRequestCodeInterpreter,
+): string {
+  return JSON.stringify(
+    CreateThreadAndRunRequestCodeInterpreter$outboundSchema.parse(
+      createThreadAndRunRequestCodeInterpreter,
+    ),
+  );
+}
+
+export function createThreadAndRunRequestCodeInterpreterFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  CreateThreadAndRunRequestCodeInterpreter,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateThreadAndRunRequestCodeInterpreter$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'CreateThreadAndRunRequestCodeInterpreter' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateThreadAndRunRequestFileSearch$inboundSchema: z.ZodType<
   CreateThreadAndRunRequestFileSearch,
@@ -401,6 +475,27 @@ export namespace CreateThreadAndRunRequestFileSearch$ {
     CreateThreadAndRunRequestFileSearch$outboundSchema;
   /** @deprecated use `CreateThreadAndRunRequestFileSearch$Outbound` instead. */
   export type Outbound = CreateThreadAndRunRequestFileSearch$Outbound;
+}
+
+export function createThreadAndRunRequestFileSearchToJSON(
+  createThreadAndRunRequestFileSearch: CreateThreadAndRunRequestFileSearch,
+): string {
+  return JSON.stringify(
+    CreateThreadAndRunRequestFileSearch$outboundSchema.parse(
+      createThreadAndRunRequestFileSearch,
+    ),
+  );
+}
+
+export function createThreadAndRunRequestFileSearchFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateThreadAndRunRequestFileSearch, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateThreadAndRunRequestFileSearch$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadAndRunRequestFileSearch' from JSON`,
+  );
 }
 
 /** @internal */
@@ -462,6 +557,28 @@ export namespace CreateThreadAndRunRequestToolResources$ {
   export type Outbound = CreateThreadAndRunRequestToolResources$Outbound;
 }
 
+export function createThreadAndRunRequestToolResourcesToJSON(
+  createThreadAndRunRequestToolResources:
+    CreateThreadAndRunRequestToolResources,
+): string {
+  return JSON.stringify(
+    CreateThreadAndRunRequestToolResources$outboundSchema.parse(
+      createThreadAndRunRequestToolResources,
+    ),
+  );
+}
+
+export function createThreadAndRunRequestToolResourcesFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateThreadAndRunRequestToolResources, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateThreadAndRunRequestToolResources$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadAndRunRequestToolResources' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateThreadAndRunRequestMetadata$inboundSchema: z.ZodType<
   CreateThreadAndRunRequestMetadata,
@@ -491,6 +608,26 @@ export namespace CreateThreadAndRunRequestMetadata$ {
     CreateThreadAndRunRequestMetadata$outboundSchema;
   /** @deprecated use `CreateThreadAndRunRequestMetadata$Outbound` instead. */
   export type Outbound = CreateThreadAndRunRequestMetadata$Outbound;
+}
+
+export function createThreadAndRunRequestMetadataToJSON(
+  createThreadAndRunRequestMetadata: CreateThreadAndRunRequestMetadata,
+): string {
+  return JSON.stringify(
+    CreateThreadAndRunRequestMetadata$outboundSchema.parse(
+      createThreadAndRunRequestMetadata,
+    ),
+  );
+}
+
+export function createThreadAndRunRequestMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateThreadAndRunRequestMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateThreadAndRunRequestMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadAndRunRequestMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -527,6 +664,7 @@ export const CreateThreadAndRunRequest$inboundSchema: z.ZodType<
   max_completion_tokens: z.nullable(z.number().int()).optional(),
   truncation_strategy: TruncationObject$inboundSchema.optional(),
   tool_choice: AssistantsApiToolChoiceOption$inboundSchema.optional(),
+  parallel_tool_calls: z.boolean().default(true),
   response_format: AssistantsApiResponseFormatOption$inboundSchema.optional(),
 }).transform((v) => {
   return remap$(v, {
@@ -537,6 +675,7 @@ export const CreateThreadAndRunRequest$inboundSchema: z.ZodType<
     "max_completion_tokens": "maxCompletionTokens",
     "truncation_strategy": "truncationStrategy",
     "tool_choice": "toolChoice",
+    "parallel_tool_calls": "parallelToolCalls",
     "response_format": "responseFormat",
   });
 });
@@ -567,6 +706,7 @@ export type CreateThreadAndRunRequest$Outbound = {
   max_completion_tokens?: number | null | undefined;
   truncation_strategy?: TruncationObject$Outbound | undefined;
   tool_choice?: AssistantsApiToolChoiceOption$Outbound | undefined;
+  parallel_tool_calls: boolean;
   response_format?: AssistantsApiResponseFormatOption$Outbound | undefined;
 };
 
@@ -604,6 +744,7 @@ export const CreateThreadAndRunRequest$outboundSchema: z.ZodType<
   maxCompletionTokens: z.nullable(z.number().int()).optional(),
   truncationStrategy: TruncationObject$outboundSchema.optional(),
   toolChoice: AssistantsApiToolChoiceOption$outboundSchema.optional(),
+  parallelToolCalls: z.boolean().default(true),
   responseFormat: AssistantsApiResponseFormatOption$outboundSchema.optional(),
 }).transform((v) => {
   return remap$(v, {
@@ -614,6 +755,7 @@ export const CreateThreadAndRunRequest$outboundSchema: z.ZodType<
     maxCompletionTokens: "max_completion_tokens",
     truncationStrategy: "truncation_strategy",
     toolChoice: "tool_choice",
+    parallelToolCalls: "parallel_tool_calls",
     responseFormat: "response_format",
   });
 });
@@ -629,4 +771,22 @@ export namespace CreateThreadAndRunRequest$ {
   export const outboundSchema = CreateThreadAndRunRequest$outboundSchema;
   /** @deprecated use `CreateThreadAndRunRequest$Outbound` instead. */
   export type Outbound = CreateThreadAndRunRequest$Outbound;
+}
+
+export function createThreadAndRunRequestToJSON(
+  createThreadAndRunRequest: CreateThreadAndRunRequest,
+): string {
+  return JSON.stringify(
+    CreateThreadAndRunRequest$outboundSchema.parse(createThreadAndRunRequest),
+  );
+}
+
+export function createThreadAndRunRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateThreadAndRunRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateThreadAndRunRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadAndRunRequest' from JSON`,
+  );
 }

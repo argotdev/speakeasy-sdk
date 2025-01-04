@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Always `file_citation`.
@@ -110,6 +113,20 @@ export namespace FileCitation$ {
   export type Outbound = FileCitation$Outbound;
 }
 
+export function fileCitationToJSON(fileCitation: FileCitation): string {
+  return JSON.stringify(FileCitation$outboundSchema.parse(fileCitation));
+}
+
+export function fileCitationFromJSON(
+  jsonString: string,
+): SafeParseResult<FileCitation, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FileCitation$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FileCitation' from JSON`,
+  );
+}
+
 /** @internal */
 export const MessageContentTextAnnotationsFileCitationObject$inboundSchema:
   z.ZodType<
@@ -173,4 +190,31 @@ export namespace MessageContentTextAnnotationsFileCitationObject$ {
   /** @deprecated use `MessageContentTextAnnotationsFileCitationObject$Outbound` instead. */
   export type Outbound =
     MessageContentTextAnnotationsFileCitationObject$Outbound;
+}
+
+export function messageContentTextAnnotationsFileCitationObjectToJSON(
+  messageContentTextAnnotationsFileCitationObject:
+    MessageContentTextAnnotationsFileCitationObject,
+): string {
+  return JSON.stringify(
+    MessageContentTextAnnotationsFileCitationObject$outboundSchema.parse(
+      messageContentTextAnnotationsFileCitationObject,
+    ),
+  );
+}
+
+export function messageContentTextAnnotationsFileCitationObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  MessageContentTextAnnotationsFileCitationObject,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      MessageContentTextAnnotationsFileCitationObject$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'MessageContentTextAnnotationsFileCitationObject' from JSON`,
+  );
 }

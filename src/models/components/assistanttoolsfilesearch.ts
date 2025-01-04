@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   FileSearchRankingOptions,
   FileSearchRankingOptions$inboundSchema,
@@ -128,6 +131,20 @@ export namespace FileSearch$ {
   export type Outbound = FileSearch$Outbound;
 }
 
+export function fileSearchToJSON(fileSearch: FileSearch): string {
+  return JSON.stringify(FileSearch$outboundSchema.parse(fileSearch));
+}
+
+export function fileSearchFromJSON(
+  jsonString: string,
+): SafeParseResult<FileSearch, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FileSearch$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FileSearch' from JSON`,
+  );
+}
+
 /** @internal */
 export const AssistantToolsFileSearch$inboundSchema: z.ZodType<
   AssistantToolsFileSearch,
@@ -173,4 +190,22 @@ export namespace AssistantToolsFileSearch$ {
   export const outboundSchema = AssistantToolsFileSearch$outboundSchema;
   /** @deprecated use `AssistantToolsFileSearch$Outbound` instead. */
   export type Outbound = AssistantToolsFileSearch$Outbound;
+}
+
+export function assistantToolsFileSearchToJSON(
+  assistantToolsFileSearch: AssistantToolsFileSearch,
+): string {
+  return JSON.stringify(
+    AssistantToolsFileSearch$outboundSchema.parse(assistantToolsFileSearch),
+  );
+}
+
+export function assistantToolsFileSearchFromJSON(
+  jsonString: string,
+): SafeParseResult<AssistantToolsFileSearch, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AssistantToolsFileSearch$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AssistantToolsFileSearch' from JSON`,
+  );
 }

@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   FineTuningJobCheckpoint,
   FineTuningJobCheckpoint$inboundSchema,
@@ -110,4 +113,25 @@ export namespace ListFineTuningJobCheckpointsResponse$ {
     ListFineTuningJobCheckpointsResponse$outboundSchema;
   /** @deprecated use `ListFineTuningJobCheckpointsResponse$Outbound` instead. */
   export type Outbound = ListFineTuningJobCheckpointsResponse$Outbound;
+}
+
+export function listFineTuningJobCheckpointsResponseToJSON(
+  listFineTuningJobCheckpointsResponse: ListFineTuningJobCheckpointsResponse,
+): string {
+  return JSON.stringify(
+    ListFineTuningJobCheckpointsResponse$outboundSchema.parse(
+      listFineTuningJobCheckpointsResponse,
+    ),
+  );
+}
+
+export function listFineTuningJobCheckpointsResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<ListFineTuningJobCheckpointsResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ListFineTuningJobCheckpointsResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListFineTuningJobCheckpointsResponse' from JSON`,
+  );
 }

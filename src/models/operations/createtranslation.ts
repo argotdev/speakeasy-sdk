@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
 import * as components from "../components/index.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * OK
@@ -48,4 +51,24 @@ export namespace CreateTranslationResponseBody$ {
   export const outboundSchema = CreateTranslationResponseBody$outboundSchema;
   /** @deprecated use `CreateTranslationResponseBody$Outbound` instead. */
   export type Outbound = CreateTranslationResponseBody$Outbound;
+}
+
+export function createTranslationResponseBodyToJSON(
+  createTranslationResponseBody: CreateTranslationResponseBody,
+): string {
+  return JSON.stringify(
+    CreateTranslationResponseBody$outboundSchema.parse(
+      createTranslationResponseBody,
+    ),
+  );
+}
+
+export function createTranslationResponseBodyFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateTranslationResponseBody, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateTranslationResponseBody$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateTranslationResponseBody' from JSON`,
+  );
 }

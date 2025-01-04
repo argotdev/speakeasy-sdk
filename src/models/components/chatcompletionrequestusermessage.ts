@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   ChatCompletionRequestUserMessageContentPart,
   ChatCompletionRequestUserMessageContentPart$inboundSchema,
@@ -90,6 +93,33 @@ export namespace ChatCompletionRequestUserMessageContent$ {
   export type Outbound = ChatCompletionRequestUserMessageContent$Outbound;
 }
 
+export function chatCompletionRequestUserMessageContentToJSON(
+  chatCompletionRequestUserMessageContent:
+    ChatCompletionRequestUserMessageContent,
+): string {
+  return JSON.stringify(
+    ChatCompletionRequestUserMessageContent$outboundSchema.parse(
+      chatCompletionRequestUserMessageContent,
+    ),
+  );
+}
+
+export function chatCompletionRequestUserMessageContentFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  ChatCompletionRequestUserMessageContent,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ChatCompletionRequestUserMessageContent$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'ChatCompletionRequestUserMessageContent' from JSON`,
+  );
+}
+
 /** @internal */
 export const ChatCompletionRequestUserMessageRole$inboundSchema:
   z.ZodNativeEnum<typeof ChatCompletionRequestUserMessageRole> = z.nativeEnum(
@@ -160,4 +190,24 @@ export namespace ChatCompletionRequestUserMessage$ {
   export const outboundSchema = ChatCompletionRequestUserMessage$outboundSchema;
   /** @deprecated use `ChatCompletionRequestUserMessage$Outbound` instead. */
   export type Outbound = ChatCompletionRequestUserMessage$Outbound;
+}
+
+export function chatCompletionRequestUserMessageToJSON(
+  chatCompletionRequestUserMessage: ChatCompletionRequestUserMessage,
+): string {
+  return JSON.stringify(
+    ChatCompletionRequestUserMessage$outboundSchema.parse(
+      chatCompletionRequestUserMessage,
+    ),
+  );
+}
+
+export function chatCompletionRequestUserMessageFromJSON(
+  jsonString: string,
+): SafeParseResult<ChatCompletionRequestUserMessage, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ChatCompletionRequestUserMessage$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ChatCompletionRequestUserMessage' from JSON`,
+  );
 }

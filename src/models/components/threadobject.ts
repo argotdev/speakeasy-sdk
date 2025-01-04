@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The object type, which is always `thread`.
@@ -147,6 +150,26 @@ export namespace ThreadObjectCodeInterpreter$ {
   export type Outbound = ThreadObjectCodeInterpreter$Outbound;
 }
 
+export function threadObjectCodeInterpreterToJSON(
+  threadObjectCodeInterpreter: ThreadObjectCodeInterpreter,
+): string {
+  return JSON.stringify(
+    ThreadObjectCodeInterpreter$outboundSchema.parse(
+      threadObjectCodeInterpreter,
+    ),
+  );
+}
+
+export function threadObjectCodeInterpreterFromJSON(
+  jsonString: string,
+): SafeParseResult<ThreadObjectCodeInterpreter, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ThreadObjectCodeInterpreter$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ThreadObjectCodeInterpreter' from JSON`,
+  );
+}
+
 /** @internal */
 export const ThreadObjectFileSearch$inboundSchema: z.ZodType<
   ThreadObjectFileSearch,
@@ -189,6 +212,24 @@ export namespace ThreadObjectFileSearch$ {
   export const outboundSchema = ThreadObjectFileSearch$outboundSchema;
   /** @deprecated use `ThreadObjectFileSearch$Outbound` instead. */
   export type Outbound = ThreadObjectFileSearch$Outbound;
+}
+
+export function threadObjectFileSearchToJSON(
+  threadObjectFileSearch: ThreadObjectFileSearch,
+): string {
+  return JSON.stringify(
+    ThreadObjectFileSearch$outboundSchema.parse(threadObjectFileSearch),
+  );
+}
+
+export function threadObjectFileSearchFromJSON(
+  jsonString: string,
+): SafeParseResult<ThreadObjectFileSearch, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ThreadObjectFileSearch$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ThreadObjectFileSearch' from JSON`,
+  );
 }
 
 /** @internal */
@@ -242,6 +283,24 @@ export namespace ThreadObjectToolResources$ {
   export type Outbound = ThreadObjectToolResources$Outbound;
 }
 
+export function threadObjectToolResourcesToJSON(
+  threadObjectToolResources: ThreadObjectToolResources,
+): string {
+  return JSON.stringify(
+    ThreadObjectToolResources$outboundSchema.parse(threadObjectToolResources),
+  );
+}
+
+export function threadObjectToolResourcesFromJSON(
+  jsonString: string,
+): SafeParseResult<ThreadObjectToolResources, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ThreadObjectToolResources$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ThreadObjectToolResources' from JSON`,
+  );
+}
+
 /** @internal */
 export const ThreadObjectMetadata$inboundSchema: z.ZodType<
   ThreadObjectMetadata,
@@ -270,6 +329,24 @@ export namespace ThreadObjectMetadata$ {
   export const outboundSchema = ThreadObjectMetadata$outboundSchema;
   /** @deprecated use `ThreadObjectMetadata$Outbound` instead. */
   export type Outbound = ThreadObjectMetadata$Outbound;
+}
+
+export function threadObjectMetadataToJSON(
+  threadObjectMetadata: ThreadObjectMetadata,
+): string {
+  return JSON.stringify(
+    ThreadObjectMetadata$outboundSchema.parse(threadObjectMetadata),
+  );
+}
+
+export function threadObjectMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<ThreadObjectMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ThreadObjectMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ThreadObjectMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -332,4 +409,18 @@ export namespace ThreadObject$ {
   export const outboundSchema = ThreadObject$outboundSchema;
   /** @deprecated use `ThreadObject$Outbound` instead. */
   export type Outbound = ThreadObject$Outbound;
+}
+
+export function threadObjectToJSON(threadObject: ThreadObject): string {
+  return JSON.stringify(ThreadObject$outboundSchema.parse(threadObject));
+}
+
+export function threadObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<ThreadObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ThreadObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ThreadObject' from JSON`,
+  );
 }

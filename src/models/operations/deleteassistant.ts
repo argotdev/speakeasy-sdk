@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type DeleteAssistantRequest = {
   /**
@@ -54,4 +57,22 @@ export namespace DeleteAssistantRequest$ {
   export const outboundSchema = DeleteAssistantRequest$outboundSchema;
   /** @deprecated use `DeleteAssistantRequest$Outbound` instead. */
   export type Outbound = DeleteAssistantRequest$Outbound;
+}
+
+export function deleteAssistantRequestToJSON(
+  deleteAssistantRequest: DeleteAssistantRequest,
+): string {
+  return JSON.stringify(
+    DeleteAssistantRequest$outboundSchema.parse(deleteAssistantRequest),
+  );
+}
+
+export function deleteAssistantRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<DeleteAssistantRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => DeleteAssistantRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeleteAssistantRequest' from JSON`,
+  );
 }

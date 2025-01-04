@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maximum of 512 characters long.
@@ -50,6 +53,26 @@ export namespace ModifyMessageRequestMetadata$ {
   export type Outbound = ModifyMessageRequestMetadata$Outbound;
 }
 
+export function modifyMessageRequestMetadataToJSON(
+  modifyMessageRequestMetadata: ModifyMessageRequestMetadata,
+): string {
+  return JSON.stringify(
+    ModifyMessageRequestMetadata$outboundSchema.parse(
+      modifyMessageRequestMetadata,
+    ),
+  );
+}
+
+export function modifyMessageRequestMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyMessageRequestMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ModifyMessageRequestMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyMessageRequestMetadata' from JSON`,
+  );
+}
+
 /** @internal */
 export const ModifyMessageRequest$inboundSchema: z.ZodType<
   ModifyMessageRequest,
@@ -87,4 +110,22 @@ export namespace ModifyMessageRequest$ {
   export const outboundSchema = ModifyMessageRequest$outboundSchema;
   /** @deprecated use `ModifyMessageRequest$Outbound` instead. */
   export type Outbound = ModifyMessageRequest$Outbound;
+}
+
+export function modifyMessageRequestToJSON(
+  modifyMessageRequest: ModifyMessageRequest,
+): string {
+  return JSON.stringify(
+    ModifyMessageRequest$outboundSchema.parse(modifyMessageRequest),
+  );
+}
+
+export function modifyMessageRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyMessageRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ModifyMessageRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyMessageRequest' from JSON`,
+  );
 }

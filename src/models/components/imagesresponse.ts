@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   Image,
   Image$inboundSchema,
@@ -52,4 +55,18 @@ export namespace ImagesResponse$ {
   export const outboundSchema = ImagesResponse$outboundSchema;
   /** @deprecated use `ImagesResponse$Outbound` instead. */
   export type Outbound = ImagesResponse$Outbound;
+}
+
+export function imagesResponseToJSON(imagesResponse: ImagesResponse): string {
+  return JSON.stringify(ImagesResponse$outboundSchema.parse(imagesResponse));
+}
+
+export function imagesResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<ImagesResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ImagesResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ImagesResponse' from JSON`,
+  );
 }

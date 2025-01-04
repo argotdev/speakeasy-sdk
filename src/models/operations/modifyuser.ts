@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
 import * as components from "../components/index.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type ModifyUserRequest = {
   /**
@@ -64,4 +67,22 @@ export namespace ModifyUserRequest$ {
   export const outboundSchema = ModifyUserRequest$outboundSchema;
   /** @deprecated use `ModifyUserRequest$Outbound` instead. */
   export type Outbound = ModifyUserRequest$Outbound;
+}
+
+export function modifyUserRequestToJSON(
+  modifyUserRequest: ModifyUserRequest,
+): string {
+  return JSON.stringify(
+    ModifyUserRequest$outboundSchema.parse(modifyUserRequest),
+  );
+}
+
+export function modifyUserRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyUserRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ModifyUserRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyUserRequest' from JSON`,
+  );
 }

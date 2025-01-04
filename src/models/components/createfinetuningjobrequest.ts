@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export const CreateFineTuningJobRequestModel2 = {
   Babbage002: "babbage-002",
@@ -272,6 +275,26 @@ export namespace CreateFineTuningJobRequestModel$ {
   export type Outbound = CreateFineTuningJobRequestModel$Outbound;
 }
 
+export function createFineTuningJobRequestModelToJSON(
+  createFineTuningJobRequestModel: CreateFineTuningJobRequestModel,
+): string {
+  return JSON.stringify(
+    CreateFineTuningJobRequestModel$outboundSchema.parse(
+      createFineTuningJobRequestModel,
+    ),
+  );
+}
+
+export function createFineTuningJobRequestModelFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateFineTuningJobRequestModel, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateFineTuningJobRequestModel$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateFineTuningJobRequestModel' from JSON`,
+  );
+}
+
 /** @internal */
 export const BatchSize1$inboundSchema: z.ZodNativeEnum<typeof BatchSize1> = z
   .nativeEnum(BatchSize1);
@@ -319,6 +342,20 @@ export namespace BatchSize$ {
   export const outboundSchema = BatchSize$outboundSchema;
   /** @deprecated use `BatchSize$Outbound` instead. */
   export type Outbound = BatchSize$Outbound;
+}
+
+export function batchSizeToJSON(batchSize: BatchSize): string {
+  return JSON.stringify(BatchSize$outboundSchema.parse(batchSize));
+}
+
+export function batchSizeFromJSON(
+  jsonString: string,
+): SafeParseResult<BatchSize, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => BatchSize$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'BatchSize' from JSON`,
+  );
 }
 
 /** @internal */
@@ -372,6 +409,24 @@ export namespace LearningRateMultiplier$ {
   export type Outbound = LearningRateMultiplier$Outbound;
 }
 
+export function learningRateMultiplierToJSON(
+  learningRateMultiplier: LearningRateMultiplier,
+): string {
+  return JSON.stringify(
+    LearningRateMultiplier$outboundSchema.parse(learningRateMultiplier),
+  );
+}
+
+export function learningRateMultiplierFromJSON(
+  jsonString: string,
+): SafeParseResult<LearningRateMultiplier, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => LearningRateMultiplier$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'LearningRateMultiplier' from JSON`,
+  );
+}
+
 /** @internal */
 export const NEpochs1$inboundSchema: z.ZodNativeEnum<typeof NEpochs1> = z
   .nativeEnum(NEpochs1);
@@ -416,6 +471,20 @@ export namespace NEpochs$ {
   export const outboundSchema = NEpochs$outboundSchema;
   /** @deprecated use `NEpochs$Outbound` instead. */
   export type Outbound = NEpochs$Outbound;
+}
+
+export function nEpochsToJSON(nEpochs: NEpochs): string {
+  return JSON.stringify(NEpochs$outboundSchema.parse(nEpochs));
+}
+
+export function nEpochsFromJSON(
+  jsonString: string,
+): SafeParseResult<NEpochs, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => NEpochs$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'NEpochs' from JSON`,
+  );
 }
 
 /** @internal */
@@ -478,6 +547,22 @@ export namespace Hyperparameters$ {
   export type Outbound = Hyperparameters$Outbound;
 }
 
+export function hyperparametersToJSON(
+  hyperparameters: Hyperparameters,
+): string {
+  return JSON.stringify(Hyperparameters$outboundSchema.parse(hyperparameters));
+}
+
+export function hyperparametersFromJSON(
+  jsonString: string,
+): SafeParseResult<Hyperparameters, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Hyperparameters$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Hyperparameters' from JSON`,
+  );
+}
+
 /** @internal */
 export const Type1$inboundSchema: z.ZodNativeEnum<typeof Type1> = z.nativeEnum(
   Type1,
@@ -528,6 +613,26 @@ export namespace CreateFineTuningJobRequestType$ {
   export type Outbound = CreateFineTuningJobRequestType$Outbound;
 }
 
+export function createFineTuningJobRequestTypeToJSON(
+  createFineTuningJobRequestType: CreateFineTuningJobRequestType,
+): string {
+  return JSON.stringify(
+    CreateFineTuningJobRequestType$outboundSchema.parse(
+      createFineTuningJobRequestType,
+    ),
+  );
+}
+
+export function createFineTuningJobRequestTypeFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateFineTuningJobRequestType, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateFineTuningJobRequestType$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateFineTuningJobRequestType' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateFineTuningJobRequestWandb$inboundSchema: z.ZodType<
   CreateFineTuningJobRequestWandb,
@@ -573,6 +678,26 @@ export namespace CreateFineTuningJobRequestWandb$ {
   export type Outbound = CreateFineTuningJobRequestWandb$Outbound;
 }
 
+export function createFineTuningJobRequestWandbToJSON(
+  createFineTuningJobRequestWandb: CreateFineTuningJobRequestWandb,
+): string {
+  return JSON.stringify(
+    CreateFineTuningJobRequestWandb$outboundSchema.parse(
+      createFineTuningJobRequestWandb,
+    ),
+  );
+}
+
+export function createFineTuningJobRequestWandbFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateFineTuningJobRequestWandb, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateFineTuningJobRequestWandb$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateFineTuningJobRequestWandb' from JSON`,
+  );
+}
+
 /** @internal */
 export const Integrations$inboundSchema: z.ZodType<
   Integrations,
@@ -610,6 +735,20 @@ export namespace Integrations$ {
   export const outboundSchema = Integrations$outboundSchema;
   /** @deprecated use `Integrations$Outbound` instead. */
   export type Outbound = Integrations$Outbound;
+}
+
+export function integrationsToJSON(integrations: Integrations): string {
+  return JSON.stringify(Integrations$outboundSchema.parse(integrations));
+}
+
+export function integrationsFromJSON(
+  jsonString: string,
+): SafeParseResult<Integrations, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Integrations$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Integrations' from JSON`,
+  );
 }
 
 /** @internal */
@@ -676,4 +815,22 @@ export namespace CreateFineTuningJobRequest$ {
   export const outboundSchema = CreateFineTuningJobRequest$outboundSchema;
   /** @deprecated use `CreateFineTuningJobRequest$Outbound` instead. */
   export type Outbound = CreateFineTuningJobRequest$Outbound;
+}
+
+export function createFineTuningJobRequestToJSON(
+  createFineTuningJobRequest: CreateFineTuningJobRequest,
+): string {
+  return JSON.stringify(
+    CreateFineTuningJobRequest$outboundSchema.parse(createFineTuningJobRequest),
+  );
+}
+
+export function createFineTuningJobRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateFineTuningJobRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateFineTuningJobRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateFineTuningJobRequest' from JSON`,
+  );
 }

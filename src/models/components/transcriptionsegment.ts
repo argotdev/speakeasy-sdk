@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type TranscriptionSegment = {
   /**
@@ -121,4 +124,22 @@ export namespace TranscriptionSegment$ {
   export const outboundSchema = TranscriptionSegment$outboundSchema;
   /** @deprecated use `TranscriptionSegment$Outbound` instead. */
   export type Outbound = TranscriptionSegment$Outbound;
+}
+
+export function transcriptionSegmentToJSON(
+  transcriptionSegment: TranscriptionSegment,
+): string {
+  return JSON.stringify(
+    TranscriptionSegment$outboundSchema.parse(transcriptionSegment),
+  );
+}
+
+export function transcriptionSegmentFromJSON(
+  jsonString: string,
+): SafeParseResult<TranscriptionSegment, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => TranscriptionSegment$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'TranscriptionSegment' from JSON`,
+  );
 }

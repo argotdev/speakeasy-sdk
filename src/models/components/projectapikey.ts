@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   ProjectServiceAccount,
   ProjectServiceAccount$inboundSchema,
@@ -172,6 +175,20 @@ export namespace Owner$ {
   export type Outbound = Owner$Outbound;
 }
 
+export function ownerToJSON(owner: Owner): string {
+  return JSON.stringify(Owner$outboundSchema.parse(owner));
+}
+
+export function ownerFromJSON(
+  jsonString: string,
+): SafeParseResult<Owner, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Owner$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Owner' from JSON`,
+  );
+}
+
 /** @internal */
 export const ProjectApiKey$inboundSchema: z.ZodType<
   ProjectApiKey,
@@ -231,4 +248,18 @@ export namespace ProjectApiKey$ {
   export const outboundSchema = ProjectApiKey$outboundSchema;
   /** @deprecated use `ProjectApiKey$Outbound` instead. */
   export type Outbound = ProjectApiKey$Outbound;
+}
+
+export function projectApiKeyToJSON(projectApiKey: ProjectApiKey): string {
+  return JSON.stringify(ProjectApiKey$outboundSchema.parse(projectApiKey));
+}
+
+export function projectApiKeyFromJSON(
+  jsonString: string,
+): SafeParseResult<ProjectApiKey, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ProjectApiKey$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ProjectApiKey' from JSON`,
+  );
 }

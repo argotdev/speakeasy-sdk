@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The role of the messages author, in this case `function`.
@@ -101,4 +104,25 @@ export namespace ChatCompletionRequestFunctionMessage$ {
     ChatCompletionRequestFunctionMessage$outboundSchema;
   /** @deprecated use `ChatCompletionRequestFunctionMessage$Outbound` instead. */
   export type Outbound = ChatCompletionRequestFunctionMessage$Outbound;
+}
+
+export function chatCompletionRequestFunctionMessageToJSON(
+  chatCompletionRequestFunctionMessage: ChatCompletionRequestFunctionMessage,
+): string {
+  return JSON.stringify(
+    ChatCompletionRequestFunctionMessage$outboundSchema.parse(
+      chatCompletionRequestFunctionMessage,
+    ),
+  );
+}
+
+export function chatCompletionRequestFunctionMessageFromJSON(
+  jsonString: string,
+): SafeParseResult<ChatCompletionRequestFunctionMessage, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ChatCompletionRequestFunctionMessage$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ChatCompletionRequestFunctionMessage' from JSON`,
+  );
 }

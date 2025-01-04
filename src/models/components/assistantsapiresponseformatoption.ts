@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   ResponseFormatJsonObject,
   ResponseFormatJsonObject$inboundSchema,
@@ -122,4 +125,24 @@ export namespace AssistantsApiResponseFormatOption$ {
     AssistantsApiResponseFormatOption$outboundSchema;
   /** @deprecated use `AssistantsApiResponseFormatOption$Outbound` instead. */
   export type Outbound = AssistantsApiResponseFormatOption$Outbound;
+}
+
+export function assistantsApiResponseFormatOptionToJSON(
+  assistantsApiResponseFormatOption: AssistantsApiResponseFormatOption,
+): string {
+  return JSON.stringify(
+    AssistantsApiResponseFormatOption$outboundSchema.parse(
+      assistantsApiResponseFormatOption,
+    ),
+  );
+}
+
+export function assistantsApiResponseFormatOptionFromJSON(
+  jsonString: string,
+): SafeParseResult<AssistantsApiResponseFormatOption, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AssistantsApiResponseFormatOption$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AssistantsApiResponseFormatOption' from JSON`,
+  );
 }

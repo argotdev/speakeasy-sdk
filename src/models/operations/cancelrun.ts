@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type CancelRunRequest = {
   /**
@@ -63,4 +66,22 @@ export namespace CancelRunRequest$ {
   export const outboundSchema = CancelRunRequest$outboundSchema;
   /** @deprecated use `CancelRunRequest$Outbound` instead. */
   export type Outbound = CancelRunRequest$Outbound;
+}
+
+export function cancelRunRequestToJSON(
+  cancelRunRequest: CancelRunRequest,
+): string {
+  return JSON.stringify(
+    CancelRunRequest$outboundSchema.parse(cancelRunRequest),
+  );
+}
+
+export function cancelRunRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CancelRunRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CancelRunRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CancelRunRequest' from JSON`,
+  );
 }

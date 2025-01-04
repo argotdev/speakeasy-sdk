@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   AutoChunkingStrategyRequestParam,
   AutoChunkingStrategyRequestParam$inboundSchema,
@@ -59,4 +62,24 @@ export namespace ChunkingStrategyRequestParam$ {
   export const outboundSchema = ChunkingStrategyRequestParam$outboundSchema;
   /** @deprecated use `ChunkingStrategyRequestParam$Outbound` instead. */
   export type Outbound = ChunkingStrategyRequestParam$Outbound;
+}
+
+export function chunkingStrategyRequestParamToJSON(
+  chunkingStrategyRequestParam: ChunkingStrategyRequestParam,
+): string {
+  return JSON.stringify(
+    ChunkingStrategyRequestParam$outboundSchema.parse(
+      chunkingStrategyRequestParam,
+    ),
+  );
+}
+
+export function chunkingStrategyRequestParamFromJSON(
+  jsonString: string,
+): SafeParseResult<ChunkingStrategyRequestParam, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ChunkingStrategyRequestParam$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ChunkingStrategyRequestParam' from JSON`,
+  );
 }

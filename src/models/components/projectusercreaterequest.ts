@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * `owner` or `member`
@@ -97,4 +100,22 @@ export namespace ProjectUserCreateRequest$ {
   export const outboundSchema = ProjectUserCreateRequest$outboundSchema;
   /** @deprecated use `ProjectUserCreateRequest$Outbound` instead. */
   export type Outbound = ProjectUserCreateRequest$Outbound;
+}
+
+export function projectUserCreateRequestToJSON(
+  projectUserCreateRequest: ProjectUserCreateRequest,
+): string {
+  return JSON.stringify(
+    ProjectUserCreateRequest$outboundSchema.parse(projectUserCreateRequest),
+  );
+}
+
+export function projectUserCreateRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ProjectUserCreateRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ProjectUserCreateRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ProjectUserCreateRequest' from JSON`,
+  );
 }

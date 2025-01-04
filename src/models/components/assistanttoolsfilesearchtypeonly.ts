@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The type of tool being defined: `file_search`
@@ -83,4 +86,24 @@ export namespace AssistantToolsFileSearchTypeOnly$ {
   export const outboundSchema = AssistantToolsFileSearchTypeOnly$outboundSchema;
   /** @deprecated use `AssistantToolsFileSearchTypeOnly$Outbound` instead. */
   export type Outbound = AssistantToolsFileSearchTypeOnly$Outbound;
+}
+
+export function assistantToolsFileSearchTypeOnlyToJSON(
+  assistantToolsFileSearchTypeOnly: AssistantToolsFileSearchTypeOnly,
+): string {
+  return JSON.stringify(
+    AssistantToolsFileSearchTypeOnly$outboundSchema.parse(
+      assistantToolsFileSearchTypeOnly,
+    ),
+  );
+}
+
+export function assistantToolsFileSearchTypeOnlyFromJSON(
+  jsonString: string,
+): SafeParseResult<AssistantToolsFileSearchTypeOnly, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AssistantToolsFileSearchTypeOnly$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AssistantToolsFileSearchTypeOnly' from JSON`,
+  );
 }

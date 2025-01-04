@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Anchor timestamp after which the expiration policy applies. Supported anchors: `last_active_at`.
@@ -86,4 +89,22 @@ export namespace VectorStoreExpirationAfter$ {
   export const outboundSchema = VectorStoreExpirationAfter$outboundSchema;
   /** @deprecated use `VectorStoreExpirationAfter$Outbound` instead. */
   export type Outbound = VectorStoreExpirationAfter$Outbound;
+}
+
+export function vectorStoreExpirationAfterToJSON(
+  vectorStoreExpirationAfter: VectorStoreExpirationAfter,
+): string {
+  return JSON.stringify(
+    VectorStoreExpirationAfter$outboundSchema.parse(vectorStoreExpirationAfter),
+  );
+}
+
+export function vectorStoreExpirationAfterFromJSON(
+  jsonString: string,
+): SafeParseResult<VectorStoreExpirationAfter, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => VectorStoreExpirationAfter$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'VectorStoreExpirationAfter' from JSON`,
+  );
 }

@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   AssistantsApiResponseFormatOption,
   AssistantsApiResponseFormatOption$inboundSchema,
@@ -299,6 +302,10 @@ export type RunObject = {
    */
   toolChoice: AssistantsApiToolChoiceOption;
   /**
+   * Whether to enable [parallel function calling](/docs/guides/function-calling/parallel-function-calling) during tool use.
+   */
+  parallelToolCalls?: boolean | undefined;
+  /**
    * Specifies the format that the model must output. Compatible with [GPT-4o](/docs/models/gpt-4o), [GPT-4 Turbo](/docs/models/gpt-4-turbo-and-gpt-4), and all GPT-3.5 Turbo models since `gpt-3.5-turbo-1106`.
    *
    * @remarks
@@ -419,6 +426,24 @@ export namespace SubmitToolOutputs$ {
   export type Outbound = SubmitToolOutputs$Outbound;
 }
 
+export function submitToolOutputsToJSON(
+  submitToolOutputs: SubmitToolOutputs,
+): string {
+  return JSON.stringify(
+    SubmitToolOutputs$outboundSchema.parse(submitToolOutputs),
+  );
+}
+
+export function submitToolOutputsFromJSON(
+  jsonString: string,
+): SafeParseResult<SubmitToolOutputs, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => SubmitToolOutputs$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'SubmitToolOutputs' from JSON`,
+  );
+}
+
 /** @internal */
 export const RequiredAction$inboundSchema: z.ZodType<
   RequiredAction,
@@ -464,6 +489,20 @@ export namespace RequiredAction$ {
   export const outboundSchema = RequiredAction$outboundSchema;
   /** @deprecated use `RequiredAction$Outbound` instead. */
   export type Outbound = RequiredAction$Outbound;
+}
+
+export function requiredActionToJSON(requiredAction: RequiredAction): string {
+  return JSON.stringify(RequiredAction$outboundSchema.parse(requiredAction));
+}
+
+export function requiredActionFromJSON(
+  jsonString: string,
+): SafeParseResult<RequiredAction, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RequiredAction$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RequiredAction' from JSON`,
+  );
 }
 
 /** @internal */
@@ -525,6 +564,20 @@ export namespace LastError$ {
   export type Outbound = LastError$Outbound;
 }
 
+export function lastErrorToJSON(lastError: LastError): string {
+  return JSON.stringify(LastError$outboundSchema.parse(lastError));
+}
+
+export function lastErrorFromJSON(
+  jsonString: string,
+): SafeParseResult<LastError, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => LastError$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'LastError' from JSON`,
+  );
+}
+
 /** @internal */
 export const RunObjectReason$inboundSchema: z.ZodNativeEnum<
   typeof RunObjectReason
@@ -582,6 +635,24 @@ export namespace RunObjectIncompleteDetails$ {
   export type Outbound = RunObjectIncompleteDetails$Outbound;
 }
 
+export function runObjectIncompleteDetailsToJSON(
+  runObjectIncompleteDetails: RunObjectIncompleteDetails,
+): string {
+  return JSON.stringify(
+    RunObjectIncompleteDetails$outboundSchema.parse(runObjectIncompleteDetails),
+  );
+}
+
+export function runObjectIncompleteDetailsFromJSON(
+  jsonString: string,
+): SafeParseResult<RunObjectIncompleteDetails, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RunObjectIncompleteDetails$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RunObjectIncompleteDetails' from JSON`,
+  );
+}
+
 /** @internal */
 export const RunObjectTools$inboundSchema: z.ZodType<
   RunObjectTools,
@@ -623,6 +694,20 @@ export namespace RunObjectTools$ {
   export type Outbound = RunObjectTools$Outbound;
 }
 
+export function runObjectToolsToJSON(runObjectTools: RunObjectTools): string {
+  return JSON.stringify(RunObjectTools$outboundSchema.parse(runObjectTools));
+}
+
+export function runObjectToolsFromJSON(
+  jsonString: string,
+): SafeParseResult<RunObjectTools, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RunObjectTools$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RunObjectTools' from JSON`,
+  );
+}
+
 /** @internal */
 export const RunObjectMetadata$inboundSchema: z.ZodType<
   RunObjectMetadata,
@@ -651,6 +736,24 @@ export namespace RunObjectMetadata$ {
   export const outboundSchema = RunObjectMetadata$outboundSchema;
   /** @deprecated use `RunObjectMetadata$Outbound` instead. */
   export type Outbound = RunObjectMetadata$Outbound;
+}
+
+export function runObjectMetadataToJSON(
+  runObjectMetadata: RunObjectMetadata,
+): string {
+  return JSON.stringify(
+    RunObjectMetadata$outboundSchema.parse(runObjectMetadata),
+  );
+}
+
+export function runObjectMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<RunObjectMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RunObjectMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RunObjectMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -692,6 +795,7 @@ export const RunObject$inboundSchema: z.ZodType<
   max_completion_tokens: z.nullable(z.number().int()),
   truncation_strategy: TruncationObject$inboundSchema,
   tool_choice: AssistantsApiToolChoiceOption$inboundSchema,
+  parallel_tool_calls: z.boolean().default(true),
   response_format: AssistantsApiResponseFormatOption$inboundSchema,
 }).transform((v) => {
   return remap$(v, {
@@ -711,6 +815,7 @@ export const RunObject$inboundSchema: z.ZodType<
     "max_completion_tokens": "maxCompletionTokens",
     "truncation_strategy": "truncationStrategy",
     "tool_choice": "toolChoice",
+    "parallel_tool_calls": "parallelToolCalls",
     "response_format": "responseFormat",
   });
 });
@@ -746,6 +851,7 @@ export type RunObject$Outbound = {
   max_completion_tokens: number | null;
   truncation_strategy: TruncationObject$Outbound;
   tool_choice: AssistantsApiToolChoiceOption$Outbound;
+  parallel_tool_calls: boolean;
   response_format: AssistantsApiResponseFormatOption$Outbound;
 };
 
@@ -788,6 +894,7 @@ export const RunObject$outboundSchema: z.ZodType<
   maxCompletionTokens: z.nullable(z.number().int()),
   truncationStrategy: TruncationObject$outboundSchema,
   toolChoice: AssistantsApiToolChoiceOption$outboundSchema,
+  parallelToolCalls: z.boolean().default(true),
   responseFormat: AssistantsApiResponseFormatOption$outboundSchema,
 }).transform((v) => {
   return remap$(v, {
@@ -807,6 +914,7 @@ export const RunObject$outboundSchema: z.ZodType<
     maxCompletionTokens: "max_completion_tokens",
     truncationStrategy: "truncation_strategy",
     toolChoice: "tool_choice",
+    parallelToolCalls: "parallel_tool_calls",
     responseFormat: "response_format",
   });
 });
@@ -822,4 +930,18 @@ export namespace RunObject$ {
   export const outboundSchema = RunObject$outboundSchema;
   /** @deprecated use `RunObject$Outbound` instead. */
   export type Outbound = RunObject$Outbound;
+}
+
+export function runObjectToJSON(runObject: RunObject): string {
+  return JSON.stringify(RunObject$outboundSchema.parse(runObject));
+}
+
+export function runObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<RunObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RunObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RunObject' from JSON`,
+  );
 }

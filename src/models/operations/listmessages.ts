@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and `desc` for descending order.
@@ -139,4 +142,22 @@ export namespace ListMessagesRequest$ {
   export const outboundSchema = ListMessagesRequest$outboundSchema;
   /** @deprecated use `ListMessagesRequest$Outbound` instead. */
   export type Outbound = ListMessagesRequest$Outbound;
+}
+
+export function listMessagesRequestToJSON(
+  listMessagesRequest: ListMessagesRequest,
+): string {
+  return JSON.stringify(
+    ListMessagesRequest$outboundSchema.parse(listMessagesRequest),
+  );
+}
+
+export function listMessagesRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ListMessagesRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ListMessagesRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListMessagesRequest' from JSON`,
+  );
 }

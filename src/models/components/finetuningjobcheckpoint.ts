@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Metrics at the step number during the fine-tuning job.
@@ -137,6 +140,20 @@ export namespace Metrics$ {
   export type Outbound = Metrics$Outbound;
 }
 
+export function metricsToJSON(metrics: Metrics): string {
+  return JSON.stringify(Metrics$outboundSchema.parse(metrics));
+}
+
+export function metricsFromJSON(
+  jsonString: string,
+): SafeParseResult<Metrics, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Metrics$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Metrics' from JSON`,
+  );
+}
+
 /** @internal */
 export const FineTuningJobCheckpointObject$inboundSchema: z.ZodNativeEnum<
   typeof FineTuningJobCheckpointObject
@@ -224,4 +241,22 @@ export namespace FineTuningJobCheckpoint$ {
   export const outboundSchema = FineTuningJobCheckpoint$outboundSchema;
   /** @deprecated use `FineTuningJobCheckpoint$Outbound` instead. */
   export type Outbound = FineTuningJobCheckpoint$Outbound;
+}
+
+export function fineTuningJobCheckpointToJSON(
+  fineTuningJobCheckpoint: FineTuningJobCheckpoint,
+): string {
+  return JSON.stringify(
+    FineTuningJobCheckpoint$outboundSchema.parse(fineTuningJobCheckpoint),
+  );
+}
+
+export function fineTuningJobCheckpointFromJSON(
+  jsonString: string,
+): SafeParseResult<FineTuningJobCheckpoint, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FineTuningJobCheckpoint$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FineTuningJobCheckpoint' from JSON`,
+  );
 }

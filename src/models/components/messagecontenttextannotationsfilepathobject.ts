@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Always `file_path`.
@@ -110,6 +113,20 @@ export namespace FilePath$ {
   export type Outbound = FilePath$Outbound;
 }
 
+export function filePathToJSON(filePath: FilePath): string {
+  return JSON.stringify(FilePath$outboundSchema.parse(filePath));
+}
+
+export function filePathFromJSON(
+  jsonString: string,
+): SafeParseResult<FilePath, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FilePath$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FilePath' from JSON`,
+  );
+}
+
 /** @internal */
 export const MessageContentTextAnnotationsFilePathObject$inboundSchema:
   z.ZodType<
@@ -172,4 +189,31 @@ export namespace MessageContentTextAnnotationsFilePathObject$ {
     MessageContentTextAnnotationsFilePathObject$outboundSchema;
   /** @deprecated use `MessageContentTextAnnotationsFilePathObject$Outbound` instead. */
   export type Outbound = MessageContentTextAnnotationsFilePathObject$Outbound;
+}
+
+export function messageContentTextAnnotationsFilePathObjectToJSON(
+  messageContentTextAnnotationsFilePathObject:
+    MessageContentTextAnnotationsFilePathObject,
+): string {
+  return JSON.stringify(
+    MessageContentTextAnnotationsFilePathObject$outboundSchema.parse(
+      messageContentTextAnnotationsFilePathObject,
+    ),
+  );
+}
+
+export function messageContentTextAnnotationsFilePathObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  MessageContentTextAnnotationsFilePathObject,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      MessageContentTextAnnotationsFilePathObject$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'MessageContentTextAnnotationsFilePathObject' from JSON`,
+  );
 }

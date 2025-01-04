@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The object type, which is always `organization.invite.deleted`
@@ -88,4 +91,22 @@ export namespace InviteDeleteResponse$ {
   export const outboundSchema = InviteDeleteResponse$outboundSchema;
   /** @deprecated use `InviteDeleteResponse$Outbound` instead. */
   export type Outbound = InviteDeleteResponse$Outbound;
+}
+
+export function inviteDeleteResponseToJSON(
+  inviteDeleteResponse: InviteDeleteResponse,
+): string {
+  return JSON.stringify(
+    InviteDeleteResponse$outboundSchema.parse(inviteDeleteResponse),
+  );
+}
+
+export function inviteDeleteResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<InviteDeleteResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => InviteDeleteResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'InviteDeleteResponse' from JSON`,
+  );
 }

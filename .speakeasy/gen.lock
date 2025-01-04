@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 61a4ac00-e7ed-4a10-9e0f-47f8aef9702c
 management:
-  docChecksum: c58ce1a8f4761676d0ec62b40ce3b5af
+  docChecksum: e1f306b5ba0a01e1785143532d301bf4
   docVersion: 2.3.0
-  speakeasyVersion: 1.421.1
-  generationVersion: 2.438.15
-  releaseVersion: 0.0.5
-  configChecksum: 20495d52a63fb99b59bfcbbc62b92c6b
+  speakeasyVersion: 1.462.2
+  generationVersion: 2.486.1
+  releaseVersion: 0.1.0
+  configChecksum: 7368fbdfd96840ba79324b02deebb238
   repoURL: https://github.com/argotdev/speakeasy-sdk.git
   installationURL: https://github.com/argotdev/speakeasy-sdk
   published: true
@@ -14,22 +14,22 @@ features:
   typescript:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.1.11
-    core: 3.18.2
+    core: 3.18.12
     defaultEnabledRetries: 0.1.0
     deprecations: 2.81.1
     devContainers: 2.90.0
     downloadStreams: 0.1.1
     enumUnions: 0.1.0
-    envVarSecurityUsage: 0.1.1
-    globalSecurity: 2.82.11
+    envVarSecurityUsage: 0.1.2
+    globalSecurity: 2.82.12
     globalSecurityCallbacks: 0.1.0
     globalSecurityFlattening: 0.1.0
     globalServerURLs: 2.82.4
     nullables: 0.1.0
     responseFormat: 0.2.3
     retries: 2.83.0
-    sdkHooks: 0.1.0
-    unions: 2.85.7
+    sdkHooks: 0.2.0
+    unions: 2.85.8
     uploadStreams: 0.1.0
 generatedFiles:
   - .devcontainer/README.md
@@ -1917,3 +1917,4 @@ examples:
           application/json: {"object": "organization.project.api_key.deleted", "id": "<id>", "deleted": false}
         "400":
           application/json: {"error": {"code": "<value>", "message": "<value>", "param": "<value>", "type": "<value>"}}
+generatedTests: {}

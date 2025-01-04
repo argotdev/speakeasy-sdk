@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
 import * as components from "../components/index.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type ModifyThreadRequest = {
   /**
@@ -61,4 +64,22 @@ export namespace ModifyThreadRequest$ {
   export const outboundSchema = ModifyThreadRequest$outboundSchema;
   /** @deprecated use `ModifyThreadRequest$Outbound` instead. */
   export type Outbound = ModifyThreadRequest$Outbound;
+}
+
+export function modifyThreadRequestToJSON(
+  modifyThreadRequest: ModifyThreadRequest,
+): string {
+  return JSON.stringify(
+    ModifyThreadRequest$outboundSchema.parse(modifyThreadRequest),
+  );
+}
+
+export function modifyThreadRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyThreadRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ModifyThreadRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyThreadRequest' from JSON`,
+  );
 }

@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The user who performed the audit logged action.
@@ -55,4 +58,22 @@ export namespace AuditLogActorUser$ {
   export const outboundSchema = AuditLogActorUser$outboundSchema;
   /** @deprecated use `AuditLogActorUser$Outbound` instead. */
   export type Outbound = AuditLogActorUser$Outbound;
+}
+
+export function auditLogActorUserToJSON(
+  auditLogActorUser: AuditLogActorUser,
+): string {
+  return JSON.stringify(
+    AuditLogActorUser$outboundSchema.parse(auditLogActorUser),
+  );
+}
+
+export function auditLogActorUserFromJSON(
+  jsonString: string,
+): SafeParseResult<AuditLogActorUser, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AuditLogActorUser$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AuditLogActorUser' from JSON`,
+  );
 }

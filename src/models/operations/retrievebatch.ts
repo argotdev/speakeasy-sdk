@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type RetrieveBatchRequest = {
   /**
@@ -54,4 +57,22 @@ export namespace RetrieveBatchRequest$ {
   export const outboundSchema = RetrieveBatchRequest$outboundSchema;
   /** @deprecated use `RetrieveBatchRequest$Outbound` instead. */
   export type Outbound = RetrieveBatchRequest$Outbound;
+}
+
+export function retrieveBatchRequestToJSON(
+  retrieveBatchRequest: RetrieveBatchRequest,
+): string {
+  return JSON.stringify(
+    RetrieveBatchRequest$outboundSchema.parse(retrieveBatchRequest),
+  );
+}
+
+export function retrieveBatchRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<RetrieveBatchRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RetrieveBatchRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RetrieveBatchRequest' from JSON`,
+  );
 }

@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type ModifyThreadRequestCodeInterpreter = {
   /**
@@ -100,6 +103,27 @@ export namespace ModifyThreadRequestCodeInterpreter$ {
   export type Outbound = ModifyThreadRequestCodeInterpreter$Outbound;
 }
 
+export function modifyThreadRequestCodeInterpreterToJSON(
+  modifyThreadRequestCodeInterpreter: ModifyThreadRequestCodeInterpreter,
+): string {
+  return JSON.stringify(
+    ModifyThreadRequestCodeInterpreter$outboundSchema.parse(
+      modifyThreadRequestCodeInterpreter,
+    ),
+  );
+}
+
+export function modifyThreadRequestCodeInterpreterFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyThreadRequestCodeInterpreter, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ModifyThreadRequestCodeInterpreter$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyThreadRequestCodeInterpreter' from JSON`,
+  );
+}
+
 /** @internal */
 export const ModifyThreadRequestFileSearch$inboundSchema: z.ZodType<
   ModifyThreadRequestFileSearch,
@@ -142,6 +166,26 @@ export namespace ModifyThreadRequestFileSearch$ {
   export const outboundSchema = ModifyThreadRequestFileSearch$outboundSchema;
   /** @deprecated use `ModifyThreadRequestFileSearch$Outbound` instead. */
   export type Outbound = ModifyThreadRequestFileSearch$Outbound;
+}
+
+export function modifyThreadRequestFileSearchToJSON(
+  modifyThreadRequestFileSearch: ModifyThreadRequestFileSearch,
+): string {
+  return JSON.stringify(
+    ModifyThreadRequestFileSearch$outboundSchema.parse(
+      modifyThreadRequestFileSearch,
+    ),
+  );
+}
+
+export function modifyThreadRequestFileSearchFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyThreadRequestFileSearch, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ModifyThreadRequestFileSearch$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyThreadRequestFileSearch' from JSON`,
+  );
 }
 
 /** @internal */
@@ -199,6 +243,26 @@ export namespace ModifyThreadRequestToolResources$ {
   export type Outbound = ModifyThreadRequestToolResources$Outbound;
 }
 
+export function modifyThreadRequestToolResourcesToJSON(
+  modifyThreadRequestToolResources: ModifyThreadRequestToolResources,
+): string {
+  return JSON.stringify(
+    ModifyThreadRequestToolResources$outboundSchema.parse(
+      modifyThreadRequestToolResources,
+    ),
+  );
+}
+
+export function modifyThreadRequestToolResourcesFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyThreadRequestToolResources, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ModifyThreadRequestToolResources$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyThreadRequestToolResources' from JSON`,
+  );
+}
+
 /** @internal */
 export const ModifyThreadRequestMetadata$inboundSchema: z.ZodType<
   ModifyThreadRequestMetadata,
@@ -227,6 +291,26 @@ export namespace ModifyThreadRequestMetadata$ {
   export const outboundSchema = ModifyThreadRequestMetadata$outboundSchema;
   /** @deprecated use `ModifyThreadRequestMetadata$Outbound` instead. */
   export type Outbound = ModifyThreadRequestMetadata$Outbound;
+}
+
+export function modifyThreadRequestMetadataToJSON(
+  modifyThreadRequestMetadata: ModifyThreadRequestMetadata,
+): string {
+  return JSON.stringify(
+    ModifyThreadRequestMetadata$outboundSchema.parse(
+      modifyThreadRequestMetadata,
+    ),
+  );
+}
+
+export function modifyThreadRequestMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyThreadRequestMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ModifyThreadRequestMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyThreadRequestMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -280,4 +364,22 @@ export namespace ModifyThreadRequest$ {
   export const outboundSchema = ModifyThreadRequest$outboundSchema;
   /** @deprecated use `ModifyThreadRequest$Outbound` instead. */
   export type Outbound = ModifyThreadRequest$Outbound;
+}
+
+export function modifyThreadRequestToJSON(
+  modifyThreadRequest: ModifyThreadRequest,
+): string {
+  return JSON.stringify(
+    ModifyThreadRequest$outboundSchema.parse(modifyThreadRequest),
+  );
+}
+
+export function modifyThreadRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyThreadRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ModifyThreadRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyThreadRequest' from JSON`,
+  );
 }

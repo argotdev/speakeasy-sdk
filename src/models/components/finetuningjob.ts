@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   FineTuningIntegration,
   FineTuningIntegration$inboundSchema,
@@ -203,6 +206,24 @@ export namespace FineTuningJobError$ {
   export type Outbound = FineTuningJobError$Outbound;
 }
 
+export function fineTuningJobErrorToJSON(
+  fineTuningJobError: FineTuningJobError,
+): string {
+  return JSON.stringify(
+    FineTuningJobError$outboundSchema.parse(fineTuningJobError),
+  );
+}
+
+export function fineTuningJobErrorFromJSON(
+  jsonString: string,
+): SafeParseResult<FineTuningJobError, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FineTuningJobError$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FineTuningJobError' from JSON`,
+  );
+}
+
 /** @internal */
 export const FineTuningJobNEpochs1$inboundSchema: z.ZodNativeEnum<
   typeof FineTuningJobNEpochs1
@@ -254,6 +275,24 @@ export namespace FineTuningJobNEpochs$ {
   export type Outbound = FineTuningJobNEpochs$Outbound;
 }
 
+export function fineTuningJobNEpochsToJSON(
+  fineTuningJobNEpochs: FineTuningJobNEpochs,
+): string {
+  return JSON.stringify(
+    FineTuningJobNEpochs$outboundSchema.parse(fineTuningJobNEpochs),
+  );
+}
+
+export function fineTuningJobNEpochsFromJSON(
+  jsonString: string,
+): SafeParseResult<FineTuningJobNEpochs, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FineTuningJobNEpochs$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FineTuningJobNEpochs' from JSON`,
+  );
+}
+
 /** @internal */
 export const FineTuningJobHyperparameters$inboundSchema: z.ZodType<
   FineTuningJobHyperparameters,
@@ -296,6 +335,26 @@ export namespace FineTuningJobHyperparameters$ {
   export const outboundSchema = FineTuningJobHyperparameters$outboundSchema;
   /** @deprecated use `FineTuningJobHyperparameters$Outbound` instead. */
   export type Outbound = FineTuningJobHyperparameters$Outbound;
+}
+
+export function fineTuningJobHyperparametersToJSON(
+  fineTuningJobHyperparameters: FineTuningJobHyperparameters,
+): string {
+  return JSON.stringify(
+    FineTuningJobHyperparameters$outboundSchema.parse(
+      fineTuningJobHyperparameters,
+    ),
+  );
+}
+
+export function fineTuningJobHyperparametersFromJSON(
+  jsonString: string,
+): SafeParseResult<FineTuningJobHyperparameters, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FineTuningJobHyperparameters$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FineTuningJobHyperparameters' from JSON`,
+  );
 }
 
 /** @internal */
@@ -368,6 +427,24 @@ export namespace FineTuningJobIntegrations$ {
   export const outboundSchema = FineTuningJobIntegrations$outboundSchema;
   /** @deprecated use `FineTuningJobIntegrations$Outbound` instead. */
   export type Outbound = FineTuningJobIntegrations$Outbound;
+}
+
+export function fineTuningJobIntegrationsToJSON(
+  fineTuningJobIntegrations: FineTuningJobIntegrations,
+): string {
+  return JSON.stringify(
+    FineTuningJobIntegrations$outboundSchema.parse(fineTuningJobIntegrations),
+  );
+}
+
+export function fineTuningJobIntegrationsFromJSON(
+  jsonString: string,
+): SafeParseResult<FineTuningJobIntegrations, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FineTuningJobIntegrations$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FineTuningJobIntegrations' from JSON`,
+  );
 }
 
 /** @internal */
@@ -478,4 +555,18 @@ export namespace FineTuningJob$ {
   export const outboundSchema = FineTuningJob$outboundSchema;
   /** @deprecated use `FineTuningJob$Outbound` instead. */
   export type Outbound = FineTuningJob$Outbound;
+}
+
+export function fineTuningJobToJSON(fineTuningJob: FineTuningJob): string {
+  return JSON.stringify(FineTuningJob$outboundSchema.parse(fineTuningJob));
+}
+
+export function fineTuningJobFromJSON(
+  jsonString: string,
+): SafeParseResult<FineTuningJob, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FineTuningJob$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FineTuningJob' from JSON`,
+  );
 }

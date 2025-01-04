@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   MessageContentTextAnnotationsFileCitationObject,
   MessageContentTextAnnotationsFileCitationObject$inboundSchema,
@@ -115,6 +118,20 @@ export namespace Annotations$ {
   export type Outbound = Annotations$Outbound;
 }
 
+export function annotationsToJSON(annotations: Annotations): string {
+  return JSON.stringify(Annotations$outboundSchema.parse(annotations));
+}
+
+export function annotationsFromJSON(
+  jsonString: string,
+): SafeParseResult<Annotations, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Annotations$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Annotations' from JSON`,
+  );
+}
+
 /** @internal */
 export const Text$inboundSchema: z.ZodType<Text, z.ZodTypeDef, unknown> = z
   .object({
@@ -161,6 +178,20 @@ export namespace Text$ {
   export type Outbound = Text$Outbound;
 }
 
+export function textToJSON(text: Text): string {
+  return JSON.stringify(Text$outboundSchema.parse(text));
+}
+
+export function textFromJSON(
+  jsonString: string,
+): SafeParseResult<Text, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Text$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Text' from JSON`,
+  );
+}
+
 /** @internal */
 export const MessageContentTextObject$inboundSchema: z.ZodType<
   MessageContentTextObject,
@@ -198,4 +229,22 @@ export namespace MessageContentTextObject$ {
   export const outboundSchema = MessageContentTextObject$outboundSchema;
   /** @deprecated use `MessageContentTextObject$Outbound` instead. */
   export type Outbound = MessageContentTextObject$Outbound;
+}
+
+export function messageContentTextObjectToJSON(
+  messageContentTextObject: MessageContentTextObject,
+): string {
+  return JSON.stringify(
+    MessageContentTextObject$outboundSchema.parse(messageContentTextObject),
+  );
+}
+
+export function messageContentTextObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<MessageContentTextObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MessageContentTextObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MessageContentTextObject' from JSON`,
+  );
 }

@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   AssistantsNamedToolChoice,
   AssistantsNamedToolChoice$inboundSchema,
@@ -100,4 +103,24 @@ export namespace AssistantsApiToolChoiceOption$ {
   export const outboundSchema = AssistantsApiToolChoiceOption$outboundSchema;
   /** @deprecated use `AssistantsApiToolChoiceOption$Outbound` instead. */
   export type Outbound = AssistantsApiToolChoiceOption$Outbound;
+}
+
+export function assistantsApiToolChoiceOptionToJSON(
+  assistantsApiToolChoiceOption: AssistantsApiToolChoiceOption,
+): string {
+  return JSON.stringify(
+    AssistantsApiToolChoiceOption$outboundSchema.parse(
+      assistantsApiToolChoiceOption,
+    ),
+  );
+}
+
+export function assistantsApiToolChoiceOptionFromJSON(
+  jsonString: string,
+): SafeParseResult<AssistantsApiToolChoiceOption, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AssistantsApiToolChoiceOption$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AssistantsApiToolChoiceOption' from JSON`,
+  );
 }

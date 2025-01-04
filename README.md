@@ -22,19 +22,24 @@ OpenAI API: The OpenAI REST API. Please see https://platform.openai.com/docs/api
 
 <!-- Start Table of Contents [toc] -->
 ## Table of Contents
+<!-- $toc-max-depth=2 -->
+* [argot-open-ai](#argot-open-ai)
+  * [SDK Installation](#sdk-installation)
+  * [Requirements](#requirements)
+  * [SDK Example Usage](#sdk-example-usage)
+  * [Available Resources and Operations](#available-resources-and-operations)
+  * [Standalone functions](#standalone-functions)
+  * [File uploads](#file-uploads)
+  * [Retries](#retries)
+  * [Error Handling](#error-handling)
+  * [Server Selection](#server-selection)
+  * [Custom HTTP Client](#custom-http-client)
+  * [Authentication](#authentication)
+  * [Debugging](#debugging)
+* [Development](#development)
+  * [Maturity](#maturity)
+  * [Contributions](#contributions)
 
-* [SDK Installation](#sdk-installation)
-* [Requirements](#requirements)
-* [SDK Example Usage](#sdk-example-usage)
-* [Available Resources and Operations](#available-resources-and-operations)
-* [Standalone functions](#standalone-functions)
-* [File uploads](#file-uploads)
-* [Retries](#retries)
-* [Error Handling](#error-handling)
-* [Server Selection](#server-selection)
-* [Custom HTTP Client](#custom-http-client)
-* [Authentication](#authentication)
-* [Debugging](#debugging)
 <!-- End Table of Contents [toc] -->
 
 <!-- Start SDK Installation [installation] -->
@@ -664,24 +669,14 @@ run();
 <!-- Start Error Handling [errors] -->
 ## Error Handling
 
-All SDK methods return a response object or throw an error. By default, an API error will throw a `errors.SDKError`.
+Some methods specify known errors which can be thrown. All the known errors are enumerated in the `models/errors/errors.ts` module. The known errors for a method are documented under the *Errors* tables in SDK docs. For example, the `modifyProject` method may throw the following errors:
 
-If a HTTP request fails, an operation my also throw an error from the `models/errors/httpclienterrors.ts` module:
+| Error Type           | Status Code | Content Type     |
+| -------------------- | ----------- | ---------------- |
+| errors.ErrorResponse | 400         | application/json |
+| errors.SDKError      | 4XX, 5XX    | \*/\*            |
 
-| HTTP Client Error                                    | Description                                          |
-| ---------------------------------------------------- | ---------------------------------------------------- |
-| RequestAbortedError                                  | HTTP request was aborted by the client               |
-| RequestTimeoutError                                  | HTTP request timed out due to an AbortSignal signal  |
-| ConnectionError                                      | HTTP client was unable to make a request to a server |
-| InvalidRequestError                                  | Any input used to create a request is invalid        |
-| UnexpectedClientError                                | Unrecognised or unexpected error                     |
-
-In addition, when custom error responses are specified for an operation, the SDK may throw their associated Error type. You can refer to respective *Errors* tables in SDK docs for more details on possible error types for each operation. For example, the `modifyProject` method may throw the following errors:
-
-| Error Type           | Status Code          | Content Type         |
-| -------------------- | -------------------- | -------------------- |
-| errors.ErrorResponse | 400                  | application/json     |
-| errors.SDKError      | 4XX, 5XX             | \*/\*                |
+If the method throws an error and it is not captured by the known errors, it will default to throwing a `SDKError`.
 
 ```typescript
 import { ArgotOpenAi } from "argot-open-ai";
@@ -705,8 +700,9 @@ async function run() {
     console.log(result);
   } catch (err) {
     switch (true) {
+      // The server response does not match the expected SDK schema
       case (err instanceof SDKValidationError): {
-        // Validation errors can be pretty-printed
+        // Pretty-print will provide a human-readable multi-line error message
         console.error(err.pretty());
         // Raw value may also be inspected
         console.error(err.rawValue);
@@ -718,6 +714,7 @@ async function run() {
         return;
       }
       default: {
+        // Other errors such as network errors, see HTTPClientErrors for more details
         throw err;
       }
     }
@@ -728,76 +725,25 @@ run();
 
 ```
 
-Validation errors can also occur when either method arguments or data returned from the server do not match the expected format. The `SDKValidationError` that is thrown as a result will capture the raw value that failed validation in an attribute called `rawValue`. Additionally, a `pretty()` method is available on this error that can be used to log a nicely formatted string since validation errors can list many issues and the plain error string may be difficult read when debugging.
+Validation errors can also occur when either method arguments or data returned from the server do not match the expected format. The `SDKValidationError` that is thrown as a result will capture the raw value that failed validation in an attribute called `rawValue`. Additionally, a `pretty()` method is available on this error that can be used to log a nicely formatted multi-line string since validation errors can list many issues and the plain error string may be difficult read when debugging.
+
+In some rare cases, the SDK can fail to get a response from the server or even make the request due to unexpected circumstances such as network conditions. These types of errors are captured in the `models/errors/httpclienterrors.ts` module:
+
+| HTTP Client Error                                    | Description                                          |
+| ---------------------------------------------------- | ---------------------------------------------------- |
+| RequestAbortedError                                  | HTTP request was aborted by the client               |
+| RequestTimeoutError                                  | HTTP request timed out due to an AbortSignal signal  |
+| ConnectionError                                      | HTTP client was unable to make a request to a server |
+| InvalidRequestError                                  | Any input used to create a request is invalid        |
+| UnexpectedClientError                                | Unrecognised or unexpected error                     |
 <!-- End Error Handling [errors] -->
 
 <!-- Start Server Selection [server] -->
 ## Server Selection
 
-### Select Server by Index
-
-You can override the default server globally by passing a server index to the `serverIdx` optional parameter when initializing the SDK client instance. The selected server will then be used as the default on the operations that use it. This table lists the indexes associated with the available servers:
-
-| # | Server | Variables |
-| - | ------ | --------- |
-| 0 | `https://api.openai.com/v1` | None |
-
-```typescript
-import { ArgotOpenAi } from "argot-open-ai";
-
-const argotOpenAi = new ArgotOpenAi({
-  serverIdx: 0,
-  apiKeyAuth: process.env["ARGOTOPENAI_API_KEY_AUTH"] ?? "",
-});
-
-async function run() {
-  const result = await argotOpenAi.chat.createChatCompletion({
-    messages: [
-      {
-        content: "<value>",
-        role: "user",
-      },
-      {
-        content: [
-          {
-            type: "text",
-            text: "<value>",
-          },
-          {
-            type: "image_url",
-            imageUrl: {
-              url: "https://fixed-circumference.com",
-            },
-          },
-        ],
-        role: "user",
-      },
-      {
-        role: "tool",
-        content: "<value>",
-        toolCallId: "<id>",
-      },
-    ],
-    model: "gpt-4o",
-    n: 1,
-    temperature: 1,
-    topP: 1,
-    user: "user-1234",
-  });
-
-  // Handle the result
-  console.log(result);
-}
-
-run();
-
-```
-
-
 ### Override Server URL Per-Client
 
-The default server can also be overridden globally by passing a URL to the `serverURL` optional parameter when initializing the SDK client instance. For example:
-
+The default server can also be overridden globally by passing a URL to the `serverURL: string` optional parameter when initializing the SDK client instance. For example:
 ```typescript
 import { ArgotOpenAi } from "argot-open-ai";
 
@@ -906,9 +852,9 @@ const sdk = new ArgotOpenAi({ httpClient });
 
 This SDK supports the following security scheme globally:
 
-| Name                       | Type                       | Scheme                     | Environment Variable       |
-| -------------------------- | -------------------------- | -------------------------- | -------------------------- |
-| `apiKeyAuth`               | http                       | HTTP Bearer                | `ARGOTOPENAI_API_KEY_AUTH` |
+| Name         | Type | Scheme      | Environment Variable       |
+| ------------ | ---- | ----------- | -------------------------- |
+| `apiKeyAuth` | http | HTTP Bearer | `ARGOTOPENAI_API_KEY_AUTH` |
 
 To authenticate with the API the `apiKeyAuth` parameter must be set when initializing the SDK client instance. For example:
 ```typescript

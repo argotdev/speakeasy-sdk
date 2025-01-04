@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The object type, which is always `organization.project.user`
@@ -158,4 +161,18 @@ export namespace ProjectUser$ {
   export const outboundSchema = ProjectUser$outboundSchema;
   /** @deprecated use `ProjectUser$Outbound` instead. */
   export type Outbound = ProjectUser$Outbound;
+}
+
+export function projectUserToJSON(projectUser: ProjectUser): string {
+  return JSON.stringify(ProjectUser$outboundSchema.parse(projectUser));
+}
+
+export function projectUserFromJSON(
+  jsonString: string,
+): SafeParseResult<ProjectUser, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ProjectUser$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ProjectUser' from JSON`,
+  );
 }

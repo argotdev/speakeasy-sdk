@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export const UserDeleteResponseObject = {
   OrganizationUserDeleted: "organization.user.deleted",
@@ -79,4 +82,22 @@ export namespace UserDeleteResponse$ {
   export const outboundSchema = UserDeleteResponse$outboundSchema;
   /** @deprecated use `UserDeleteResponse$Outbound` instead. */
   export type Outbound = UserDeleteResponse$Outbound;
+}
+
+export function userDeleteResponseToJSON(
+  userDeleteResponse: UserDeleteResponse,
+): string {
+  return JSON.stringify(
+    UserDeleteResponse$outboundSchema.parse(userDeleteResponse),
+  );
+}
+
+export function userDeleteResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<UserDeleteResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => UserDeleteResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'UserDeleteResponse' from JSON`,
+  );
 }

@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type GetThreadRequest = {
   /**
@@ -54,4 +57,22 @@ export namespace GetThreadRequest$ {
   export const outboundSchema = GetThreadRequest$outboundSchema;
   /** @deprecated use `GetThreadRequest$Outbound` instead. */
   export type Outbound = GetThreadRequest$Outbound;
+}
+
+export function getThreadRequestToJSON(
+  getThreadRequest: GetThreadRequest,
+): string {
+  return JSON.stringify(
+    GetThreadRequest$outboundSchema.parse(getThreadRequest),
+  );
+}
+
+export function getThreadRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<GetThreadRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => GetThreadRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'GetThreadRequest' from JSON`,
+  );
 }

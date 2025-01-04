@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and `desc` for descending order.
@@ -111,4 +114,22 @@ export namespace ListAssistantsRequest$ {
   export const outboundSchema = ListAssistantsRequest$outboundSchema;
   /** @deprecated use `ListAssistantsRequest$Outbound` instead. */
   export type Outbound = ListAssistantsRequest$Outbound;
+}
+
+export function listAssistantsRequestToJSON(
+  listAssistantsRequest: ListAssistantsRequest,
+): string {
+  return JSON.stringify(
+    ListAssistantsRequest$outboundSchema.parse(listAssistantsRequest),
+  );
+}
+
+export function listAssistantsRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ListAssistantsRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ListAssistantsRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListAssistantsRequest' from JSON`,
+  );
 }

@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   RunStepDetailsToolCallsFileSearchRankingOptionsObject,
   RunStepDetailsToolCallsFileSearchRankingOptionsObject$inboundSchema,
@@ -149,6 +152,33 @@ export namespace RunStepDetailsToolCallsFileSearchObjectFileSearch$ {
     RunStepDetailsToolCallsFileSearchObjectFileSearch$Outbound;
 }
 
+export function runStepDetailsToolCallsFileSearchObjectFileSearchToJSON(
+  runStepDetailsToolCallsFileSearchObjectFileSearch:
+    RunStepDetailsToolCallsFileSearchObjectFileSearch,
+): string {
+  return JSON.stringify(
+    RunStepDetailsToolCallsFileSearchObjectFileSearch$outboundSchema.parse(
+      runStepDetailsToolCallsFileSearchObjectFileSearch,
+    ),
+  );
+}
+
+export function runStepDetailsToolCallsFileSearchObjectFileSearchFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  RunStepDetailsToolCallsFileSearchObjectFileSearch,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      RunStepDetailsToolCallsFileSearchObjectFileSearch$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'RunStepDetailsToolCallsFileSearchObjectFileSearch' from JSON`,
+  );
+}
+
 /** @internal */
 export const RunStepDetailsToolCallsFileSearchObject$inboundSchema: z.ZodType<
   RunStepDetailsToolCallsFileSearchObject,
@@ -203,4 +233,31 @@ export namespace RunStepDetailsToolCallsFileSearchObject$ {
     RunStepDetailsToolCallsFileSearchObject$outboundSchema;
   /** @deprecated use `RunStepDetailsToolCallsFileSearchObject$Outbound` instead. */
   export type Outbound = RunStepDetailsToolCallsFileSearchObject$Outbound;
+}
+
+export function runStepDetailsToolCallsFileSearchObjectToJSON(
+  runStepDetailsToolCallsFileSearchObject:
+    RunStepDetailsToolCallsFileSearchObject,
+): string {
+  return JSON.stringify(
+    RunStepDetailsToolCallsFileSearchObject$outboundSchema.parse(
+      runStepDetailsToolCallsFileSearchObject,
+    ),
+  );
+}
+
+export function runStepDetailsToolCallsFileSearchObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  RunStepDetailsToolCallsFileSearchObject,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      RunStepDetailsToolCallsFileSearchObject$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'RunStepDetailsToolCallsFileSearchObject' from JSON`,
+  );
 }

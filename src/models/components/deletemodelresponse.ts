@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type DeleteModelResponse = {
   id: string;
@@ -50,4 +53,22 @@ export namespace DeleteModelResponse$ {
   export const outboundSchema = DeleteModelResponse$outboundSchema;
   /** @deprecated use `DeleteModelResponse$Outbound` instead. */
   export type Outbound = DeleteModelResponse$Outbound;
+}
+
+export function deleteModelResponseToJSON(
+  deleteModelResponse: DeleteModelResponse,
+): string {
+  return JSON.stringify(
+    DeleteModelResponse$outboundSchema.parse(deleteModelResponse),
+  );
+}
+
+export function deleteModelResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<DeleteModelResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => DeleteModelResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeleteModelResponse' from JSON`,
+  );
 }

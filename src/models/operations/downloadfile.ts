@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type DownloadFileRequest = {
   /**
@@ -54,4 +57,22 @@ export namespace DownloadFileRequest$ {
   export const outboundSchema = DownloadFileRequest$outboundSchema;
   /** @deprecated use `DownloadFileRequest$Outbound` instead. */
   export type Outbound = DownloadFileRequest$Outbound;
+}
+
+export function downloadFileRequestToJSON(
+  downloadFileRequest: DownloadFileRequest,
+): string {
+  return JSON.stringify(
+    DownloadFileRequest$outboundSchema.parse(downloadFileRequest),
+  );
+}
+
+export function downloadFileRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<DownloadFileRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => DownloadFileRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DownloadFileRequest' from JSON`,
+  );
 }
