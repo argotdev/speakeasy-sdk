@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   ChatCompletionRequestSystemMessageContentPart,
   ChatCompletionRequestSystemMessageContentPart$inboundSchema,
@@ -79,6 +82,20 @@ export namespace Content$ {
   export type Outbound = Content$Outbound;
 }
 
+export function contentToJSON(content: Content): string {
+  return JSON.stringify(Content$outboundSchema.parse(content));
+}
+
+export function contentFromJSON(
+  jsonString: string,
+): SafeParseResult<Content, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Content$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Content' from JSON`,
+  );
+}
+
 /** @internal */
 export const Role$inboundSchema: z.ZodNativeEnum<typeof Role> = z.nativeEnum(
   Role,
@@ -148,4 +165,25 @@ export namespace ChatCompletionRequestSystemMessage$ {
     ChatCompletionRequestSystemMessage$outboundSchema;
   /** @deprecated use `ChatCompletionRequestSystemMessage$Outbound` instead. */
   export type Outbound = ChatCompletionRequestSystemMessage$Outbound;
+}
+
+export function chatCompletionRequestSystemMessageToJSON(
+  chatCompletionRequestSystemMessage: ChatCompletionRequestSystemMessage,
+): string {
+  return JSON.stringify(
+    ChatCompletionRequestSystemMessage$outboundSchema.parse(
+      chatCompletionRequestSystemMessage,
+    ),
+  );
+}
+
+export function chatCompletionRequestSystemMessageFromJSON(
+  jsonString: string,
+): SafeParseResult<ChatCompletionRequestSystemMessage, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ChatCompletionRequestSystemMessage$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ChatCompletionRequestSystemMessage' from JSON`,
+  );
 }

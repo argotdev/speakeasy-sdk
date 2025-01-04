@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   VectorStoreExpirationAfter,
   VectorStoreExpirationAfter$inboundSchema,
@@ -65,6 +68,26 @@ export namespace UpdateVectorStoreRequestMetadata$ {
   export type Outbound = UpdateVectorStoreRequestMetadata$Outbound;
 }
 
+export function updateVectorStoreRequestMetadataToJSON(
+  updateVectorStoreRequestMetadata: UpdateVectorStoreRequestMetadata,
+): string {
+  return JSON.stringify(
+    UpdateVectorStoreRequestMetadata$outboundSchema.parse(
+      updateVectorStoreRequestMetadata,
+    ),
+  );
+}
+
+export function updateVectorStoreRequestMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<UpdateVectorStoreRequestMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => UpdateVectorStoreRequestMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'UpdateVectorStoreRequestMetadata' from JSON`,
+  );
+}
+
 /** @internal */
 export const UpdateVectorStoreRequest$inboundSchema: z.ZodType<
   UpdateVectorStoreRequest,
@@ -117,4 +140,22 @@ export namespace UpdateVectorStoreRequest$ {
   export const outboundSchema = UpdateVectorStoreRequest$outboundSchema;
   /** @deprecated use `UpdateVectorStoreRequest$Outbound` instead. */
   export type Outbound = UpdateVectorStoreRequest$Outbound;
+}
+
+export function updateVectorStoreRequestToJSON(
+  updateVectorStoreRequest: UpdateVectorStoreRequest,
+): string {
+  return JSON.stringify(
+    UpdateVectorStoreRequest$outboundSchema.parse(updateVectorStoreRequest),
+  );
+}
+
+export function updateVectorStoreRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<UpdateVectorStoreRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => UpdateVectorStoreRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'UpdateVectorStoreRequest' from JSON`,
+  );
 }

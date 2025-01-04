@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   Invite,
   Invite$inboundSchema,
@@ -124,4 +127,22 @@ export namespace InviteListResponse$ {
   export const outboundSchema = InviteListResponse$outboundSchema;
   /** @deprecated use `InviteListResponse$Outbound` instead. */
   export type Outbound = InviteListResponse$Outbound;
+}
+
+export function inviteListResponseToJSON(
+  inviteListResponse: InviteListResponse,
+): string {
+  return JSON.stringify(
+    InviteListResponse$outboundSchema.parse(inviteListResponse),
+  );
+}
+
+export function inviteListResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<InviteListResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => InviteListResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'InviteListResponse' from JSON`,
+  );
 }

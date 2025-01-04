@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Always `text`.
@@ -92,4 +95,24 @@ export namespace MessageRequestContentTextObject$ {
   export const outboundSchema = MessageRequestContentTextObject$outboundSchema;
   /** @deprecated use `MessageRequestContentTextObject$Outbound` instead. */
   export type Outbound = MessageRequestContentTextObject$Outbound;
+}
+
+export function messageRequestContentTextObjectToJSON(
+  messageRequestContentTextObject: MessageRequestContentTextObject,
+): string {
+  return JSON.stringify(
+    MessageRequestContentTextObject$outboundSchema.parse(
+      messageRequestContentTextObject,
+    ),
+  );
+}
+
+export function messageRequestContentTextObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<MessageRequestContentTextObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MessageRequestContentTextObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MessageRequestContentTextObject' from JSON`,
+  );
 }

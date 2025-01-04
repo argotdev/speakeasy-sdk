@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type ToolOutputs = {
   /**
@@ -76,6 +79,20 @@ export namespace ToolOutputs$ {
   export type Outbound = ToolOutputs$Outbound;
 }
 
+export function toolOutputsToJSON(toolOutputs: ToolOutputs): string {
+  return JSON.stringify(ToolOutputs$outboundSchema.parse(toolOutputs));
+}
+
+export function toolOutputsFromJSON(
+  jsonString: string,
+): SafeParseResult<ToolOutputs, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ToolOutputs$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ToolOutputs' from JSON`,
+  );
+}
+
 /** @internal */
 export const SubmitToolOutputsRunRequest$inboundSchema: z.ZodType<
   SubmitToolOutputsRunRequest,
@@ -121,4 +138,24 @@ export namespace SubmitToolOutputsRunRequest$ {
   export const outboundSchema = SubmitToolOutputsRunRequest$outboundSchema;
   /** @deprecated use `SubmitToolOutputsRunRequest$Outbound` instead. */
   export type Outbound = SubmitToolOutputsRunRequest$Outbound;
+}
+
+export function submitToolOutputsRunRequestToJSON(
+  submitToolOutputsRunRequest: SubmitToolOutputsRunRequest,
+): string {
+  return JSON.stringify(
+    SubmitToolOutputsRunRequest$outboundSchema.parse(
+      submitToolOutputsRunRequest,
+    ),
+  );
+}
+
+export function submitToolOutputsRunRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<SubmitToolOutputsRunRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => SubmitToolOutputsRunRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'SubmitToolOutputsRunRequest' from JSON`,
+  );
 }

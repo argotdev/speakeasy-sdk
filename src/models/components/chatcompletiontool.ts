@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   FunctionObject,
   FunctionObject$inboundSchema,
@@ -88,4 +91,22 @@ export namespace ChatCompletionTool$ {
   export const outboundSchema = ChatCompletionTool$outboundSchema;
   /** @deprecated use `ChatCompletionTool$Outbound` instead. */
   export type Outbound = ChatCompletionTool$Outbound;
+}
+
+export function chatCompletionToolToJSON(
+  chatCompletionTool: ChatCompletionTool,
+): string {
+  return JSON.stringify(
+    ChatCompletionTool$outboundSchema.parse(chatCompletionTool),
+  );
+}
+
+export function chatCompletionToolFromJSON(
+  jsonString: string,
+): SafeParseResult<ChatCompletionTool, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ChatCompletionTool$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ChatCompletionTool' from JSON`,
+  );
 }

@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   VectorStoreObject,
   VectorStoreObject$inboundSchema,
@@ -77,4 +80,22 @@ export namespace ListVectorStoresResponse$ {
   export const outboundSchema = ListVectorStoresResponse$outboundSchema;
   /** @deprecated use `ListVectorStoresResponse$Outbound` instead. */
   export type Outbound = ListVectorStoresResponse$Outbound;
+}
+
+export function listVectorStoresResponseToJSON(
+  listVectorStoresResponse: ListVectorStoresResponse,
+): string {
+  return JSON.stringify(
+    ListVectorStoresResponse$outboundSchema.parse(listVectorStoresResponse),
+  );
+}
+
+export function listVectorStoresResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<ListVectorStoresResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ListVectorStoresResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListVectorStoresResponse' from JSON`,
+  );
 }

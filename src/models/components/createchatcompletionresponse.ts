@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   ChatCompletionResponseMessage,
   ChatCompletionResponseMessage$inboundSchema,
@@ -212,6 +215,20 @@ export namespace Logprobs$ {
   export type Outbound = Logprobs$Outbound;
 }
 
+export function logprobsToJSON(logprobs: Logprobs): string {
+  return JSON.stringify(Logprobs$outboundSchema.parse(logprobs));
+}
+
+export function logprobsFromJSON(
+  jsonString: string,
+): SafeParseResult<Logprobs, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Logprobs$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Logprobs' from JSON`,
+  );
+}
+
 /** @internal */
 export const Choices$inboundSchema: z.ZodType<Choices, z.ZodTypeDef, unknown> =
   z.object({
@@ -260,6 +277,20 @@ export namespace Choices$ {
   export const outboundSchema = Choices$outboundSchema;
   /** @deprecated use `Choices$Outbound` instead. */
   export type Outbound = Choices$Outbound;
+}
+
+export function choicesToJSON(choices: Choices): string {
+  return JSON.stringify(Choices$outboundSchema.parse(choices));
+}
+
+export function choicesFromJSON(
+  jsonString: string,
+): SafeParseResult<Choices, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Choices$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Choices' from JSON`,
+  );
 }
 
 /** @internal */
@@ -373,4 +404,24 @@ export namespace CreateChatCompletionResponse$ {
   export const outboundSchema = CreateChatCompletionResponse$outboundSchema;
   /** @deprecated use `CreateChatCompletionResponse$Outbound` instead. */
   export type Outbound = CreateChatCompletionResponse$Outbound;
+}
+
+export function createChatCompletionResponseToJSON(
+  createChatCompletionResponse: CreateChatCompletionResponse,
+): string {
+  return JSON.stringify(
+    CreateChatCompletionResponse$outboundSchema.parse(
+      createChatCompletionResponse,
+    ),
+  );
+}
+
+export function createChatCompletionResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateChatCompletionResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateChatCompletionResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateChatCompletionResponse' from JSON`,
+  );
 }

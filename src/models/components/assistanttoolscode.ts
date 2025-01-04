@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The type of tool being defined: `code_interpreter`
@@ -78,4 +81,22 @@ export namespace AssistantToolsCode$ {
   export const outboundSchema = AssistantToolsCode$outboundSchema;
   /** @deprecated use `AssistantToolsCode$Outbound` instead. */
   export type Outbound = AssistantToolsCode$Outbound;
+}
+
+export function assistantToolsCodeToJSON(
+  assistantToolsCode: AssistantToolsCode,
+): string {
+  return JSON.stringify(
+    AssistantToolsCode$outboundSchema.parse(assistantToolsCode),
+  );
+}
+
+export function assistantToolsCodeFromJSON(
+  jsonString: string,
+): SafeParseResult<AssistantToolsCode, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AssistantToolsCode$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AssistantToolsCode' from JSON`,
+  );
 }

@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Always `message_creation`.
@@ -104,6 +107,22 @@ export namespace MessageCreation$ {
   export type Outbound = MessageCreation$Outbound;
 }
 
+export function messageCreationToJSON(
+  messageCreation: MessageCreation,
+): string {
+  return JSON.stringify(MessageCreation$outboundSchema.parse(messageCreation));
+}
+
+export function messageCreationFromJSON(
+  jsonString: string,
+): SafeParseResult<MessageCreation, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MessageCreation$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MessageCreation' from JSON`,
+  );
+}
+
 /** @internal */
 export const RunStepDetailsMessageCreationObject$inboundSchema: z.ZodType<
   RunStepDetailsMessageCreationObject,
@@ -151,4 +170,25 @@ export namespace RunStepDetailsMessageCreationObject$ {
     RunStepDetailsMessageCreationObject$outboundSchema;
   /** @deprecated use `RunStepDetailsMessageCreationObject$Outbound` instead. */
   export type Outbound = RunStepDetailsMessageCreationObject$Outbound;
+}
+
+export function runStepDetailsMessageCreationObjectToJSON(
+  runStepDetailsMessageCreationObject: RunStepDetailsMessageCreationObject,
+): string {
+  return JSON.stringify(
+    RunStepDetailsMessageCreationObject$outboundSchema.parse(
+      runStepDetailsMessageCreationObject,
+    ),
+  );
+}
+
+export function runStepDetailsMessageCreationObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<RunStepDetailsMessageCreationObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      RunStepDetailsMessageCreationObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RunStepDetailsMessageCreationObject' from JSON`,
+  );
 }

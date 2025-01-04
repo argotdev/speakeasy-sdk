@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   OpenAIFile,
   OpenAIFile$inboundSchema,
@@ -184,4 +187,18 @@ export namespace Upload$ {
   export const outboundSchema = Upload$outboundSchema;
   /** @deprecated use `Upload$Outbound` instead. */
   export type Outbound = Upload$Outbound;
+}
+
+export function uploadToJSON(upload: Upload): string {
+  return JSON.stringify(Upload$outboundSchema.parse(upload));
+}
+
+export function uploadFromJSON(
+  jsonString: string,
+): SafeParseResult<Upload, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Upload$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Upload' from JSON`,
+  );
 }

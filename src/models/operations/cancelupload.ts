@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type CancelUploadRequest = {
   /**
@@ -56,4 +59,22 @@ export namespace CancelUploadRequest$ {
   export const outboundSchema = CancelUploadRequest$outboundSchema;
   /** @deprecated use `CancelUploadRequest$Outbound` instead. */
   export type Outbound = CancelUploadRequest$Outbound;
+}
+
+export function cancelUploadRequestToJSON(
+  cancelUploadRequest: CancelUploadRequest,
+): string {
+  return JSON.stringify(
+    CancelUploadRequest$outboundSchema.parse(cancelUploadRequest),
+  );
+}
+
+export function cancelUploadRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CancelUploadRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CancelUploadRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CancelUploadRequest' from JSON`,
+  );
 }

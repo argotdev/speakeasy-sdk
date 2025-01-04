@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Input text to embed, encoded as a string or array of tokens. To embed multiple inputs in a single request, pass an array of strings or array of token arrays. The input must not exceed the max input tokens for the model (8192 tokens for `text-embedding-ada-002`), cannot be an empty string, and any array must be 2048 dimensions or less. [Example Python code](https://cookbook.openai.com/examples/how_to_count_tokens_with_tiktoken) for counting tokens.
@@ -117,6 +120,20 @@ export namespace Input$ {
   export type Outbound = Input$Outbound;
 }
 
+export function inputToJSON(input: Input): string {
+  return JSON.stringify(Input$outboundSchema.parse(input));
+}
+
+export function inputFromJSON(
+  jsonString: string,
+): SafeParseResult<Input, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Input$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Input' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateEmbeddingRequestModel2$inboundSchema: z.ZodNativeEnum<
   typeof CreateEmbeddingRequestModel2
@@ -166,6 +183,26 @@ export namespace CreateEmbeddingRequestModel$ {
   export const outboundSchema = CreateEmbeddingRequestModel$outboundSchema;
   /** @deprecated use `CreateEmbeddingRequestModel$Outbound` instead. */
   export type Outbound = CreateEmbeddingRequestModel$Outbound;
+}
+
+export function createEmbeddingRequestModelToJSON(
+  createEmbeddingRequestModel: CreateEmbeddingRequestModel,
+): string {
+  return JSON.stringify(
+    CreateEmbeddingRequestModel$outboundSchema.parse(
+      createEmbeddingRequestModel,
+    ),
+  );
+}
+
+export function createEmbeddingRequestModelFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateEmbeddingRequestModel, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateEmbeddingRequestModel$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateEmbeddingRequestModel' from JSON`,
+  );
 }
 
 /** @internal */
@@ -253,4 +290,22 @@ export namespace CreateEmbeddingRequest$ {
   export const outboundSchema = CreateEmbeddingRequest$outboundSchema;
   /** @deprecated use `CreateEmbeddingRequest$Outbound` instead. */
   export type Outbound = CreateEmbeddingRequest$Outbound;
+}
+
+export function createEmbeddingRequestToJSON(
+  createEmbeddingRequest: CreateEmbeddingRequest,
+): string {
+  return JSON.stringify(
+    CreateEmbeddingRequest$outboundSchema.parse(createEmbeddingRequest),
+  );
+}
+
+export function createEmbeddingRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateEmbeddingRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateEmbeddingRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateEmbeddingRequest' from JSON`,
+  );
 }

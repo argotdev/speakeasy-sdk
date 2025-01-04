@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maximum of 512 characters long.
@@ -50,6 +53,24 @@ export namespace ModifyRunRequestMetadata$ {
   export type Outbound = ModifyRunRequestMetadata$Outbound;
 }
 
+export function modifyRunRequestMetadataToJSON(
+  modifyRunRequestMetadata: ModifyRunRequestMetadata,
+): string {
+  return JSON.stringify(
+    ModifyRunRequestMetadata$outboundSchema.parse(modifyRunRequestMetadata),
+  );
+}
+
+export function modifyRunRequestMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyRunRequestMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ModifyRunRequestMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyRunRequestMetadata' from JSON`,
+  );
+}
+
 /** @internal */
 export const ModifyRunRequest$inboundSchema: z.ZodType<
   ModifyRunRequest,
@@ -86,4 +107,22 @@ export namespace ModifyRunRequest$ {
   export const outboundSchema = ModifyRunRequest$outboundSchema;
   /** @deprecated use `ModifyRunRequest$Outbound` instead. */
   export type Outbound = ModifyRunRequest$Outbound;
+}
+
+export function modifyRunRequestToJSON(
+  modifyRunRequest: ModifyRunRequest,
+): string {
+  return JSON.stringify(
+    ModifyRunRequest$outboundSchema.parse(modifyRunRequest),
+  );
+}
+
+export function modifyRunRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyRunRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ModifyRunRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyRunRequest' from JSON`,
+  );
 }

@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and `desc` for descending order.
@@ -114,4 +117,22 @@ export namespace ListVectorStoresRequest$ {
   export const outboundSchema = ListVectorStoresRequest$outboundSchema;
   /** @deprecated use `ListVectorStoresRequest$Outbound` instead. */
   export type Outbound = ListVectorStoresRequest$Outbound;
+}
+
+export function listVectorStoresRequestToJSON(
+  listVectorStoresRequest: ListVectorStoresRequest,
+): string {
+  return JSON.stringify(
+    ListVectorStoresRequest$outboundSchema.parse(listVectorStoresRequest),
+  );
+}
+
+export function listVectorStoresRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ListVectorStoresRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ListVectorStoresRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListVectorStoresRequest' from JSON`,
+  );
 }

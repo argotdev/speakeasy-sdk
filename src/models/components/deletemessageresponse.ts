@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export const DeleteMessageResponseObject = {
   ThreadMessageDeleted: "thread.message.deleted",
@@ -79,4 +82,22 @@ export namespace DeleteMessageResponse$ {
   export const outboundSchema = DeleteMessageResponse$outboundSchema;
   /** @deprecated use `DeleteMessageResponse$Outbound` instead. */
   export type Outbound = DeleteMessageResponse$Outbound;
+}
+
+export function deleteMessageResponseToJSON(
+  deleteMessageResponse: DeleteMessageResponse,
+): string {
+  return JSON.stringify(
+    DeleteMessageResponse$outboundSchema.parse(deleteMessageResponse),
+  );
+}
+
+export function deleteMessageResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<DeleteMessageResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => DeleteMessageResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeleteMessageResponse' from JSON`,
+  );
 }

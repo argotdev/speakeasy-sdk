@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   ChatCompletionFunctionCallOption,
   ChatCompletionFunctionCallOption$inboundSchema,
@@ -333,6 +336,10 @@ export type CreateChatCompletionRequest = {
    */
   toolChoice?: ChatCompletionToolChoiceOption | undefined;
   /**
+   * Whether to enable [parallel function calling](/docs/guides/function-calling/parallel-function-calling) during tool use.
+   */
+  parallelToolCalls?: boolean | undefined;
+  /**
    * A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).
    *
    * @remarks
@@ -413,6 +420,26 @@ export namespace CreateChatCompletionRequestModel$ {
   export type Outbound = CreateChatCompletionRequestModel$Outbound;
 }
 
+export function createChatCompletionRequestModelToJSON(
+  createChatCompletionRequestModel: CreateChatCompletionRequestModel,
+): string {
+  return JSON.stringify(
+    CreateChatCompletionRequestModel$outboundSchema.parse(
+      createChatCompletionRequestModel,
+    ),
+  );
+}
+
+export function createChatCompletionRequestModelFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateChatCompletionRequestModel, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateChatCompletionRequestModel$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateChatCompletionRequestModel' from JSON`,
+  );
+}
+
 /** @internal */
 export const ResponseFormat$inboundSchema: z.ZodType<
   ResponseFormat,
@@ -452,6 +479,20 @@ export namespace ResponseFormat$ {
   export const outboundSchema = ResponseFormat$outboundSchema;
   /** @deprecated use `ResponseFormat$Outbound` instead. */
   export type Outbound = ResponseFormat$Outbound;
+}
+
+export function responseFormatToJSON(responseFormat: ResponseFormat): string {
+  return JSON.stringify(ResponseFormat$outboundSchema.parse(responseFormat));
+}
+
+export function responseFormatFromJSON(
+  jsonString: string,
+): SafeParseResult<ResponseFormat, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ResponseFormat$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ResponseFormat' from JSON`,
+  );
 }
 
 /** @internal */
@@ -495,6 +536,20 @@ export namespace Stop$ {
   export const outboundSchema = Stop$outboundSchema;
   /** @deprecated use `Stop$Outbound` instead. */
   export type Outbound = Stop$Outbound;
+}
+
+export function stopToJSON(stop: Stop): string {
+  return JSON.stringify(Stop$outboundSchema.parse(stop));
+}
+
+export function stopFromJSON(
+  jsonString: string,
+): SafeParseResult<Stop, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Stop$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Stop' from JSON`,
+  );
 }
 
 /** @internal */
@@ -555,6 +610,33 @@ export namespace CreateChatCompletionRequestFunctionCall$ {
   export type Outbound = CreateChatCompletionRequestFunctionCall$Outbound;
 }
 
+export function createChatCompletionRequestFunctionCallToJSON(
+  createChatCompletionRequestFunctionCall:
+    CreateChatCompletionRequestFunctionCall,
+): string {
+  return JSON.stringify(
+    CreateChatCompletionRequestFunctionCall$outboundSchema.parse(
+      createChatCompletionRequestFunctionCall,
+    ),
+  );
+}
+
+export function createChatCompletionRequestFunctionCallFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  CreateChatCompletionRequestFunctionCall,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateChatCompletionRequestFunctionCall$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'CreateChatCompletionRequestFunctionCall' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateChatCompletionRequest$inboundSchema: z.ZodType<
   CreateChatCompletionRequest,
@@ -586,6 +668,7 @@ export const CreateChatCompletionRequest$inboundSchema: z.ZodType<
   top_p: z.nullable(z.number().default(1)),
   tools: z.array(ChatCompletionTool$inboundSchema).optional(),
   tool_choice: ChatCompletionToolChoiceOption$inboundSchema.optional(),
+  parallel_tool_calls: z.boolean().default(true),
   user: z.string().optional(),
   function_call: z.union([
     ChatCompletionFunctionCallOption$inboundSchema,
@@ -605,6 +688,7 @@ export const CreateChatCompletionRequest$inboundSchema: z.ZodType<
     "stream_options": "streamOptions",
     "top_p": "topP",
     "tool_choice": "toolChoice",
+    "parallel_tool_calls": "parallelToolCalls",
     "function_call": "functionCall",
   });
 });
@@ -635,6 +719,7 @@ export type CreateChatCompletionRequest$Outbound = {
   top_p: number | null;
   tools?: Array<ChatCompletionTool$Outbound> | undefined;
   tool_choice?: ChatCompletionToolChoiceOption$Outbound | undefined;
+  parallel_tool_calls: boolean;
   user?: string | undefined;
   function_call?:
     | ChatCompletionFunctionCallOption$Outbound
@@ -674,6 +759,7 @@ export const CreateChatCompletionRequest$outboundSchema: z.ZodType<
   topP: z.nullable(z.number().default(1)),
   tools: z.array(ChatCompletionTool$outboundSchema).optional(),
   toolChoice: ChatCompletionToolChoiceOption$outboundSchema.optional(),
+  parallelToolCalls: z.boolean().default(true),
   user: z.string().optional(),
   functionCall: z.union([
     ChatCompletionFunctionCallOption$outboundSchema,
@@ -693,6 +779,7 @@ export const CreateChatCompletionRequest$outboundSchema: z.ZodType<
     streamOptions: "stream_options",
     topP: "top_p",
     toolChoice: "tool_choice",
+    parallelToolCalls: "parallel_tool_calls",
     functionCall: "function_call",
   });
 });
@@ -708,4 +795,24 @@ export namespace CreateChatCompletionRequest$ {
   export const outboundSchema = CreateChatCompletionRequest$outboundSchema;
   /** @deprecated use `CreateChatCompletionRequest$Outbound` instead. */
   export type Outbound = CreateChatCompletionRequest$Outbound;
+}
+
+export function createChatCompletionRequestToJSON(
+  createChatCompletionRequest: CreateChatCompletionRequest,
+): string {
+  return JSON.stringify(
+    CreateChatCompletionRequest$outboundSchema.parse(
+      createChatCompletionRequest,
+    ),
+  );
+}
+
+export function createChatCompletionRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateChatCompletionRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateChatCompletionRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateChatCompletionRequest' from JSON`,
+  );
 }

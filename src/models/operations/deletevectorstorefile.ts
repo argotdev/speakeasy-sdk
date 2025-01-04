@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type DeleteVectorStoreFileRequest = {
   /**
@@ -63,4 +66,24 @@ export namespace DeleteVectorStoreFileRequest$ {
   export const outboundSchema = DeleteVectorStoreFileRequest$outboundSchema;
   /** @deprecated use `DeleteVectorStoreFileRequest$Outbound` instead. */
   export type Outbound = DeleteVectorStoreFileRequest$Outbound;
+}
+
+export function deleteVectorStoreFileRequestToJSON(
+  deleteVectorStoreFileRequest: DeleteVectorStoreFileRequest,
+): string {
+  return JSON.stringify(
+    DeleteVectorStoreFileRequest$outboundSchema.parse(
+      deleteVectorStoreFileRequest,
+    ),
+  );
+}
+
+export function deleteVectorStoreFileRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<DeleteVectorStoreFileRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => DeleteVectorStoreFileRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeleteVectorStoreFileRequest' from JSON`,
+  );
 }

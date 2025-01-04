@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   AuditLogActor,
   AuditLogActor$inboundSchema,
@@ -523,6 +526,22 @@ export namespace AuditLogProject$ {
   export type Outbound = AuditLogProject$Outbound;
 }
 
+export function auditLogProjectToJSON(
+  auditLogProject: AuditLogProject,
+): string {
+  return JSON.stringify(AuditLogProject$outboundSchema.parse(auditLogProject));
+}
+
+export function auditLogProjectFromJSON(
+  jsonString: string,
+): SafeParseResult<AuditLogProject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AuditLogProject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AuditLogProject' from JSON`,
+  );
+}
+
 /** @internal */
 export const AuditLogData$inboundSchema: z.ZodType<
   AuditLogData,
@@ -557,6 +576,20 @@ export namespace AuditLogData$ {
   export const outboundSchema = AuditLogData$outboundSchema;
   /** @deprecated use `AuditLogData$Outbound` instead. */
   export type Outbound = AuditLogData$Outbound;
+}
+
+export function auditLogDataToJSON(auditLogData: AuditLogData): string {
+  return JSON.stringify(AuditLogData$outboundSchema.parse(auditLogData));
+}
+
+export function auditLogDataFromJSON(
+  jsonString: string,
+): SafeParseResult<AuditLogData, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AuditLogData$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AuditLogData' from JSON`,
+  );
 }
 
 /** @internal */
@@ -598,6 +631,20 @@ export namespace ApiKeyCreated$ {
   export type Outbound = ApiKeyCreated$Outbound;
 }
 
+export function apiKeyCreatedToJSON(apiKeyCreated: ApiKeyCreated): string {
+  return JSON.stringify(ApiKeyCreated$outboundSchema.parse(apiKeyCreated));
+}
+
+export function apiKeyCreatedFromJSON(
+  jsonString: string,
+): SafeParseResult<ApiKeyCreated, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ApiKeyCreated$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ApiKeyCreated' from JSON`,
+  );
+}
+
 /** @internal */
 export const ChangesRequested$inboundSchema: z.ZodType<
   ChangesRequested,
@@ -632,6 +679,24 @@ export namespace ChangesRequested$ {
   export const outboundSchema = ChangesRequested$outboundSchema;
   /** @deprecated use `ChangesRequested$Outbound` instead. */
   export type Outbound = ChangesRequested$Outbound;
+}
+
+export function changesRequestedToJSON(
+  changesRequested: ChangesRequested,
+): string {
+  return JSON.stringify(
+    ChangesRequested$outboundSchema.parse(changesRequested),
+  );
+}
+
+export function changesRequestedFromJSON(
+  jsonString: string,
+): SafeParseResult<ChangesRequested, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ChangesRequested$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ChangesRequested' from JSON`,
+  );
 }
 
 /** @internal */
@@ -681,6 +746,20 @@ export namespace ApiKeyUpdated$ {
   export type Outbound = ApiKeyUpdated$Outbound;
 }
 
+export function apiKeyUpdatedToJSON(apiKeyUpdated: ApiKeyUpdated): string {
+  return JSON.stringify(ApiKeyUpdated$outboundSchema.parse(apiKeyUpdated));
+}
+
+export function apiKeyUpdatedFromJSON(
+  jsonString: string,
+): SafeParseResult<ApiKeyUpdated, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ApiKeyUpdated$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ApiKeyUpdated' from JSON`,
+  );
+}
+
 /** @internal */
 export const ApiKeyDeleted$inboundSchema: z.ZodType<
   ApiKeyDeleted,
@@ -715,6 +794,20 @@ export namespace ApiKeyDeleted$ {
   export const outboundSchema = ApiKeyDeleted$outboundSchema;
   /** @deprecated use `ApiKeyDeleted$Outbound` instead. */
   export type Outbound = ApiKeyDeleted$Outbound;
+}
+
+export function apiKeyDeletedToJSON(apiKeyDeleted: ApiKeyDeleted): string {
+  return JSON.stringify(ApiKeyDeleted$outboundSchema.parse(apiKeyDeleted));
+}
+
+export function apiKeyDeletedFromJSON(
+  jsonString: string,
+): SafeParseResult<ApiKeyDeleted, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ApiKeyDeleted$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ApiKeyDeleted' from JSON`,
+  );
 }
 
 /** @internal */
@@ -756,6 +849,24 @@ export namespace AuditLogInviteSentData$ {
   export type Outbound = AuditLogInviteSentData$Outbound;
 }
 
+export function auditLogInviteSentDataToJSON(
+  auditLogInviteSentData: AuditLogInviteSentData,
+): string {
+  return JSON.stringify(
+    AuditLogInviteSentData$outboundSchema.parse(auditLogInviteSentData),
+  );
+}
+
+export function auditLogInviteSentDataFromJSON(
+  jsonString: string,
+): SafeParseResult<AuditLogInviteSentData, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AuditLogInviteSentData$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AuditLogInviteSentData' from JSON`,
+  );
+}
+
 /** @internal */
 export const InviteSent$inboundSchema: z.ZodType<
   InviteSent,
@@ -795,6 +906,20 @@ export namespace InviteSent$ {
   export type Outbound = InviteSent$Outbound;
 }
 
+export function inviteSentToJSON(inviteSent: InviteSent): string {
+  return JSON.stringify(InviteSent$outboundSchema.parse(inviteSent));
+}
+
+export function inviteSentFromJSON(
+  jsonString: string,
+): SafeParseResult<InviteSent, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => InviteSent$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'InviteSent' from JSON`,
+  );
+}
+
 /** @internal */
 export const InviteAccepted$inboundSchema: z.ZodType<
   InviteAccepted,
@@ -831,6 +956,20 @@ export namespace InviteAccepted$ {
   export type Outbound = InviteAccepted$Outbound;
 }
 
+export function inviteAcceptedToJSON(inviteAccepted: InviteAccepted): string {
+  return JSON.stringify(InviteAccepted$outboundSchema.parse(inviteAccepted));
+}
+
+export function inviteAcceptedFromJSON(
+  jsonString: string,
+): SafeParseResult<InviteAccepted, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => InviteAccepted$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'InviteAccepted' from JSON`,
+  );
+}
+
 /** @internal */
 export const InviteDeleted$inboundSchema: z.ZodType<
   InviteDeleted,
@@ -865,6 +1004,20 @@ export namespace InviteDeleted$ {
   export const outboundSchema = InviteDeleted$outboundSchema;
   /** @deprecated use `InviteDeleted$Outbound` instead. */
   export type Outbound = InviteDeleted$Outbound;
+}
+
+export function inviteDeletedToJSON(inviteDeleted: InviteDeleted): string {
+  return JSON.stringify(InviteDeleted$outboundSchema.parse(inviteDeleted));
+}
+
+export function inviteDeletedFromJSON(
+  jsonString: string,
+): SafeParseResult<InviteDeleted, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => InviteDeleted$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'InviteDeleted' from JSON`,
+  );
 }
 
 /** @internal */
@@ -916,6 +1069,20 @@ export namespace LoginFailed$ {
   export type Outbound = LoginFailed$Outbound;
 }
 
+export function loginFailedToJSON(loginFailed: LoginFailed): string {
+  return JSON.stringify(LoginFailed$outboundSchema.parse(loginFailed));
+}
+
+export function loginFailedFromJSON(
+  jsonString: string,
+): SafeParseResult<LoginFailed, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => LoginFailed$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'LoginFailed' from JSON`,
+  );
+}
+
 /** @internal */
 export const LogoutFailed$inboundSchema: z.ZodType<
   LogoutFailed,
@@ -963,6 +1130,20 @@ export namespace LogoutFailed$ {
   export const outboundSchema = LogoutFailed$outboundSchema;
   /** @deprecated use `LogoutFailed$Outbound` instead. */
   export type Outbound = LogoutFailed$Outbound;
+}
+
+export function logoutFailedToJSON(logoutFailed: LogoutFailed): string {
+  return JSON.stringify(LogoutFailed$outboundSchema.parse(logoutFailed));
+}
+
+export function logoutFailedFromJSON(
+  jsonString: string,
+): SafeParseResult<LogoutFailed, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => LogoutFailed$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'LogoutFailed' from JSON`,
+  );
 }
 
 /** @internal */
@@ -1014,6 +1195,20 @@ export namespace Settings$ {
   export type Outbound = Settings$Outbound;
 }
 
+export function settingsToJSON(settings: Settings): string {
+  return JSON.stringify(Settings$outboundSchema.parse(settings));
+}
+
+export function settingsFromJSON(
+  jsonString: string,
+): SafeParseResult<Settings, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Settings$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Settings' from JSON`,
+  );
+}
+
 /** @internal */
 export const AuditLogChangesRequested$inboundSchema: z.ZodType<
   AuditLogChangesRequested,
@@ -1057,6 +1252,24 @@ export namespace AuditLogChangesRequested$ {
   export const outboundSchema = AuditLogChangesRequested$outboundSchema;
   /** @deprecated use `AuditLogChangesRequested$Outbound` instead. */
   export type Outbound = AuditLogChangesRequested$Outbound;
+}
+
+export function auditLogChangesRequestedToJSON(
+  auditLogChangesRequested: AuditLogChangesRequested,
+): string {
+  return JSON.stringify(
+    AuditLogChangesRequested$outboundSchema.parse(auditLogChangesRequested),
+  );
+}
+
+export function auditLogChangesRequestedFromJSON(
+  jsonString: string,
+): SafeParseResult<AuditLogChangesRequested, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AuditLogChangesRequested$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AuditLogChangesRequested' from JSON`,
+  );
 }
 
 /** @internal */
@@ -1108,6 +1321,24 @@ export namespace OrganizationUpdated$ {
   export type Outbound = OrganizationUpdated$Outbound;
 }
 
+export function organizationUpdatedToJSON(
+  organizationUpdated: OrganizationUpdated,
+): string {
+  return JSON.stringify(
+    OrganizationUpdated$outboundSchema.parse(organizationUpdated),
+  );
+}
+
+export function organizationUpdatedFromJSON(
+  jsonString: string,
+): SafeParseResult<OrganizationUpdated, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => OrganizationUpdated$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'OrganizationUpdated' from JSON`,
+  );
+}
+
 /** @internal */
 export const AuditLogProjectCreatedData$inboundSchema: z.ZodType<
   AuditLogProjectCreatedData,
@@ -1145,6 +1376,24 @@ export namespace AuditLogProjectCreatedData$ {
   export const outboundSchema = AuditLogProjectCreatedData$outboundSchema;
   /** @deprecated use `AuditLogProjectCreatedData$Outbound` instead. */
   export type Outbound = AuditLogProjectCreatedData$Outbound;
+}
+
+export function auditLogProjectCreatedDataToJSON(
+  auditLogProjectCreatedData: AuditLogProjectCreatedData,
+): string {
+  return JSON.stringify(
+    AuditLogProjectCreatedData$outboundSchema.parse(auditLogProjectCreatedData),
+  );
+}
+
+export function auditLogProjectCreatedDataFromJSON(
+  jsonString: string,
+): SafeParseResult<AuditLogProjectCreatedData, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AuditLogProjectCreatedData$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AuditLogProjectCreatedData' from JSON`,
+  );
 }
 
 /** @internal */
@@ -1186,6 +1435,20 @@ export namespace ProjectCreated$ {
   export type Outbound = ProjectCreated$Outbound;
 }
 
+export function projectCreatedToJSON(projectCreated: ProjectCreated): string {
+  return JSON.stringify(ProjectCreated$outboundSchema.parse(projectCreated));
+}
+
+export function projectCreatedFromJSON(
+  jsonString: string,
+): SafeParseResult<ProjectCreated, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ProjectCreated$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ProjectCreated' from JSON`,
+  );
+}
+
 /** @internal */
 export const AuditLogProjectUpdatedChangesRequested$inboundSchema: z.ZodType<
   AuditLogProjectUpdatedChangesRequested,
@@ -1222,6 +1485,28 @@ export namespace AuditLogProjectUpdatedChangesRequested$ {
     AuditLogProjectUpdatedChangesRequested$outboundSchema;
   /** @deprecated use `AuditLogProjectUpdatedChangesRequested$Outbound` instead. */
   export type Outbound = AuditLogProjectUpdatedChangesRequested$Outbound;
+}
+
+export function auditLogProjectUpdatedChangesRequestedToJSON(
+  auditLogProjectUpdatedChangesRequested:
+    AuditLogProjectUpdatedChangesRequested,
+): string {
+  return JSON.stringify(
+    AuditLogProjectUpdatedChangesRequested$outboundSchema.parse(
+      auditLogProjectUpdatedChangesRequested,
+    ),
+  );
+}
+
+export function auditLogProjectUpdatedChangesRequestedFromJSON(
+  jsonString: string,
+): SafeParseResult<AuditLogProjectUpdatedChangesRequested, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      AuditLogProjectUpdatedChangesRequested$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AuditLogProjectUpdatedChangesRequested' from JSON`,
+  );
 }
 
 /** @internal */
@@ -1277,6 +1562,20 @@ export namespace ProjectUpdated$ {
   export type Outbound = ProjectUpdated$Outbound;
 }
 
+export function projectUpdatedToJSON(projectUpdated: ProjectUpdated): string {
+  return JSON.stringify(ProjectUpdated$outboundSchema.parse(projectUpdated));
+}
+
+export function projectUpdatedFromJSON(
+  jsonString: string,
+): SafeParseResult<ProjectUpdated, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ProjectUpdated$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ProjectUpdated' from JSON`,
+  );
+}
+
 /** @internal */
 export const ProjectArchived$inboundSchema: z.ZodType<
   ProjectArchived,
@@ -1311,6 +1610,22 @@ export namespace ProjectArchived$ {
   export const outboundSchema = ProjectArchived$outboundSchema;
   /** @deprecated use `ProjectArchived$Outbound` instead. */
   export type Outbound = ProjectArchived$Outbound;
+}
+
+export function projectArchivedToJSON(
+  projectArchived: ProjectArchived,
+): string {
+  return JSON.stringify(ProjectArchived$outboundSchema.parse(projectArchived));
+}
+
+export function projectArchivedFromJSON(
+  jsonString: string,
+): SafeParseResult<ProjectArchived, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ProjectArchived$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ProjectArchived' from JSON`,
+  );
 }
 
 /** @internal */
@@ -1348,6 +1663,26 @@ export namespace AuditLogServiceAccountCreatedData$ {
     AuditLogServiceAccountCreatedData$outboundSchema;
   /** @deprecated use `AuditLogServiceAccountCreatedData$Outbound` instead. */
   export type Outbound = AuditLogServiceAccountCreatedData$Outbound;
+}
+
+export function auditLogServiceAccountCreatedDataToJSON(
+  auditLogServiceAccountCreatedData: AuditLogServiceAccountCreatedData,
+): string {
+  return JSON.stringify(
+    AuditLogServiceAccountCreatedData$outboundSchema.parse(
+      auditLogServiceAccountCreatedData,
+    ),
+  );
+}
+
+export function auditLogServiceAccountCreatedDataFromJSON(
+  jsonString: string,
+): SafeParseResult<AuditLogServiceAccountCreatedData, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AuditLogServiceAccountCreatedData$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AuditLogServiceAccountCreatedData' from JSON`,
+  );
 }
 
 /** @internal */
@@ -1391,6 +1726,24 @@ export namespace ServiceAccountCreated$ {
   export type Outbound = ServiceAccountCreated$Outbound;
 }
 
+export function serviceAccountCreatedToJSON(
+  serviceAccountCreated: ServiceAccountCreated,
+): string {
+  return JSON.stringify(
+    ServiceAccountCreated$outboundSchema.parse(serviceAccountCreated),
+  );
+}
+
+export function serviceAccountCreatedFromJSON(
+  jsonString: string,
+): SafeParseResult<ServiceAccountCreated, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ServiceAccountCreated$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ServiceAccountCreated' from JSON`,
+  );
+}
+
 /** @internal */
 export const AuditLogServiceAccountUpdatedChangesRequested$inboundSchema:
   z.ZodType<
@@ -1429,6 +1782,33 @@ export namespace AuditLogServiceAccountUpdatedChangesRequested$ {
     AuditLogServiceAccountUpdatedChangesRequested$outboundSchema;
   /** @deprecated use `AuditLogServiceAccountUpdatedChangesRequested$Outbound` instead. */
   export type Outbound = AuditLogServiceAccountUpdatedChangesRequested$Outbound;
+}
+
+export function auditLogServiceAccountUpdatedChangesRequestedToJSON(
+  auditLogServiceAccountUpdatedChangesRequested:
+    AuditLogServiceAccountUpdatedChangesRequested,
+): string {
+  return JSON.stringify(
+    AuditLogServiceAccountUpdatedChangesRequested$outboundSchema.parse(
+      auditLogServiceAccountUpdatedChangesRequested,
+    ),
+  );
+}
+
+export function auditLogServiceAccountUpdatedChangesRequestedFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  AuditLogServiceAccountUpdatedChangesRequested,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      AuditLogServiceAccountUpdatedChangesRequested$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'AuditLogServiceAccountUpdatedChangesRequested' from JSON`,
+  );
 }
 
 /** @internal */
@@ -1484,6 +1864,24 @@ export namespace ServiceAccountUpdated$ {
   export type Outbound = ServiceAccountUpdated$Outbound;
 }
 
+export function serviceAccountUpdatedToJSON(
+  serviceAccountUpdated: ServiceAccountUpdated,
+): string {
+  return JSON.stringify(
+    ServiceAccountUpdated$outboundSchema.parse(serviceAccountUpdated),
+  );
+}
+
+export function serviceAccountUpdatedFromJSON(
+  jsonString: string,
+): SafeParseResult<ServiceAccountUpdated, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ServiceAccountUpdated$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ServiceAccountUpdated' from JSON`,
+  );
+}
+
 /** @internal */
 export const ServiceAccountDeleted$inboundSchema: z.ZodType<
   ServiceAccountDeleted,
@@ -1520,6 +1918,24 @@ export namespace ServiceAccountDeleted$ {
   export type Outbound = ServiceAccountDeleted$Outbound;
 }
 
+export function serviceAccountDeletedToJSON(
+  serviceAccountDeleted: ServiceAccountDeleted,
+): string {
+  return JSON.stringify(
+    ServiceAccountDeleted$outboundSchema.parse(serviceAccountDeleted),
+  );
+}
+
+export function serviceAccountDeletedFromJSON(
+  jsonString: string,
+): SafeParseResult<ServiceAccountDeleted, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ServiceAccountDeleted$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ServiceAccountDeleted' from JSON`,
+  );
+}
+
 /** @internal */
 export const AuditLogUserAddedData$inboundSchema: z.ZodType<
   AuditLogUserAddedData,
@@ -1554,6 +1970,24 @@ export namespace AuditLogUserAddedData$ {
   export const outboundSchema = AuditLogUserAddedData$outboundSchema;
   /** @deprecated use `AuditLogUserAddedData$Outbound` instead. */
   export type Outbound = AuditLogUserAddedData$Outbound;
+}
+
+export function auditLogUserAddedDataToJSON(
+  auditLogUserAddedData: AuditLogUserAddedData,
+): string {
+  return JSON.stringify(
+    AuditLogUserAddedData$outboundSchema.parse(auditLogUserAddedData),
+  );
+}
+
+export function auditLogUserAddedDataFromJSON(
+  jsonString: string,
+): SafeParseResult<AuditLogUserAddedData, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AuditLogUserAddedData$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AuditLogUserAddedData' from JSON`,
+  );
 }
 
 /** @internal */
@@ -1595,6 +2029,20 @@ export namespace UserAdded$ {
   export type Outbound = UserAdded$Outbound;
 }
 
+export function userAddedToJSON(userAdded: UserAdded): string {
+  return JSON.stringify(UserAdded$outboundSchema.parse(userAdded));
+}
+
+export function userAddedFromJSON(
+  jsonString: string,
+): SafeParseResult<UserAdded, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => UserAdded$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'UserAdded' from JSON`,
+  );
+}
+
 /** @internal */
 export const AuditLogUserUpdatedChangesRequested$inboundSchema: z.ZodType<
   AuditLogUserUpdatedChangesRequested,
@@ -1631,6 +2079,27 @@ export namespace AuditLogUserUpdatedChangesRequested$ {
     AuditLogUserUpdatedChangesRequested$outboundSchema;
   /** @deprecated use `AuditLogUserUpdatedChangesRequested$Outbound` instead. */
   export type Outbound = AuditLogUserUpdatedChangesRequested$Outbound;
+}
+
+export function auditLogUserUpdatedChangesRequestedToJSON(
+  auditLogUserUpdatedChangesRequested: AuditLogUserUpdatedChangesRequested,
+): string {
+  return JSON.stringify(
+    AuditLogUserUpdatedChangesRequested$outboundSchema.parse(
+      auditLogUserUpdatedChangesRequested,
+    ),
+  );
+}
+
+export function auditLogUserUpdatedChangesRequestedFromJSON(
+  jsonString: string,
+): SafeParseResult<AuditLogUserUpdatedChangesRequested, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      AuditLogUserUpdatedChangesRequested$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AuditLogUserUpdatedChangesRequested' from JSON`,
+  );
 }
 
 /** @internal */
@@ -1684,6 +2153,20 @@ export namespace UserUpdated$ {
   export type Outbound = UserUpdated$Outbound;
 }
 
+export function userUpdatedToJSON(userUpdated: UserUpdated): string {
+  return JSON.stringify(UserUpdated$outboundSchema.parse(userUpdated));
+}
+
+export function userUpdatedFromJSON(
+  jsonString: string,
+): SafeParseResult<UserUpdated, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => UserUpdated$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'UserUpdated' from JSON`,
+  );
+}
+
 /** @internal */
 export const UserDeleted$inboundSchema: z.ZodType<
   UserDeleted,
@@ -1718,6 +2201,20 @@ export namespace UserDeleted$ {
   export const outboundSchema = UserDeleted$outboundSchema;
   /** @deprecated use `UserDeleted$Outbound` instead. */
   export type Outbound = UserDeleted$Outbound;
+}
+
+export function userDeletedToJSON(userDeleted: UserDeleted): string {
+  return JSON.stringify(UserDeleted$outboundSchema.parse(userDeleted));
+}
+
+export function userDeletedFromJSON(
+  jsonString: string,
+): SafeParseResult<UserDeleted, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => UserDeleted$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'UserDeleted' from JSON`,
+  );
 }
 
 /** @internal */
@@ -1872,4 +2369,18 @@ export namespace AuditLog$ {
   export const outboundSchema = AuditLog$outboundSchema;
   /** @deprecated use `AuditLog$Outbound` instead. */
   export type Outbound = AuditLog$Outbound;
+}
+
+export function auditLogToJSON(auditLog: AuditLog): string {
+  return JSON.stringify(AuditLog$outboundSchema.parse(auditLog));
+}
+
+export function auditLogFromJSON(
+  jsonString: string,
+): SafeParseResult<AuditLog, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AuditLog$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AuditLog' from JSON`,
+  );
 }

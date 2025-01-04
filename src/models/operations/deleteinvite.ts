@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type DeleteInviteRequest = {
   /**
@@ -54,4 +57,22 @@ export namespace DeleteInviteRequest$ {
   export const outboundSchema = DeleteInviteRequest$outboundSchema;
   /** @deprecated use `DeleteInviteRequest$Outbound` instead. */
   export type Outbound = DeleteInviteRequest$Outbound;
+}
+
+export function deleteInviteRequestToJSON(
+  deleteInviteRequest: DeleteInviteRequest,
+): string {
+  return JSON.stringify(
+    DeleteInviteRequest$outboundSchema.parse(deleteInviteRequest),
+  );
+}
+
+export function deleteInviteRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<DeleteInviteRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => DeleteInviteRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeleteInviteRequest' from JSON`,
+  );
 }

@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type ProjectServiceAccountCreateRequest = {
   /**
@@ -46,4 +49,25 @@ export namespace ProjectServiceAccountCreateRequest$ {
     ProjectServiceAccountCreateRequest$outboundSchema;
   /** @deprecated use `ProjectServiceAccountCreateRequest$Outbound` instead. */
   export type Outbound = ProjectServiceAccountCreateRequest$Outbound;
+}
+
+export function projectServiceAccountCreateRequestToJSON(
+  projectServiceAccountCreateRequest: ProjectServiceAccountCreateRequest,
+): string {
+  return JSON.stringify(
+    ProjectServiceAccountCreateRequest$outboundSchema.parse(
+      projectServiceAccountCreateRequest,
+    ),
+  );
+}
+
+export function projectServiceAccountCreateRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ProjectServiceAccountCreateRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ProjectServiceAccountCreateRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ProjectServiceAccountCreateRequest' from JSON`,
+  );
 }

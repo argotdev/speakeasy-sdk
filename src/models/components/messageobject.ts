@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   AssistantToolsCode,
   AssistantToolsCode$inboundSchema,
@@ -299,6 +302,24 @@ export namespace IncompleteDetails$ {
   export type Outbound = IncompleteDetails$Outbound;
 }
 
+export function incompleteDetailsToJSON(
+  incompleteDetails: IncompleteDetails,
+): string {
+  return JSON.stringify(
+    IncompleteDetails$outboundSchema.parse(incompleteDetails),
+  );
+}
+
+export function incompleteDetailsFromJSON(
+  jsonString: string,
+): SafeParseResult<IncompleteDetails, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => IncompleteDetails$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'IncompleteDetails' from JSON`,
+  );
+}
+
 /** @internal */
 export const MessageObjectRole$inboundSchema: z.ZodNativeEnum<
   typeof MessageObjectRole
@@ -364,6 +385,24 @@ export namespace MessageObjectContent$ {
   export type Outbound = MessageObjectContent$Outbound;
 }
 
+export function messageObjectContentToJSON(
+  messageObjectContent: MessageObjectContent,
+): string {
+  return JSON.stringify(
+    MessageObjectContent$outboundSchema.parse(messageObjectContent),
+  );
+}
+
+export function messageObjectContentFromJSON(
+  jsonString: string,
+): SafeParseResult<MessageObjectContent, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MessageObjectContent$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MessageObjectContent' from JSON`,
+  );
+}
+
 /** @internal */
 export const MessageObjectTools$inboundSchema: z.ZodType<
   MessageObjectTools,
@@ -400,6 +439,24 @@ export namespace MessageObjectTools$ {
   export const outboundSchema = MessageObjectTools$outboundSchema;
   /** @deprecated use `MessageObjectTools$Outbound` instead. */
   export type Outbound = MessageObjectTools$Outbound;
+}
+
+export function messageObjectToolsToJSON(
+  messageObjectTools: MessageObjectTools,
+): string {
+  return JSON.stringify(
+    MessageObjectTools$outboundSchema.parse(messageObjectTools),
+  );
+}
+
+export function messageObjectToolsFromJSON(
+  jsonString: string,
+): SafeParseResult<MessageObjectTools, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MessageObjectTools$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MessageObjectTools' from JSON`,
+  );
 }
 
 /** @internal */
@@ -463,6 +520,24 @@ export namespace MessageObjectAttachments$ {
   export type Outbound = MessageObjectAttachments$Outbound;
 }
 
+export function messageObjectAttachmentsToJSON(
+  messageObjectAttachments: MessageObjectAttachments,
+): string {
+  return JSON.stringify(
+    MessageObjectAttachments$outboundSchema.parse(messageObjectAttachments),
+  );
+}
+
+export function messageObjectAttachmentsFromJSON(
+  jsonString: string,
+): SafeParseResult<MessageObjectAttachments, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MessageObjectAttachments$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MessageObjectAttachments' from JSON`,
+  );
+}
+
 /** @internal */
 export const MessageObjectMetadata$inboundSchema: z.ZodType<
   MessageObjectMetadata,
@@ -491,6 +566,24 @@ export namespace MessageObjectMetadata$ {
   export const outboundSchema = MessageObjectMetadata$outboundSchema;
   /** @deprecated use `MessageObjectMetadata$Outbound` instead. */
   export type Outbound = MessageObjectMetadata$Outbound;
+}
+
+export function messageObjectMetadataToJSON(
+  messageObjectMetadata: MessageObjectMetadata,
+): string {
+  return JSON.stringify(
+    MessageObjectMetadata$outboundSchema.parse(messageObjectMetadata),
+  );
+}
+
+export function messageObjectMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<MessageObjectMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MessageObjectMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MessageObjectMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -609,4 +702,18 @@ export namespace MessageObject$ {
   export const outboundSchema = MessageObject$outboundSchema;
   /** @deprecated use `MessageObject$Outbound` instead. */
   export type Outbound = MessageObject$Outbound;
+}
+
+export function messageObjectToJSON(messageObject: MessageObject): string {
+  return JSON.stringify(MessageObject$outboundSchema.parse(messageObject));
+}
+
+export function messageObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<MessageObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MessageObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MessageObject' from JSON`,
+  );
 }

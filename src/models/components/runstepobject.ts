@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   RunStepCompletionUsage,
   RunStepCompletionUsage$inboundSchema,
@@ -279,6 +282,20 @@ export namespace StepDetails$ {
   export type Outbound = StepDetails$Outbound;
 }
 
+export function stepDetailsToJSON(stepDetails: StepDetails): string {
+  return JSON.stringify(StepDetails$outboundSchema.parse(stepDetails));
+}
+
+export function stepDetailsFromJSON(
+  jsonString: string,
+): SafeParseResult<StepDetails, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => StepDetails$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'StepDetails' from JSON`,
+  );
+}
+
 /** @internal */
 export const RunStepObjectCode$inboundSchema: z.ZodNativeEnum<
   typeof RunStepObjectCode
@@ -339,6 +356,24 @@ export namespace RunStepObjectLastError$ {
   export type Outbound = RunStepObjectLastError$Outbound;
 }
 
+export function runStepObjectLastErrorToJSON(
+  runStepObjectLastError: RunStepObjectLastError,
+): string {
+  return JSON.stringify(
+    RunStepObjectLastError$outboundSchema.parse(runStepObjectLastError),
+  );
+}
+
+export function runStepObjectLastErrorFromJSON(
+  jsonString: string,
+): SafeParseResult<RunStepObjectLastError, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RunStepObjectLastError$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RunStepObjectLastError' from JSON`,
+  );
+}
+
 /** @internal */
 export const RunStepObjectMetadata$inboundSchema: z.ZodType<
   RunStepObjectMetadata,
@@ -367,6 +402,24 @@ export namespace RunStepObjectMetadata$ {
   export const outboundSchema = RunStepObjectMetadata$outboundSchema;
   /** @deprecated use `RunStepObjectMetadata$Outbound` instead. */
   export type Outbound = RunStepObjectMetadata$Outbound;
+}
+
+export function runStepObjectMetadataToJSON(
+  runStepObjectMetadata: RunStepObjectMetadata,
+): string {
+  return JSON.stringify(
+    RunStepObjectMetadata$outboundSchema.parse(runStepObjectMetadata),
+  );
+}
+
+export function runStepObjectMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<RunStepObjectMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RunStepObjectMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RunStepObjectMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -482,4 +535,18 @@ export namespace RunStepObject$ {
   export const outboundSchema = RunStepObject$outboundSchema;
   /** @deprecated use `RunStepObject$Outbound` instead. */
   export type Outbound = RunStepObject$Outbound;
+}
+
+export function runStepObjectToJSON(runStepObject: RunStepObject): string {
+  return JSON.stringify(RunStepObject$outboundSchema.parse(runStepObject));
+}
+
+export function runStepObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<RunStepObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RunStepObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RunStepObject' from JSON`,
+  );
 }

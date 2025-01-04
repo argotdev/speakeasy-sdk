@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   Embedding,
   Embedding$inboundSchema,
@@ -125,6 +128,20 @@ export namespace Usage$ {
   export type Outbound = Usage$Outbound;
 }
 
+export function usageToJSON(usage: Usage): string {
+  return JSON.stringify(Usage$outboundSchema.parse(usage));
+}
+
+export function usageFromJSON(
+  jsonString: string,
+): SafeParseResult<Usage, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Usage$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Usage' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateEmbeddingResponse$inboundSchema: z.ZodType<
   CreateEmbeddingResponse,
@@ -168,4 +185,22 @@ export namespace CreateEmbeddingResponse$ {
   export const outboundSchema = CreateEmbeddingResponse$outboundSchema;
   /** @deprecated use `CreateEmbeddingResponse$Outbound` instead. */
   export type Outbound = CreateEmbeddingResponse$Outbound;
+}
+
+export function createEmbeddingResponseToJSON(
+  createEmbeddingResponse: CreateEmbeddingResponse,
+): string {
+  return JSON.stringify(
+    CreateEmbeddingResponse$outboundSchema.parse(createEmbeddingResponse),
+  );
+}
+
+export function createEmbeddingResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateEmbeddingResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateEmbeddingResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateEmbeddingResponse' from JSON`,
+  );
 }

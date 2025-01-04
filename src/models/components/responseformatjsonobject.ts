@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The type of response format being defined: `json_object`
@@ -80,4 +83,22 @@ export namespace ResponseFormatJsonObject$ {
   export const outboundSchema = ResponseFormatJsonObject$outboundSchema;
   /** @deprecated use `ResponseFormatJsonObject$Outbound` instead. */
   export type Outbound = ResponseFormatJsonObject$Outbound;
+}
+
+export function responseFormatJsonObjectToJSON(
+  responseFormatJsonObject: ResponseFormatJsonObject,
+): string {
+  return JSON.stringify(
+    ResponseFormatJsonObject$outboundSchema.parse(responseFormatJsonObject),
+  );
+}
+
+export function responseFormatJsonObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<ResponseFormatJsonObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ResponseFormatJsonObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ResponseFormatJsonObject' from JSON`,
+  );
 }

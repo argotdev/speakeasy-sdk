@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   RunStepDetailsToolCallsCodeObject,
   RunStepDetailsToolCallsCodeObject$inboundSchema,
@@ -125,6 +128,20 @@ export namespace ToolCalls$ {
   export type Outbound = ToolCalls$Outbound;
 }
 
+export function toolCallsToJSON(toolCalls: ToolCalls): string {
+  return JSON.stringify(ToolCalls$outboundSchema.parse(toolCalls));
+}
+
+export function toolCallsFromJSON(
+  jsonString: string,
+): SafeParseResult<ToolCalls, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ToolCalls$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ToolCalls' from JSON`,
+  );
+}
+
 /** @internal */
 export const RunStepDetailsToolCallsObject$inboundSchema: z.ZodType<
   RunStepDetailsToolCallsObject,
@@ -186,4 +203,24 @@ export namespace RunStepDetailsToolCallsObject$ {
   export const outboundSchema = RunStepDetailsToolCallsObject$outboundSchema;
   /** @deprecated use `RunStepDetailsToolCallsObject$Outbound` instead. */
   export type Outbound = RunStepDetailsToolCallsObject$Outbound;
+}
+
+export function runStepDetailsToolCallsObjectToJSON(
+  runStepDetailsToolCallsObject: RunStepDetailsToolCallsObject,
+): string {
+  return JSON.stringify(
+    RunStepDetailsToolCallsObject$outboundSchema.parse(
+      runStepDetailsToolCallsObject,
+    ),
+  );
+}
+
+export function runStepDetailsToolCallsObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<RunStepDetailsToolCallsObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RunStepDetailsToolCallsObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RunStepDetailsToolCallsObject' from JSON`,
+  );
 }

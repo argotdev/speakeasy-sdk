@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and `desc` for descending order.
@@ -172,4 +175,24 @@ export namespace ListVectorStoreFilesRequest$ {
   export const outboundSchema = ListVectorStoreFilesRequest$outboundSchema;
   /** @deprecated use `ListVectorStoreFilesRequest$Outbound` instead. */
   export type Outbound = ListVectorStoreFilesRequest$Outbound;
+}
+
+export function listVectorStoreFilesRequestToJSON(
+  listVectorStoreFilesRequest: ListVectorStoreFilesRequest,
+): string {
+  return JSON.stringify(
+    ListVectorStoreFilesRequest$outboundSchema.parse(
+      listVectorStoreFilesRequest,
+    ),
+  );
+}
+
+export function listVectorStoreFilesRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ListVectorStoreFilesRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ListVectorStoreFilesRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListVectorStoreFilesRequest' from JSON`,
+  );
 }

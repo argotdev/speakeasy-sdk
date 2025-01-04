@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The object type, which is always `vector_store.file_batch`.
@@ -185,6 +188,27 @@ export namespace VectorStoreFileBatchObjectFileCounts$ {
   export type Outbound = VectorStoreFileBatchObjectFileCounts$Outbound;
 }
 
+export function vectorStoreFileBatchObjectFileCountsToJSON(
+  vectorStoreFileBatchObjectFileCounts: VectorStoreFileBatchObjectFileCounts,
+): string {
+  return JSON.stringify(
+    VectorStoreFileBatchObjectFileCounts$outboundSchema.parse(
+      vectorStoreFileBatchObjectFileCounts,
+    ),
+  );
+}
+
+export function vectorStoreFileBatchObjectFileCountsFromJSON(
+  jsonString: string,
+): SafeParseResult<VectorStoreFileBatchObjectFileCounts, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      VectorStoreFileBatchObjectFileCounts$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'VectorStoreFileBatchObjectFileCounts' from JSON`,
+  );
+}
+
 /** @internal */
 export const VectorStoreFileBatchObject$inboundSchema: z.ZodType<
   VectorStoreFileBatchObject,
@@ -246,4 +270,22 @@ export namespace VectorStoreFileBatchObject$ {
   export const outboundSchema = VectorStoreFileBatchObject$outboundSchema;
   /** @deprecated use `VectorStoreFileBatchObject$Outbound` instead. */
   export type Outbound = VectorStoreFileBatchObject$Outbound;
+}
+
+export function vectorStoreFileBatchObjectToJSON(
+  vectorStoreFileBatchObject: VectorStoreFileBatchObject,
+): string {
+  return JSON.stringify(
+    VectorStoreFileBatchObject$outboundSchema.parse(vectorStoreFileBatchObject),
+  );
+}
+
+export function vectorStoreFileBatchObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<VectorStoreFileBatchObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => VectorStoreFileBatchObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'VectorStoreFileBatchObject' from JSON`,
+  );
 }

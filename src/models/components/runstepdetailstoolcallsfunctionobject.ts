@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The type of tool call. This is always going to be `function` for this type of tool call.
@@ -120,6 +123,33 @@ export namespace RunStepDetailsToolCallsFunctionObjectFunction$ {
   export type Outbound = RunStepDetailsToolCallsFunctionObjectFunction$Outbound;
 }
 
+export function runStepDetailsToolCallsFunctionObjectFunctionToJSON(
+  runStepDetailsToolCallsFunctionObjectFunction:
+    RunStepDetailsToolCallsFunctionObjectFunction,
+): string {
+  return JSON.stringify(
+    RunStepDetailsToolCallsFunctionObjectFunction$outboundSchema.parse(
+      runStepDetailsToolCallsFunctionObjectFunction,
+    ),
+  );
+}
+
+export function runStepDetailsToolCallsFunctionObjectFunctionFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  RunStepDetailsToolCallsFunctionObjectFunction,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      RunStepDetailsToolCallsFunctionObjectFunction$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'RunStepDetailsToolCallsFunctionObjectFunction' from JSON`,
+  );
+}
+
 /** @internal */
 export const RunStepDetailsToolCallsFunctionObject$inboundSchema: z.ZodType<
   RunStepDetailsToolCallsFunctionObject,
@@ -166,4 +196,25 @@ export namespace RunStepDetailsToolCallsFunctionObject$ {
     RunStepDetailsToolCallsFunctionObject$outboundSchema;
   /** @deprecated use `RunStepDetailsToolCallsFunctionObject$Outbound` instead. */
   export type Outbound = RunStepDetailsToolCallsFunctionObject$Outbound;
+}
+
+export function runStepDetailsToolCallsFunctionObjectToJSON(
+  runStepDetailsToolCallsFunctionObject: RunStepDetailsToolCallsFunctionObject,
+): string {
+  return JSON.stringify(
+    RunStepDetailsToolCallsFunctionObject$outboundSchema.parse(
+      runStepDetailsToolCallsFunctionObject,
+    ),
+  );
+}
+
+export function runStepDetailsToolCallsFunctionObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<RunStepDetailsToolCallsFunctionObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      RunStepDetailsToolCallsFunctionObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RunStepDetailsToolCallsFunctionObject' from JSON`,
+  );
 }

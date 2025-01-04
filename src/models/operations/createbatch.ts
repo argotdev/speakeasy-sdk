@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The endpoint to be used for all requests in the batch. Currently `/v1/chat/completions`, `/v1/embeddings`, and `/v1/completions` are supported. Note that `/v1/embeddings` batches are also restricted to a maximum of 50,000 embedding inputs across all requests in the batch.
@@ -148,4 +151,22 @@ export namespace CreateBatchRequestBody$ {
   export const outboundSchema = CreateBatchRequestBody$outboundSchema;
   /** @deprecated use `CreateBatchRequestBody$Outbound` instead. */
   export type Outbound = CreateBatchRequestBody$Outbound;
+}
+
+export function createBatchRequestBodyToJSON(
+  createBatchRequestBody: CreateBatchRequestBody,
+): string {
+  return JSON.stringify(
+    CreateBatchRequestBody$outboundSchema.parse(createBatchRequestBody),
+  );
+}
+
+export function createBatchRequestBodyFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateBatchRequestBody, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateBatchRequestBody$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateBatchRequestBody' from JSON`,
+  );
 }

@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Represents a transcription response returned by model, based on the provided input.
@@ -48,4 +51,24 @@ export namespace CreateTranscriptionResponseJson$ {
   export const outboundSchema = CreateTranscriptionResponseJson$outboundSchema;
   /** @deprecated use `CreateTranscriptionResponseJson$Outbound` instead. */
   export type Outbound = CreateTranscriptionResponseJson$Outbound;
+}
+
+export function createTranscriptionResponseJsonToJSON(
+  createTranscriptionResponseJson: CreateTranscriptionResponseJson,
+): string {
+  return JSON.stringify(
+    CreateTranscriptionResponseJson$outboundSchema.parse(
+      createTranscriptionResponseJson,
+    ),
+  );
+}
+
+export function createTranscriptionResponseJsonFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateTranscriptionResponseJson, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateTranscriptionResponseJson$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateTranscriptionResponseJson' from JSON`,
+  );
 }

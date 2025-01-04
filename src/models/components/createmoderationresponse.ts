@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * A list of the categories, and whether they are flagged or not.
@@ -382,6 +385,20 @@ export namespace Categories$ {
   export type Outbound = Categories$Outbound;
 }
 
+export function categoriesToJSON(categories: Categories): string {
+  return JSON.stringify(Categories$outboundSchema.parse(categories));
+}
+
+export function categoriesFromJSON(
+  jsonString: string,
+): SafeParseResult<Categories, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Categories$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Categories' from JSON`,
+  );
+}
+
 /** @internal */
 export const CategoryScores$inboundSchema: z.ZodType<
   CategoryScores,
@@ -474,6 +491,20 @@ export namespace CategoryScores$ {
   export const outboundSchema = CategoryScores$outboundSchema;
   /** @deprecated use `CategoryScores$Outbound` instead. */
   export type Outbound = CategoryScores$Outbound;
+}
+
+export function categoryScoresToJSON(categoryScores: CategoryScores): string {
+  return JSON.stringify(CategoryScores$outboundSchema.parse(categoryScores));
+}
+
+export function categoryScoresFromJSON(
+  jsonString: string,
+): SafeParseResult<CategoryScores, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CategoryScores$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CategoryScores' from JSON`,
+  );
 }
 
 /** @internal */
@@ -830,6 +861,24 @@ export namespace CategoryAppliedInputTypes$ {
   export type Outbound = CategoryAppliedInputTypes$Outbound;
 }
 
+export function categoryAppliedInputTypesToJSON(
+  categoryAppliedInputTypes: CategoryAppliedInputTypes,
+): string {
+  return JSON.stringify(
+    CategoryAppliedInputTypes$outboundSchema.parse(categoryAppliedInputTypes),
+  );
+}
+
+export function categoryAppliedInputTypesFromJSON(
+  jsonString: string,
+): SafeParseResult<CategoryAppliedInputTypes, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CategoryAppliedInputTypes$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CategoryAppliedInputTypes' from JSON`,
+  );
+}
+
 /** @internal */
 export const Results$inboundSchema: z.ZodType<Results, z.ZodTypeDef, unknown> =
   z.object({
@@ -886,6 +935,20 @@ export namespace Results$ {
   export type Outbound = Results$Outbound;
 }
 
+export function resultsToJSON(results: Results): string {
+  return JSON.stringify(Results$outboundSchema.parse(results));
+}
+
+export function resultsFromJSON(
+  jsonString: string,
+): SafeParseResult<Results, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Results$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Results' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateModerationResponse$inboundSchema: z.ZodType<
   CreateModerationResponse,
@@ -926,4 +989,22 @@ export namespace CreateModerationResponse$ {
   export const outboundSchema = CreateModerationResponse$outboundSchema;
   /** @deprecated use `CreateModerationResponse$Outbound` instead. */
   export type Outbound = CreateModerationResponse$Outbound;
+}
+
+export function createModerationResponseToJSON(
+  createModerationResponse: CreateModerationResponse,
+): string {
+  return JSON.stringify(
+    CreateModerationResponse$outboundSchema.parse(createModerationResponse),
+  );
+}
+
+export function createModerationResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateModerationResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateModerationResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateModerationResponse' from JSON`,
+  );
 }

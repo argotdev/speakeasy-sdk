@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type CreateTranslationResponseJson = {
   text: string;
@@ -42,4 +45,24 @@ export namespace CreateTranslationResponseJson$ {
   export const outboundSchema = CreateTranslationResponseJson$outboundSchema;
   /** @deprecated use `CreateTranslationResponseJson$Outbound` instead. */
   export type Outbound = CreateTranslationResponseJson$Outbound;
+}
+
+export function createTranslationResponseJsonToJSON(
+  createTranslationResponseJson: CreateTranslationResponseJson,
+): string {
+  return JSON.stringify(
+    CreateTranslationResponseJson$outboundSchema.parse(
+      createTranslationResponseJson,
+    ),
+  );
+}
+
+export function createTranslationResponseJsonFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateTranslationResponseJson, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateTranslationResponseJson$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateTranslationResponseJson' from JSON`,
+  );
 }

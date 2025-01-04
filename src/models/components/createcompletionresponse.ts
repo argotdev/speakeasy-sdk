@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   CompletionUsage,
   CompletionUsage$inboundSchema,
@@ -190,6 +193,26 @@ export namespace CreateCompletionResponseLogprobs$ {
   export type Outbound = CreateCompletionResponseLogprobs$Outbound;
 }
 
+export function createCompletionResponseLogprobsToJSON(
+  createCompletionResponseLogprobs: CreateCompletionResponseLogprobs,
+): string {
+  return JSON.stringify(
+    CreateCompletionResponseLogprobs$outboundSchema.parse(
+      createCompletionResponseLogprobs,
+    ),
+  );
+}
+
+export function createCompletionResponseLogprobsFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateCompletionResponseLogprobs, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateCompletionResponseLogprobs$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateCompletionResponseLogprobs' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateCompletionResponseChoices$inboundSchema: z.ZodType<
   CreateCompletionResponseChoices,
@@ -245,6 +268,26 @@ export namespace CreateCompletionResponseChoices$ {
   export const outboundSchema = CreateCompletionResponseChoices$outboundSchema;
   /** @deprecated use `CreateCompletionResponseChoices$Outbound` instead. */
   export type Outbound = CreateCompletionResponseChoices$Outbound;
+}
+
+export function createCompletionResponseChoicesToJSON(
+  createCompletionResponseChoices: CreateCompletionResponseChoices,
+): string {
+  return JSON.stringify(
+    CreateCompletionResponseChoices$outboundSchema.parse(
+      createCompletionResponseChoices,
+    ),
+  );
+}
+
+export function createCompletionResponseChoicesFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateCompletionResponseChoices, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateCompletionResponseChoices$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateCompletionResponseChoices' from JSON`,
+  );
 }
 
 /** @internal */
@@ -330,4 +373,22 @@ export namespace CreateCompletionResponse$ {
   export const outboundSchema = CreateCompletionResponse$outboundSchema;
   /** @deprecated use `CreateCompletionResponse$Outbound` instead. */
   export type Outbound = CreateCompletionResponse$Outbound;
+}
+
+export function createCompletionResponseToJSON(
+  createCompletionResponse: CreateCompletionResponse,
+): string {
+  return JSON.stringify(
+    CreateCompletionResponse$outboundSchema.parse(createCompletionResponse),
+  );
+}
+
+export function createCompletionResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateCompletionResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateCompletionResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateCompletionResponse' from JSON`,
+  );
 }

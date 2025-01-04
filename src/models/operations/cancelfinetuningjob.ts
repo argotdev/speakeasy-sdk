@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type CancelFineTuningJobRequest = {
   /**
@@ -56,4 +59,22 @@ export namespace CancelFineTuningJobRequest$ {
   export const outboundSchema = CancelFineTuningJobRequest$outboundSchema;
   /** @deprecated use `CancelFineTuningJobRequest$Outbound` instead. */
   export type Outbound = CancelFineTuningJobRequest$Outbound;
+}
+
+export function cancelFineTuningJobRequestToJSON(
+  cancelFineTuningJobRequest: CancelFineTuningJobRequest,
+): string {
+  return JSON.stringify(
+    CancelFineTuningJobRequest$outboundSchema.parse(cancelFineTuningJobRequest),
+  );
+}
+
+export function cancelFineTuningJobRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CancelFineTuningJobRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CancelFineTuningJobRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CancelFineTuningJobRequest' from JSON`,
+  );
 }

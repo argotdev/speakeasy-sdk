@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { blobLikeSchema } from "../../types/blobs.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type Data = {
   fileName: string;
@@ -62,6 +65,20 @@ export namespace Data$ {
   export type Outbound = Data$Outbound;
 }
 
+export function dataToJSON(data: Data): string {
+  return JSON.stringify(Data$outboundSchema.parse(data));
+}
+
+export function dataFromJSON(
+  jsonString: string,
+): SafeParseResult<Data, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Data$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Data' from JSON`,
+  );
+}
+
 /** @internal */
 export const AddUploadPartRequest$inboundSchema: z.ZodType<
   AddUploadPartRequest,
@@ -96,4 +113,22 @@ export namespace AddUploadPartRequest$ {
   export const outboundSchema = AddUploadPartRequest$outboundSchema;
   /** @deprecated use `AddUploadPartRequest$Outbound` instead. */
   export type Outbound = AddUploadPartRequest$Outbound;
+}
+
+export function addUploadPartRequestToJSON(
+  addUploadPartRequest: AddUploadPartRequest,
+): string {
+  return JSON.stringify(
+    AddUploadPartRequest$outboundSchema.parse(addUploadPartRequest),
+  );
+}
+
+export function addUploadPartRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<AddUploadPartRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AddUploadPartRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AddUploadPartRequest' from JSON`,
+  );
 }

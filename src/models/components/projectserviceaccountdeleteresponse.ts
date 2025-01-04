@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export const ProjectServiceAccountDeleteResponseObject = {
   OrganizationProjectServiceAccountDeleted:
@@ -84,4 +87,25 @@ export namespace ProjectServiceAccountDeleteResponse$ {
     ProjectServiceAccountDeleteResponse$outboundSchema;
   /** @deprecated use `ProjectServiceAccountDeleteResponse$Outbound` instead. */
   export type Outbound = ProjectServiceAccountDeleteResponse$Outbound;
+}
+
+export function projectServiceAccountDeleteResponseToJSON(
+  projectServiceAccountDeleteResponse: ProjectServiceAccountDeleteResponse,
+): string {
+  return JSON.stringify(
+    ProjectServiceAccountDeleteResponse$outboundSchema.parse(
+      projectServiceAccountDeleteResponse,
+    ),
+  );
+}
+
+export function projectServiceAccountDeleteResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<ProjectServiceAccountDeleteResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ProjectServiceAccountDeleteResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ProjectServiceAccountDeleteResponse' from JSON`,
+  );
 }

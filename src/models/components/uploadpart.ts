@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The object type, which is always `upload.part`.
@@ -115,4 +118,18 @@ export namespace UploadPart$ {
   export const outboundSchema = UploadPart$outboundSchema;
   /** @deprecated use `UploadPart$Outbound` instead. */
   export type Outbound = UploadPart$Outbound;
+}
+
+export function uploadPartToJSON(uploadPart: UploadPart): string {
+  return JSON.stringify(UploadPart$outboundSchema.parse(uploadPart));
+}
+
+export function uploadPartFromJSON(
+  jsonString: string,
+): SafeParseResult<UploadPart, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => UploadPart$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'UploadPart' from JSON`,
+  );
 }

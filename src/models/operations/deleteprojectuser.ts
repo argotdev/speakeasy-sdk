@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type DeleteProjectUserRequest = {
   /**
@@ -63,4 +66,22 @@ export namespace DeleteProjectUserRequest$ {
   export const outboundSchema = DeleteProjectUserRequest$outboundSchema;
   /** @deprecated use `DeleteProjectUserRequest$Outbound` instead. */
   export type Outbound = DeleteProjectUserRequest$Outbound;
+}
+
+export function deleteProjectUserRequestToJSON(
+  deleteProjectUserRequest: DeleteProjectUserRequest,
+): string {
+  return JSON.stringify(
+    DeleteProjectUserRequest$outboundSchema.parse(deleteProjectUserRequest),
+  );
+}
+
+export function deleteProjectUserRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<DeleteProjectUserRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => DeleteProjectUserRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeleteProjectUserRequest' from JSON`,
+  );
 }

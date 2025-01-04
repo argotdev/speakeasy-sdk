@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type DeleteMessageRequest = {
   /**
@@ -63,4 +66,22 @@ export namespace DeleteMessageRequest$ {
   export const outboundSchema = DeleteMessageRequest$outboundSchema;
   /** @deprecated use `DeleteMessageRequest$Outbound` instead. */
   export type Outbound = DeleteMessageRequest$Outbound;
+}
+
+export function deleteMessageRequestToJSON(
+  deleteMessageRequest: DeleteMessageRequest,
+): string {
+  return JSON.stringify(
+    DeleteMessageRequest$outboundSchema.parse(deleteMessageRequest),
+  );
+}
+
+export function deleteMessageRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<DeleteMessageRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => DeleteMessageRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeleteMessageRequest' from JSON`,
+  );
 }

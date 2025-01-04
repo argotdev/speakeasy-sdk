@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export const DeleteAssistantResponseObject = {
   AssistantDeleted: "assistant.deleted",
@@ -79,4 +82,22 @@ export namespace DeleteAssistantResponse$ {
   export const outboundSchema = DeleteAssistantResponse$outboundSchema;
   /** @deprecated use `DeleteAssistantResponse$Outbound` instead. */
   export type Outbound = DeleteAssistantResponse$Outbound;
+}
+
+export function deleteAssistantResponseToJSON(
+  deleteAssistantResponse: DeleteAssistantResponse,
+): string {
+  return JSON.stringify(
+    DeleteAssistantResponse$outboundSchema.parse(deleteAssistantResponse),
+  );
+}
+
+export function deleteAssistantResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<DeleteAssistantResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => DeleteAssistantResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeleteAssistantResponse' from JSON`,
+  );
 }

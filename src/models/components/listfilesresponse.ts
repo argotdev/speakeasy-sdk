@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   OpenAIFile,
   OpenAIFile$inboundSchema,
@@ -81,4 +84,22 @@ export namespace ListFilesResponse$ {
   export const outboundSchema = ListFilesResponse$outboundSchema;
   /** @deprecated use `ListFilesResponse$Outbound` instead. */
   export type Outbound = ListFilesResponse$Outbound;
+}
+
+export function listFilesResponseToJSON(
+  listFilesResponse: ListFilesResponse,
+): string {
+  return JSON.stringify(
+    ListFilesResponse$outboundSchema.parse(listFilesResponse),
+  );
+}
+
+export function listFilesResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<ListFilesResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ListFilesResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListFilesResponse' from JSON`,
+  );
 }

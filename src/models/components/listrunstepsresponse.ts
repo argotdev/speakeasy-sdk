@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   RunStepObject,
   RunStepObject$inboundSchema,
@@ -77,4 +80,22 @@ export namespace ListRunStepsResponse$ {
   export const outboundSchema = ListRunStepsResponse$outboundSchema;
   /** @deprecated use `ListRunStepsResponse$Outbound` instead. */
   export type Outbound = ListRunStepsResponse$Outbound;
+}
+
+export function listRunStepsResponseToJSON(
+  listRunStepsResponse: ListRunStepsResponse,
+): string {
+  return JSON.stringify(
+    ListRunStepsResponse$outboundSchema.parse(listRunStepsResponse),
+  );
+}
+
+export function listRunStepsResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<ListRunStepsResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ListRunStepsResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListRunStepsResponse' from JSON`,
+  );
 }

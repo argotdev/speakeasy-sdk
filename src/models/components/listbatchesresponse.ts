@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   Batch,
   Batch$inboundSchema,
@@ -106,4 +109,22 @@ export namespace ListBatchesResponse$ {
   export const outboundSchema = ListBatchesResponse$outboundSchema;
   /** @deprecated use `ListBatchesResponse$Outbound` instead. */
   export type Outbound = ListBatchesResponse$Outbound;
+}
+
+export function listBatchesResponseToJSON(
+  listBatchesResponse: ListBatchesResponse,
+): string {
+  return JSON.stringify(
+    ListBatchesResponse$outboundSchema.parse(listBatchesResponse),
+  );
+}
+
+export function listBatchesResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<ListBatchesResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ListBatchesResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListBatchesResponse' from JSON`,
+  );
 }

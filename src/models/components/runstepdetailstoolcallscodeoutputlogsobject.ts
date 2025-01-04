@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Always `logs`.
@@ -96,4 +99,31 @@ export namespace RunStepDetailsToolCallsCodeOutputLogsObject$ {
     RunStepDetailsToolCallsCodeOutputLogsObject$outboundSchema;
   /** @deprecated use `RunStepDetailsToolCallsCodeOutputLogsObject$Outbound` instead. */
   export type Outbound = RunStepDetailsToolCallsCodeOutputLogsObject$Outbound;
+}
+
+export function runStepDetailsToolCallsCodeOutputLogsObjectToJSON(
+  runStepDetailsToolCallsCodeOutputLogsObject:
+    RunStepDetailsToolCallsCodeOutputLogsObject,
+): string {
+  return JSON.stringify(
+    RunStepDetailsToolCallsCodeOutputLogsObject$outboundSchema.parse(
+      runStepDetailsToolCallsCodeOutputLogsObject,
+    ),
+  );
+}
+
+export function runStepDetailsToolCallsCodeOutputLogsObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  RunStepDetailsToolCallsCodeOutputLogsObject,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      RunStepDetailsToolCallsCodeOutputLogsObject$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'RunStepDetailsToolCallsCodeOutputLogsObject' from JSON`,
+  );
 }

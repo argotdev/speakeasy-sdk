@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   ChunkingStrategyRequestParam,
   ChunkingStrategyRequestParam$inboundSchema,
@@ -69,4 +72,24 @@ export namespace CreateVectorStoreFileRequest$ {
   export const outboundSchema = CreateVectorStoreFileRequest$outboundSchema;
   /** @deprecated use `CreateVectorStoreFileRequest$Outbound` instead. */
   export type Outbound = CreateVectorStoreFileRequest$Outbound;
+}
+
+export function createVectorStoreFileRequestToJSON(
+  createVectorStoreFileRequest: CreateVectorStoreFileRequest,
+): string {
+  return JSON.stringify(
+    CreateVectorStoreFileRequest$outboundSchema.parse(
+      createVectorStoreFileRequest,
+    ),
+  );
+}
+
+export function createVectorStoreFileRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateVectorStoreFileRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateVectorStoreFileRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateVectorStoreFileRequest' from JSON`,
+  );
 }

@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type ListBatchesRequest = {
   /**
@@ -56,4 +59,22 @@ export namespace ListBatchesRequest$ {
   export const outboundSchema = ListBatchesRequest$outboundSchema;
   /** @deprecated use `ListBatchesRequest$Outbound` instead. */
   export type Outbound = ListBatchesRequest$Outbound;
+}
+
+export function listBatchesRequestToJSON(
+  listBatchesRequest: ListBatchesRequest,
+): string {
+  return JSON.stringify(
+    ListBatchesRequest$outboundSchema.parse(listBatchesRequest),
+  );
+}
+
+export function listBatchesRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ListBatchesRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ListBatchesRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListBatchesRequest' from JSON`,
+  );
 }

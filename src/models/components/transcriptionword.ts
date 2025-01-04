@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type TranscriptionWord = {
   /**
@@ -59,4 +62,22 @@ export namespace TranscriptionWord$ {
   export const outboundSchema = TranscriptionWord$outboundSchema;
   /** @deprecated use `TranscriptionWord$Outbound` instead. */
   export type Outbound = TranscriptionWord$Outbound;
+}
+
+export function transcriptionWordToJSON(
+  transcriptionWord: TranscriptionWord,
+): string {
+  return JSON.stringify(
+    TranscriptionWord$outboundSchema.parse(transcriptionWord),
+  );
+}
+
+export function transcriptionWordFromJSON(
+  jsonString: string,
+): SafeParseResult<TranscriptionWord, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => TranscriptionWord$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'TranscriptionWord' from JSON`,
+  );
 }

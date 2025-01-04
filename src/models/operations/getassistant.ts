@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type GetAssistantRequest = {
   /**
@@ -54,4 +57,22 @@ export namespace GetAssistantRequest$ {
   export const outboundSchema = GetAssistantRequest$outboundSchema;
   /** @deprecated use `GetAssistantRequest$Outbound` instead. */
   export type Outbound = GetAssistantRequest$Outbound;
+}
+
+export function getAssistantRequestToJSON(
+  getAssistantRequest: GetAssistantRequest,
+): string {
+  return JSON.stringify(
+    GetAssistantRequest$outboundSchema.parse(getAssistantRequest),
+  );
+}
+
+export function getAssistantRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<GetAssistantRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => GetAssistantRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'GetAssistantRequest' from JSON`,
+  );
 }

@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   AssistantsApiResponseFormatOption,
   AssistantsApiResponseFormatOption$inboundSchema,
@@ -228,6 +231,20 @@ export namespace Tools$ {
   export type Outbound = Tools$Outbound;
 }
 
+export function toolsToJSON(tools: Tools): string {
+  return JSON.stringify(Tools$outboundSchema.parse(tools));
+}
+
+export function toolsFromJSON(
+  jsonString: string,
+): SafeParseResult<Tools, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Tools$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Tools' from JSON`,
+  );
+}
+
 /** @internal */
 export const AssistantObjectCodeInterpreter$inboundSchema: z.ZodType<
   AssistantObjectCodeInterpreter,
@@ -272,6 +289,26 @@ export namespace AssistantObjectCodeInterpreter$ {
   export type Outbound = AssistantObjectCodeInterpreter$Outbound;
 }
 
+export function assistantObjectCodeInterpreterToJSON(
+  assistantObjectCodeInterpreter: AssistantObjectCodeInterpreter,
+): string {
+  return JSON.stringify(
+    AssistantObjectCodeInterpreter$outboundSchema.parse(
+      assistantObjectCodeInterpreter,
+    ),
+  );
+}
+
+export function assistantObjectCodeInterpreterFromJSON(
+  jsonString: string,
+): SafeParseResult<AssistantObjectCodeInterpreter, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AssistantObjectCodeInterpreter$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AssistantObjectCodeInterpreter' from JSON`,
+  );
+}
+
 /** @internal */
 export const AssistantObjectFileSearch$inboundSchema: z.ZodType<
   AssistantObjectFileSearch,
@@ -314,6 +351,24 @@ export namespace AssistantObjectFileSearch$ {
   export const outboundSchema = AssistantObjectFileSearch$outboundSchema;
   /** @deprecated use `AssistantObjectFileSearch$Outbound` instead. */
   export type Outbound = AssistantObjectFileSearch$Outbound;
+}
+
+export function assistantObjectFileSearchToJSON(
+  assistantObjectFileSearch: AssistantObjectFileSearch,
+): string {
+  return JSON.stringify(
+    AssistantObjectFileSearch$outboundSchema.parse(assistantObjectFileSearch),
+  );
+}
+
+export function assistantObjectFileSearchFromJSON(
+  jsonString: string,
+): SafeParseResult<AssistantObjectFileSearch, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AssistantObjectFileSearch$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AssistantObjectFileSearch' from JSON`,
+  );
 }
 
 /** @internal */
@@ -367,6 +422,20 @@ export namespace ToolResources$ {
   export type Outbound = ToolResources$Outbound;
 }
 
+export function toolResourcesToJSON(toolResources: ToolResources): string {
+  return JSON.stringify(ToolResources$outboundSchema.parse(toolResources));
+}
+
+export function toolResourcesFromJSON(
+  jsonString: string,
+): SafeParseResult<ToolResources, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ToolResources$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ToolResources' from JSON`,
+  );
+}
+
 /** @internal */
 export const Metadata$inboundSchema: z.ZodType<
   Metadata,
@@ -395,6 +464,20 @@ export namespace Metadata$ {
   export const outboundSchema = Metadata$outboundSchema;
   /** @deprecated use `Metadata$Outbound` instead. */
   export type Outbound = Metadata$Outbound;
+}
+
+export function metadataToJSON(metadata: Metadata): string {
+  return JSON.stringify(Metadata$outboundSchema.parse(metadata));
+}
+
+export function metadataFromJSON(
+  jsonString: string,
+): SafeParseResult<Metadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Metadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Metadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -499,4 +582,20 @@ export namespace AssistantObject$ {
   export const outboundSchema = AssistantObject$outboundSchema;
   /** @deprecated use `AssistantObject$Outbound` instead. */
   export type Outbound = AssistantObject$Outbound;
+}
+
+export function assistantObjectToJSON(
+  assistantObject: AssistantObject,
+): string {
+  return JSON.stringify(AssistantObject$outboundSchema.parse(assistantObject));
+}
+
+export function assistantObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<AssistantObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AssistantObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AssistantObject' from JSON`,
+  );
 }

@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The type of the content part.
@@ -88,4 +91,31 @@ export namespace ChatCompletionRequestMessageContentPartText$ {
     ChatCompletionRequestMessageContentPartText$outboundSchema;
   /** @deprecated use `ChatCompletionRequestMessageContentPartText$Outbound` instead. */
   export type Outbound = ChatCompletionRequestMessageContentPartText$Outbound;
+}
+
+export function chatCompletionRequestMessageContentPartTextToJSON(
+  chatCompletionRequestMessageContentPartText:
+    ChatCompletionRequestMessageContentPartText,
+): string {
+  return JSON.stringify(
+    ChatCompletionRequestMessageContentPartText$outboundSchema.parse(
+      chatCompletionRequestMessageContentPartText,
+    ),
+  );
+}
+
+export function chatCompletionRequestMessageContentPartTextFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  ChatCompletionRequestMessageContentPartText,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ChatCompletionRequestMessageContentPartText$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'ChatCompletionRequestMessageContentPartText' from JSON`,
+  );
 }

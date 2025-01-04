@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
 import * as components from "../components/index.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type AddUploadPartRequest = {
   /**
@@ -63,4 +66,22 @@ export namespace AddUploadPartRequest$ {
   export const outboundSchema = AddUploadPartRequest$outboundSchema;
   /** @deprecated use `AddUploadPartRequest$Outbound` instead. */
   export type Outbound = AddUploadPartRequest$Outbound;
+}
+
+export function addUploadPartRequestToJSON(
+  addUploadPartRequest: AddUploadPartRequest,
+): string {
+  return JSON.stringify(
+    AddUploadPartRequest$outboundSchema.parse(addUploadPartRequest),
+  );
+}
+
+export function addUploadPartRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<AddUploadPartRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AddUploadPartRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AddUploadPartRequest' from JSON`,
+  );
 }

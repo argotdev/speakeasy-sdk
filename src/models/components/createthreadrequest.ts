@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   CreateMessageRequest,
   CreateMessageRequest$inboundSchema,
@@ -333,6 +336,27 @@ export namespace CreateThreadRequestCodeInterpreter$ {
   export type Outbound = CreateThreadRequestCodeInterpreter$Outbound;
 }
 
+export function createThreadRequestCodeInterpreterToJSON(
+  createThreadRequestCodeInterpreter: CreateThreadRequestCodeInterpreter,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestCodeInterpreter$outboundSchema.parse(
+      createThreadRequestCodeInterpreter,
+    ),
+  );
+}
+
+export function createThreadRequestCodeInterpreterFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateThreadRequestCodeInterpreter, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateThreadRequestCodeInterpreter$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadRequestCodeInterpreter' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateThreadRequestChunkingStrategyToolResourcesFileSearch2Type$inboundSchema:
   z.ZodNativeEnum<
@@ -415,6 +439,32 @@ export namespace CreateThreadRequestChunkingStrategyToolResourcesStatic$ {
     CreateThreadRequestChunkingStrategyToolResourcesStatic$Outbound;
 }
 
+export function createThreadRequestChunkingStrategyToolResourcesStaticToJSON(
+  createThreadRequestChunkingStrategyToolResourcesStatic:
+    CreateThreadRequestChunkingStrategyToolResourcesStatic,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestChunkingStrategyToolResourcesStatic$outboundSchema.parse(
+      createThreadRequestChunkingStrategyToolResourcesStatic,
+    ),
+  );
+}
+
+export function createThreadRequestChunkingStrategyToolResourcesStaticFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  CreateThreadRequestChunkingStrategyToolResourcesStatic,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateThreadRequestChunkingStrategyToolResourcesStatic$inboundSchema
+        .parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadRequestChunkingStrategyToolResourcesStatic' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateThreadRequestChunkingStrategyToolResourcesStaticChunkingStrategy$inboundSchema:
   z.ZodType<
@@ -464,6 +514,33 @@ export namespace CreateThreadRequestChunkingStrategyToolResourcesStaticChunkingS
   /** @deprecated use `CreateThreadRequestChunkingStrategyToolResourcesStaticChunkingStrategy$Outbound` instead. */
   export type Outbound =
     CreateThreadRequestChunkingStrategyToolResourcesStaticChunkingStrategy$Outbound;
+}
+
+export function createThreadRequestChunkingStrategyToolResourcesStaticChunkingStrategyToJSON(
+  createThreadRequestChunkingStrategyToolResourcesStaticChunkingStrategy:
+    CreateThreadRequestChunkingStrategyToolResourcesStaticChunkingStrategy,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestChunkingStrategyToolResourcesStaticChunkingStrategy$outboundSchema
+      .parse(
+        createThreadRequestChunkingStrategyToolResourcesStaticChunkingStrategy,
+      ),
+  );
+}
+
+export function createThreadRequestChunkingStrategyToolResourcesStaticChunkingStrategyFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  CreateThreadRequestChunkingStrategyToolResourcesStaticChunkingStrategy,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateThreadRequestChunkingStrategyToolResourcesStaticChunkingStrategy$inboundSchema
+        .parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadRequestChunkingStrategyToolResourcesStaticChunkingStrategy' from JSON`,
+  );
 }
 
 /** @internal */
@@ -538,6 +615,33 @@ export namespace CreateThreadRequestChunkingStrategyToolResourcesAutoChunkingStr
     CreateThreadRequestChunkingStrategyToolResourcesAutoChunkingStrategy$Outbound;
 }
 
+export function createThreadRequestChunkingStrategyToolResourcesAutoChunkingStrategyToJSON(
+  createThreadRequestChunkingStrategyToolResourcesAutoChunkingStrategy:
+    CreateThreadRequestChunkingStrategyToolResourcesAutoChunkingStrategy,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestChunkingStrategyToolResourcesAutoChunkingStrategy$outboundSchema
+      .parse(
+        createThreadRequestChunkingStrategyToolResourcesAutoChunkingStrategy,
+      ),
+  );
+}
+
+export function createThreadRequestChunkingStrategyToolResourcesAutoChunkingStrategyFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  CreateThreadRequestChunkingStrategyToolResourcesAutoChunkingStrategy,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateThreadRequestChunkingStrategyToolResourcesAutoChunkingStrategy$inboundSchema
+        .parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadRequestChunkingStrategyToolResourcesAutoChunkingStrategy' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateThreadRequestFileSearchToolResourcesChunkingStrategy$inboundSchema:
   z.ZodType<
@@ -589,6 +693,31 @@ export namespace CreateThreadRequestFileSearchToolResourcesChunkingStrategy$ {
     CreateThreadRequestFileSearchToolResourcesChunkingStrategy$Outbound;
 }
 
+export function createThreadRequestFileSearchToolResourcesChunkingStrategyToJSON(
+  createThreadRequestFileSearchToolResourcesChunkingStrategy:
+    CreateThreadRequestFileSearchToolResourcesChunkingStrategy,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestFileSearchToolResourcesChunkingStrategy$outboundSchema
+      .parse(createThreadRequestFileSearchToolResourcesChunkingStrategy),
+  );
+}
+
+export function createThreadRequestFileSearchToolResourcesChunkingStrategyFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  CreateThreadRequestFileSearchToolResourcesChunkingStrategy,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateThreadRequestFileSearchToolResourcesChunkingStrategy$inboundSchema
+        .parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadRequestFileSearchToolResourcesChunkingStrategy' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateThreadRequestFileSearchToolResourcesMetadata$inboundSchema:
   z.ZodType<
@@ -622,6 +751,33 @@ export namespace CreateThreadRequestFileSearchToolResourcesMetadata$ {
   /** @deprecated use `CreateThreadRequestFileSearchToolResourcesMetadata$Outbound` instead. */
   export type Outbound =
     CreateThreadRequestFileSearchToolResourcesMetadata$Outbound;
+}
+
+export function createThreadRequestFileSearchToolResourcesMetadataToJSON(
+  createThreadRequestFileSearchToolResourcesMetadata:
+    CreateThreadRequestFileSearchToolResourcesMetadata,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestFileSearchToolResourcesMetadata$outboundSchema.parse(
+      createThreadRequestFileSearchToolResourcesMetadata,
+    ),
+  );
+}
+
+export function createThreadRequestFileSearchToolResourcesMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  CreateThreadRequestFileSearchToolResourcesMetadata,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateThreadRequestFileSearchToolResourcesMetadata$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'CreateThreadRequestFileSearchToolResourcesMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -704,6 +860,32 @@ export namespace CreateThreadRequestFileSearchToolResourcesVectorStores$ {
     CreateThreadRequestFileSearchToolResourcesVectorStores$Outbound;
 }
 
+export function createThreadRequestFileSearchToolResourcesVectorStoresToJSON(
+  createThreadRequestFileSearchToolResourcesVectorStores:
+    CreateThreadRequestFileSearchToolResourcesVectorStores,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestFileSearchToolResourcesVectorStores$outboundSchema.parse(
+      createThreadRequestFileSearchToolResourcesVectorStores,
+    ),
+  );
+}
+
+export function createThreadRequestFileSearchToolResourcesVectorStoresFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  CreateThreadRequestFileSearchToolResourcesVectorStores,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateThreadRequestFileSearchToolResourcesVectorStores$inboundSchema
+        .parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadRequestFileSearchToolResourcesVectorStores' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateThreadRequestFileSearch2$inboundSchema: z.ZodType<
   CreateThreadRequestFileSearch2,
@@ -761,6 +943,26 @@ export namespace CreateThreadRequestFileSearch2$ {
   export const outboundSchema = CreateThreadRequestFileSearch2$outboundSchema;
   /** @deprecated use `CreateThreadRequestFileSearch2$Outbound` instead. */
   export type Outbound = CreateThreadRequestFileSearch2$Outbound;
+}
+
+export function createThreadRequestFileSearch2ToJSON(
+  createThreadRequestFileSearch2: CreateThreadRequestFileSearch2,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestFileSearch2$outboundSchema.parse(
+      createThreadRequestFileSearch2,
+    ),
+  );
+}
+
+export function createThreadRequestFileSearch2FromJSON(
+  jsonString: string,
+): SafeParseResult<CreateThreadRequestFileSearch2, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateThreadRequestFileSearch2$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadRequestFileSearch2' from JSON`,
+  );
 }
 
 /** @internal */
@@ -838,6 +1040,33 @@ export namespace CreateThreadRequestChunkingStrategyStatic$ {
   export type Outbound = CreateThreadRequestChunkingStrategyStatic$Outbound;
 }
 
+export function createThreadRequestChunkingStrategyStaticToJSON(
+  createThreadRequestChunkingStrategyStatic:
+    CreateThreadRequestChunkingStrategyStatic,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestChunkingStrategyStatic$outboundSchema.parse(
+      createThreadRequestChunkingStrategyStatic,
+    ),
+  );
+}
+
+export function createThreadRequestChunkingStrategyStaticFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  CreateThreadRequestChunkingStrategyStatic,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateThreadRequestChunkingStrategyStatic$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'CreateThreadRequestChunkingStrategyStatic' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateThreadRequestChunkingStrategyStaticChunkingStrategy$inboundSchema:
   z.ZodType<
@@ -885,6 +1114,31 @@ export namespace CreateThreadRequestChunkingStrategyStaticChunkingStrategy$ {
   /** @deprecated use `CreateThreadRequestChunkingStrategyStaticChunkingStrategy$Outbound` instead. */
   export type Outbound =
     CreateThreadRequestChunkingStrategyStaticChunkingStrategy$Outbound;
+}
+
+export function createThreadRequestChunkingStrategyStaticChunkingStrategyToJSON(
+  createThreadRequestChunkingStrategyStaticChunkingStrategy:
+    CreateThreadRequestChunkingStrategyStaticChunkingStrategy,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestChunkingStrategyStaticChunkingStrategy$outboundSchema
+      .parse(createThreadRequestChunkingStrategyStaticChunkingStrategy),
+  );
+}
+
+export function createThreadRequestChunkingStrategyStaticChunkingStrategyFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  CreateThreadRequestChunkingStrategyStaticChunkingStrategy,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateThreadRequestChunkingStrategyStaticChunkingStrategy$inboundSchema
+        .parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadRequestChunkingStrategyStaticChunkingStrategy' from JSON`,
+  );
 }
 
 /** @internal */
@@ -951,6 +1205,31 @@ export namespace CreateThreadRequestChunkingStrategyAutoChunkingStrategy$ {
     CreateThreadRequestChunkingStrategyAutoChunkingStrategy$Outbound;
 }
 
+export function createThreadRequestChunkingStrategyAutoChunkingStrategyToJSON(
+  createThreadRequestChunkingStrategyAutoChunkingStrategy:
+    CreateThreadRequestChunkingStrategyAutoChunkingStrategy,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestChunkingStrategyAutoChunkingStrategy$outboundSchema
+      .parse(createThreadRequestChunkingStrategyAutoChunkingStrategy),
+  );
+}
+
+export function createThreadRequestChunkingStrategyAutoChunkingStrategyFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  CreateThreadRequestChunkingStrategyAutoChunkingStrategy,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateThreadRequestChunkingStrategyAutoChunkingStrategy$inboundSchema
+        .parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadRequestChunkingStrategyAutoChunkingStrategy' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateThreadRequestFileSearchChunkingStrategy$inboundSchema:
   z.ZodType<
@@ -1001,6 +1280,33 @@ export namespace CreateThreadRequestFileSearchChunkingStrategy$ {
   export type Outbound = CreateThreadRequestFileSearchChunkingStrategy$Outbound;
 }
 
+export function createThreadRequestFileSearchChunkingStrategyToJSON(
+  createThreadRequestFileSearchChunkingStrategy:
+    CreateThreadRequestFileSearchChunkingStrategy,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestFileSearchChunkingStrategy$outboundSchema.parse(
+      createThreadRequestFileSearchChunkingStrategy,
+    ),
+  );
+}
+
+export function createThreadRequestFileSearchChunkingStrategyFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  CreateThreadRequestFileSearchChunkingStrategy,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateThreadRequestFileSearchChunkingStrategy$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'CreateThreadRequestFileSearchChunkingStrategy' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateThreadRequestFileSearchMetadata$inboundSchema: z.ZodType<
   CreateThreadRequestFileSearchMetadata,
@@ -1031,6 +1337,27 @@ export namespace CreateThreadRequestFileSearchMetadata$ {
     CreateThreadRequestFileSearchMetadata$outboundSchema;
   /** @deprecated use `CreateThreadRequestFileSearchMetadata$Outbound` instead. */
   export type Outbound = CreateThreadRequestFileSearchMetadata$Outbound;
+}
+
+export function createThreadRequestFileSearchMetadataToJSON(
+  createThreadRequestFileSearchMetadata: CreateThreadRequestFileSearchMetadata,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestFileSearchMetadata$outboundSchema.parse(
+      createThreadRequestFileSearchMetadata,
+    ),
+  );
+}
+
+export function createThreadRequestFileSearchMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateThreadRequestFileSearchMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateThreadRequestFileSearchMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadRequestFileSearchMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -1107,6 +1434,33 @@ export namespace CreateThreadRequestFileSearchVectorStores$ {
   export type Outbound = CreateThreadRequestFileSearchVectorStores$Outbound;
 }
 
+export function createThreadRequestFileSearchVectorStoresToJSON(
+  createThreadRequestFileSearchVectorStores:
+    CreateThreadRequestFileSearchVectorStores,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestFileSearchVectorStores$outboundSchema.parse(
+      createThreadRequestFileSearchVectorStores,
+    ),
+  );
+}
+
+export function createThreadRequestFileSearchVectorStoresFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  CreateThreadRequestFileSearchVectorStores,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateThreadRequestFileSearchVectorStores$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'CreateThreadRequestFileSearchVectorStores' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateThreadRequestFileSearch1$inboundSchema: z.ZodType<
   CreateThreadRequestFileSearch1,
@@ -1162,6 +1516,26 @@ export namespace CreateThreadRequestFileSearch1$ {
   export type Outbound = CreateThreadRequestFileSearch1$Outbound;
 }
 
+export function createThreadRequestFileSearch1ToJSON(
+  createThreadRequestFileSearch1: CreateThreadRequestFileSearch1,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestFileSearch1$outboundSchema.parse(
+      createThreadRequestFileSearch1,
+    ),
+  );
+}
+
+export function createThreadRequestFileSearch1FromJSON(
+  jsonString: string,
+): SafeParseResult<CreateThreadRequestFileSearch1, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateThreadRequestFileSearch1$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadRequestFileSearch1' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateThreadRequestFileSearch$inboundSchema: z.ZodType<
   CreateThreadRequestFileSearch,
@@ -1198,6 +1572,26 @@ export namespace CreateThreadRequestFileSearch$ {
   export const outboundSchema = CreateThreadRequestFileSearch$outboundSchema;
   /** @deprecated use `CreateThreadRequestFileSearch$Outbound` instead. */
   export type Outbound = CreateThreadRequestFileSearch$Outbound;
+}
+
+export function createThreadRequestFileSearchToJSON(
+  createThreadRequestFileSearch: CreateThreadRequestFileSearch,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestFileSearch$outboundSchema.parse(
+      createThreadRequestFileSearch,
+    ),
+  );
+}
+
+export function createThreadRequestFileSearchFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateThreadRequestFileSearch, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateThreadRequestFileSearch$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadRequestFileSearch' from JSON`,
+  );
 }
 
 /** @internal */
@@ -1262,6 +1656,26 @@ export namespace CreateThreadRequestToolResources$ {
   export type Outbound = CreateThreadRequestToolResources$Outbound;
 }
 
+export function createThreadRequestToolResourcesToJSON(
+  createThreadRequestToolResources: CreateThreadRequestToolResources,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestToolResources$outboundSchema.parse(
+      createThreadRequestToolResources,
+    ),
+  );
+}
+
+export function createThreadRequestToolResourcesFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateThreadRequestToolResources, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateThreadRequestToolResources$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadRequestToolResources' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateThreadRequestMetadata$inboundSchema: z.ZodType<
   CreateThreadRequestMetadata,
@@ -1290,6 +1704,26 @@ export namespace CreateThreadRequestMetadata$ {
   export const outboundSchema = CreateThreadRequestMetadata$outboundSchema;
   /** @deprecated use `CreateThreadRequestMetadata$Outbound` instead. */
   export type Outbound = CreateThreadRequestMetadata$Outbound;
+}
+
+export function createThreadRequestMetadataToJSON(
+  createThreadRequestMetadata: CreateThreadRequestMetadata,
+): string {
+  return JSON.stringify(
+    CreateThreadRequestMetadata$outboundSchema.parse(
+      createThreadRequestMetadata,
+    ),
+  );
+}
+
+export function createThreadRequestMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateThreadRequestMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateThreadRequestMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadRequestMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -1346,4 +1780,22 @@ export namespace CreateThreadRequest$ {
   export const outboundSchema = CreateThreadRequest$outboundSchema;
   /** @deprecated use `CreateThreadRequest$Outbound` instead. */
   export type Outbound = CreateThreadRequest$Outbound;
+}
+
+export function createThreadRequestToJSON(
+  createThreadRequest: CreateThreadRequest,
+): string {
+  return JSON.stringify(
+    CreateThreadRequest$outboundSchema.parse(createThreadRequest),
+  );
+}
+
+export function createThreadRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateThreadRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateThreadRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateThreadRequest' from JSON`,
+  );
 }

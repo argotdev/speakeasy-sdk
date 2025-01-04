@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type ListFineTuningEventsRequest = {
   /**
@@ -70,4 +73,24 @@ export namespace ListFineTuningEventsRequest$ {
   export const outboundSchema = ListFineTuningEventsRequest$outboundSchema;
   /** @deprecated use `ListFineTuningEventsRequest$Outbound` instead. */
   export type Outbound = ListFineTuningEventsRequest$Outbound;
+}
+
+export function listFineTuningEventsRequestToJSON(
+  listFineTuningEventsRequest: ListFineTuningEventsRequest,
+): string {
+  return JSON.stringify(
+    ListFineTuningEventsRequest$outboundSchema.parse(
+      listFineTuningEventsRequest,
+    ),
+  );
+}
+
+export function listFineTuningEventsRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ListFineTuningEventsRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ListFineTuningEventsRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListFineTuningEventsRequest' from JSON`,
+  );
 }

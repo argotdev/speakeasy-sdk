@@ -1,18 +1,21 @@
-speakeasyVersion: 1.421.1
+speakeasyVersion: 1.462.2
 sources:
     ArgotOpenAi-OAS:
         sourceNamespace: argot-open-ai-oas
-        sourceRevisionDigest: sha256:57762a25bf2b9db92394f493016221caac15a961a8b0d0daf781fbf169cf11de
-        sourceBlobDigest: sha256:1ac004496342b737f8cbb62c2de296ce98c3851f1082d3b6d73d7f312b6d247e
+        sourceRevisionDigest: sha256:1cf9f2b2735ce891126bb1eb1aa9256826a291a80ca2b07adb272c46e71a765c
+        sourceBlobDigest: sha256:e89de7a85a3dfb63c1563aefa16ae940ce3d67eaa50d2d718fe9bedb74e902bb
         tags:
             - latest
-            - main
+            - speakeasy-sdk-regen-1729907398
+            - 2.3.0
 targets:
     argot-open-ai:
         source: ArgotOpenAi-OAS
         sourceNamespace: argot-open-ai-oas
-        sourceRevisionDigest: sha256:57762a25bf2b9db92394f493016221caac15a961a8b0d0daf781fbf169cf11de
-        sourceBlobDigest: sha256:1ac004496342b737f8cbb62c2de296ce98c3851f1082d3b6d73d7f312b6d247e
+        sourceRevisionDigest: sha256:1cf9f2b2735ce891126bb1eb1aa9256826a291a80ca2b07adb272c46e71a765c
+        sourceBlobDigest: sha256:e89de7a85a3dfb63c1563aefa16ae940ce3d67eaa50d2d718fe9bedb74e902bb
+        codeSamplesNamespace: argot-open-ai-oas-typescript-code-samples
+        codeSamplesRevisionDigest: sha256:6aa316ebc0883131949bd37cec5b736e48fad731b4786cd10ecd79f3929f6010
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -29,3 +32,9 @@ workflow:
             publish:
                 npm:
                     token: $npm_token
+            codeSamples:
+                registry:
+                    location: registry.speakeasyapi.dev/argot/argot/argot-open-ai-oas-typescript-code-samples
+                labelOverride:
+                    fixedValue: Typescript (SDK)
+                blocking: false

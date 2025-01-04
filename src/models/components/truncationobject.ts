@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The truncation strategy to use for the thread. The default is `auto`. If set to `last_messages`, the thread will be truncated to the n most recent messages in the thread. When set to `auto`, messages in the middle of the thread will be dropped to fit the context length of the model, `max_prompt_tokens`.
@@ -98,4 +101,22 @@ export namespace TruncationObject$ {
   export const outboundSchema = TruncationObject$outboundSchema;
   /** @deprecated use `TruncationObject$Outbound` instead. */
   export type Outbound = TruncationObject$Outbound;
+}
+
+export function truncationObjectToJSON(
+  truncationObject: TruncationObject,
+): string {
+  return JSON.stringify(
+    TruncationObject$outboundSchema.parse(truncationObject),
+  );
+}
+
+export function truncationObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<TruncationObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => TruncationObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'TruncationObject' from JSON`,
+  );
 }

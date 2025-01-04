@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and `desc` for descending order.
@@ -188,4 +191,25 @@ export namespace ListFilesInVectorStoreBatchRequest$ {
     ListFilesInVectorStoreBatchRequest$outboundSchema;
   /** @deprecated use `ListFilesInVectorStoreBatchRequest$Outbound` instead. */
   export type Outbound = ListFilesInVectorStoreBatchRequest$Outbound;
+}
+
+export function listFilesInVectorStoreBatchRequestToJSON(
+  listFilesInVectorStoreBatchRequest: ListFilesInVectorStoreBatchRequest,
+): string {
+  return JSON.stringify(
+    ListFilesInVectorStoreBatchRequest$outboundSchema.parse(
+      listFilesInVectorStoreBatchRequest,
+    ),
+  );
+}
+
+export function listFilesInVectorStoreBatchRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ListFilesInVectorStoreBatchRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ListFilesInVectorStoreBatchRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListFilesInVectorStoreBatchRequest' from JSON`,
+  );
 }

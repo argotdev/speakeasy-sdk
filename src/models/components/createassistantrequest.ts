@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   AssistantsApiResponseFormatOption,
   AssistantsApiResponseFormatOption$inboundSchema,
@@ -444,6 +447,26 @@ export namespace CreateAssistantRequestModel$ {
   export type Outbound = CreateAssistantRequestModel$Outbound;
 }
 
+export function createAssistantRequestModelToJSON(
+  createAssistantRequestModel: CreateAssistantRequestModel,
+): string {
+  return JSON.stringify(
+    CreateAssistantRequestModel$outboundSchema.parse(
+      createAssistantRequestModel,
+    ),
+  );
+}
+
+export function createAssistantRequestModelFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateAssistantRequestModel, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateAssistantRequestModel$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateAssistantRequestModel' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateAssistantRequestTools$inboundSchema: z.ZodType<
   CreateAssistantRequestTools,
@@ -483,6 +506,26 @@ export namespace CreateAssistantRequestTools$ {
   export const outboundSchema = CreateAssistantRequestTools$outboundSchema;
   /** @deprecated use `CreateAssistantRequestTools$Outbound` instead. */
   export type Outbound = CreateAssistantRequestTools$Outbound;
+}
+
+export function createAssistantRequestToolsToJSON(
+  createAssistantRequestTools: CreateAssistantRequestTools,
+): string {
+  return JSON.stringify(
+    CreateAssistantRequestTools$outboundSchema.parse(
+      createAssistantRequestTools,
+    ),
+  );
+}
+
+export function createAssistantRequestToolsFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateAssistantRequestTools, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateAssistantRequestTools$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateAssistantRequestTools' from JSON`,
+  );
 }
 
 /** @internal */
@@ -529,6 +572,27 @@ export namespace CreateAssistantRequestCodeInterpreter$ {
     CreateAssistantRequestCodeInterpreter$outboundSchema;
   /** @deprecated use `CreateAssistantRequestCodeInterpreter$Outbound` instead. */
   export type Outbound = CreateAssistantRequestCodeInterpreter$Outbound;
+}
+
+export function createAssistantRequestCodeInterpreterToJSON(
+  createAssistantRequestCodeInterpreter: CreateAssistantRequestCodeInterpreter,
+): string {
+  return JSON.stringify(
+    CreateAssistantRequestCodeInterpreter$outboundSchema.parse(
+      createAssistantRequestCodeInterpreter,
+    ),
+  );
+}
+
+export function createAssistantRequestCodeInterpreterFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateAssistantRequestCodeInterpreter, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateAssistantRequestCodeInterpreter$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateAssistantRequestCodeInterpreter' from JSON`,
+  );
 }
 
 /** @internal */
@@ -608,6 +672,24 @@ export namespace ChunkingStrategyStatic$ {
   export type Outbound = ChunkingStrategyStatic$Outbound;
 }
 
+export function chunkingStrategyStaticToJSON(
+  chunkingStrategyStatic: ChunkingStrategyStatic,
+): string {
+  return JSON.stringify(
+    ChunkingStrategyStatic$outboundSchema.parse(chunkingStrategyStatic),
+  );
+}
+
+export function chunkingStrategyStaticFromJSON(
+  jsonString: string,
+): SafeParseResult<ChunkingStrategyStatic, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ChunkingStrategyStatic$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ChunkingStrategyStatic' from JSON`,
+  );
+}
+
 /** @internal */
 export const ChunkingStrategyStaticChunkingStrategy$inboundSchema: z.ZodType<
   ChunkingStrategyStaticChunkingStrategy,
@@ -649,6 +731,28 @@ export namespace ChunkingStrategyStaticChunkingStrategy$ {
     ChunkingStrategyStaticChunkingStrategy$outboundSchema;
   /** @deprecated use `ChunkingStrategyStaticChunkingStrategy$Outbound` instead. */
   export type Outbound = ChunkingStrategyStaticChunkingStrategy$Outbound;
+}
+
+export function chunkingStrategyStaticChunkingStrategyToJSON(
+  chunkingStrategyStaticChunkingStrategy:
+    ChunkingStrategyStaticChunkingStrategy,
+): string {
+  return JSON.stringify(
+    ChunkingStrategyStaticChunkingStrategy$outboundSchema.parse(
+      chunkingStrategyStaticChunkingStrategy,
+    ),
+  );
+}
+
+export function chunkingStrategyStaticChunkingStrategyFromJSON(
+  jsonString: string,
+): SafeParseResult<ChunkingStrategyStaticChunkingStrategy, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ChunkingStrategyStaticChunkingStrategy$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ChunkingStrategyStaticChunkingStrategy' from JSON`,
+  );
 }
 
 /** @internal */
@@ -714,6 +818,27 @@ export namespace ChunkingStrategyAutoChunkingStrategy$ {
   export type Outbound = ChunkingStrategyAutoChunkingStrategy$Outbound;
 }
 
+export function chunkingStrategyAutoChunkingStrategyToJSON(
+  chunkingStrategyAutoChunkingStrategy: ChunkingStrategyAutoChunkingStrategy,
+): string {
+  return JSON.stringify(
+    ChunkingStrategyAutoChunkingStrategy$outboundSchema.parse(
+      chunkingStrategyAutoChunkingStrategy,
+    ),
+  );
+}
+
+export function chunkingStrategyAutoChunkingStrategyFromJSON(
+  jsonString: string,
+): SafeParseResult<ChunkingStrategyAutoChunkingStrategy, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ChunkingStrategyAutoChunkingStrategy$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ChunkingStrategyAutoChunkingStrategy' from JSON`,
+  );
+}
+
 /** @internal */
 export const FileSearchChunkingStrategy$inboundSchema: z.ZodType<
   FileSearchChunkingStrategy,
@@ -752,6 +877,24 @@ export namespace FileSearchChunkingStrategy$ {
   export type Outbound = FileSearchChunkingStrategy$Outbound;
 }
 
+export function fileSearchChunkingStrategyToJSON(
+  fileSearchChunkingStrategy: FileSearchChunkingStrategy,
+): string {
+  return JSON.stringify(
+    FileSearchChunkingStrategy$outboundSchema.parse(fileSearchChunkingStrategy),
+  );
+}
+
+export function fileSearchChunkingStrategyFromJSON(
+  jsonString: string,
+): SafeParseResult<FileSearchChunkingStrategy, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FileSearchChunkingStrategy$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FileSearchChunkingStrategy' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateAssistantRequestFileSearchMetadata$inboundSchema: z.ZodType<
   CreateAssistantRequestFileSearchMetadata,
@@ -782,6 +925,33 @@ export namespace CreateAssistantRequestFileSearchMetadata$ {
     CreateAssistantRequestFileSearchMetadata$outboundSchema;
   /** @deprecated use `CreateAssistantRequestFileSearchMetadata$Outbound` instead. */
   export type Outbound = CreateAssistantRequestFileSearchMetadata$Outbound;
+}
+
+export function createAssistantRequestFileSearchMetadataToJSON(
+  createAssistantRequestFileSearchMetadata:
+    CreateAssistantRequestFileSearchMetadata,
+): string {
+  return JSON.stringify(
+    CreateAssistantRequestFileSearchMetadata$outboundSchema.parse(
+      createAssistantRequestFileSearchMetadata,
+    ),
+  );
+}
+
+export function createAssistantRequestFileSearchMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  CreateAssistantRequestFileSearchMetadata,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateAssistantRequestFileSearchMetadata$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'CreateAssistantRequestFileSearchMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -848,6 +1018,24 @@ export namespace FileSearchVectorStores$ {
   export type Outbound = FileSearchVectorStores$Outbound;
 }
 
+export function fileSearchVectorStoresToJSON(
+  fileSearchVectorStores: FileSearchVectorStores,
+): string {
+  return JSON.stringify(
+    FileSearchVectorStores$outboundSchema.parse(fileSearchVectorStores),
+  );
+}
+
+export function fileSearchVectorStoresFromJSON(
+  jsonString: string,
+): SafeParseResult<FileSearchVectorStores, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FileSearchVectorStores$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FileSearchVectorStores' from JSON`,
+  );
+}
+
 /** @internal */
 export const FileSearch2$inboundSchema: z.ZodType<
   FileSearch2,
@@ -895,6 +1083,20 @@ export namespace FileSearch2$ {
   export const outboundSchema = FileSearch2$outboundSchema;
   /** @deprecated use `FileSearch2$Outbound` instead. */
   export type Outbound = FileSearch2$Outbound;
+}
+
+export function fileSearch2ToJSON(fileSearch2: FileSearch2): string {
+  return JSON.stringify(FileSearch2$outboundSchema.parse(fileSearch2));
+}
+
+export function fileSearch2FromJSON(
+  jsonString: string,
+): SafeParseResult<FileSearch2, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FileSearch2$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FileSearch2' from JSON`,
+  );
 }
 
 /** @internal */
@@ -966,6 +1168,20 @@ export namespace Static$ {
   export type Outbound = Static$Outbound;
 }
 
+export function staticToJSON(value: Static): string {
+  return JSON.stringify(Static$outboundSchema.parse(value));
+}
+
+export function staticFromJSON(
+  jsonString: string,
+): SafeParseResult<Static, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Static$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Static' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateAssistantRequestChunkingStrategyStaticChunkingStrategy$inboundSchema:
   z.ZodType<
@@ -1009,6 +1225,31 @@ export namespace CreateAssistantRequestChunkingStrategyStaticChunkingStrategy$ {
   /** @deprecated use `CreateAssistantRequestChunkingStrategyStaticChunkingStrategy$Outbound` instead. */
   export type Outbound =
     CreateAssistantRequestChunkingStrategyStaticChunkingStrategy$Outbound;
+}
+
+export function createAssistantRequestChunkingStrategyStaticChunkingStrategyToJSON(
+  createAssistantRequestChunkingStrategyStaticChunkingStrategy:
+    CreateAssistantRequestChunkingStrategyStaticChunkingStrategy,
+): string {
+  return JSON.stringify(
+    CreateAssistantRequestChunkingStrategyStaticChunkingStrategy$outboundSchema
+      .parse(createAssistantRequestChunkingStrategyStaticChunkingStrategy),
+  );
+}
+
+export function createAssistantRequestChunkingStrategyStaticChunkingStrategyFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  CreateAssistantRequestChunkingStrategyStaticChunkingStrategy,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateAssistantRequestChunkingStrategyStaticChunkingStrategy$inboundSchema
+        .parse(JSON.parse(x)),
+    `Failed to parse 'CreateAssistantRequestChunkingStrategyStaticChunkingStrategy' from JSON`,
+  );
 }
 
 /** @internal */
@@ -1068,6 +1309,24 @@ export namespace AutoChunkingStrategy$ {
   export type Outbound = AutoChunkingStrategy$Outbound;
 }
 
+export function autoChunkingStrategyToJSON(
+  autoChunkingStrategy: AutoChunkingStrategy,
+): string {
+  return JSON.stringify(
+    AutoChunkingStrategy$outboundSchema.parse(autoChunkingStrategy),
+  );
+}
+
+export function autoChunkingStrategyFromJSON(
+  jsonString: string,
+): SafeParseResult<AutoChunkingStrategy, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AutoChunkingStrategy$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AutoChunkingStrategy' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateAssistantRequestFileSearchChunkingStrategy$inboundSchema:
   z.ZodType<
@@ -1115,6 +1374,33 @@ export namespace CreateAssistantRequestFileSearchChunkingStrategy$ {
     CreateAssistantRequestFileSearchChunkingStrategy$Outbound;
 }
 
+export function createAssistantRequestFileSearchChunkingStrategyToJSON(
+  createAssistantRequestFileSearchChunkingStrategy:
+    CreateAssistantRequestFileSearchChunkingStrategy,
+): string {
+  return JSON.stringify(
+    CreateAssistantRequestFileSearchChunkingStrategy$outboundSchema.parse(
+      createAssistantRequestFileSearchChunkingStrategy,
+    ),
+  );
+}
+
+export function createAssistantRequestFileSearchChunkingStrategyFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  CreateAssistantRequestFileSearchChunkingStrategy,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateAssistantRequestFileSearchChunkingStrategy$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'CreateAssistantRequestFileSearchChunkingStrategy' from JSON`,
+  );
+}
+
 /** @internal */
 export const FileSearchMetadata$inboundSchema: z.ZodType<
   FileSearchMetadata,
@@ -1143,6 +1429,24 @@ export namespace FileSearchMetadata$ {
   export const outboundSchema = FileSearchMetadata$outboundSchema;
   /** @deprecated use `FileSearchMetadata$Outbound` instead. */
   export type Outbound = FileSearchMetadata$Outbound;
+}
+
+export function fileSearchMetadataToJSON(
+  fileSearchMetadata: FileSearchMetadata,
+): string {
+  return JSON.stringify(
+    FileSearchMetadata$outboundSchema.parse(fileSearchMetadata),
+  );
+}
+
+export function fileSearchMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<FileSearchMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FileSearchMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FileSearchMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -1210,6 +1514,20 @@ export namespace VectorStores$ {
   export type Outbound = VectorStores$Outbound;
 }
 
+export function vectorStoresToJSON(vectorStores: VectorStores): string {
+  return JSON.stringify(VectorStores$outboundSchema.parse(vectorStores));
+}
+
+export function vectorStoresFromJSON(
+  jsonString: string,
+): SafeParseResult<VectorStores, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => VectorStores$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'VectorStores' from JSON`,
+  );
+}
+
 /** @internal */
 export const FileSearch1$inboundSchema: z.ZodType<
   FileSearch1,
@@ -1259,6 +1577,20 @@ export namespace FileSearch1$ {
   export type Outbound = FileSearch1$Outbound;
 }
 
+export function fileSearch1ToJSON(fileSearch1: FileSearch1): string {
+  return JSON.stringify(FileSearch1$outboundSchema.parse(fileSearch1));
+}
+
+export function fileSearch1FromJSON(
+  jsonString: string,
+): SafeParseResult<FileSearch1, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FileSearch1$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FileSearch1' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateAssistantRequestFileSearch$inboundSchema: z.ZodType<
   CreateAssistantRequestFileSearch,
@@ -1295,6 +1627,26 @@ export namespace CreateAssistantRequestFileSearch$ {
   export const outboundSchema = CreateAssistantRequestFileSearch$outboundSchema;
   /** @deprecated use `CreateAssistantRequestFileSearch$Outbound` instead. */
   export type Outbound = CreateAssistantRequestFileSearch$Outbound;
+}
+
+export function createAssistantRequestFileSearchToJSON(
+  createAssistantRequestFileSearch: CreateAssistantRequestFileSearch,
+): string {
+  return JSON.stringify(
+    CreateAssistantRequestFileSearch$outboundSchema.parse(
+      createAssistantRequestFileSearch,
+    ),
+  );
+}
+
+export function createAssistantRequestFileSearchFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateAssistantRequestFileSearch, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateAssistantRequestFileSearch$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateAssistantRequestFileSearch' from JSON`,
+  );
 }
 
 /** @internal */
@@ -1358,6 +1710,27 @@ export namespace CreateAssistantRequestToolResources$ {
   export type Outbound = CreateAssistantRequestToolResources$Outbound;
 }
 
+export function createAssistantRequestToolResourcesToJSON(
+  createAssistantRequestToolResources: CreateAssistantRequestToolResources,
+): string {
+  return JSON.stringify(
+    CreateAssistantRequestToolResources$outboundSchema.parse(
+      createAssistantRequestToolResources,
+    ),
+  );
+}
+
+export function createAssistantRequestToolResourcesFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateAssistantRequestToolResources, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateAssistantRequestToolResources$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateAssistantRequestToolResources' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateAssistantRequestMetadata$inboundSchema: z.ZodType<
   CreateAssistantRequestMetadata,
@@ -1386,6 +1759,26 @@ export namespace CreateAssistantRequestMetadata$ {
   export const outboundSchema = CreateAssistantRequestMetadata$outboundSchema;
   /** @deprecated use `CreateAssistantRequestMetadata$Outbound` instead. */
   export type Outbound = CreateAssistantRequestMetadata$Outbound;
+}
+
+export function createAssistantRequestMetadataToJSON(
+  createAssistantRequestMetadata: CreateAssistantRequestMetadata,
+): string {
+  return JSON.stringify(
+    CreateAssistantRequestMetadata$outboundSchema.parse(
+      createAssistantRequestMetadata,
+    ),
+  );
+}
+
+export function createAssistantRequestMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateAssistantRequestMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateAssistantRequestMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateAssistantRequestMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -1490,4 +1883,22 @@ export namespace CreateAssistantRequest$ {
   export const outboundSchema = CreateAssistantRequest$outboundSchema;
   /** @deprecated use `CreateAssistantRequest$Outbound` instead. */
   export type Outbound = CreateAssistantRequest$Outbound;
+}
+
+export function createAssistantRequestToJSON(
+  createAssistantRequest: CreateAssistantRequest,
+): string {
+  return JSON.stringify(
+    CreateAssistantRequest$outboundSchema.parse(createAssistantRequest),
+  );
+}
+
+export function createAssistantRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateAssistantRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateAssistantRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateAssistantRequest' from JSON`,
+  );
 }

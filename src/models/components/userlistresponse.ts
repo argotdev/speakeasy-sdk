@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   User,
   User$inboundSchema,
@@ -104,4 +107,22 @@ export namespace UserListResponse$ {
   export const outboundSchema = UserListResponse$outboundSchema;
   /** @deprecated use `UserListResponse$Outbound` instead. */
   export type Outbound = UserListResponse$Outbound;
+}
+
+export function userListResponseToJSON(
+  userListResponse: UserListResponse,
+): string {
+  return JSON.stringify(
+    UserListResponse$outboundSchema.parse(userListResponse),
+  );
+}
+
+export function userListResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<UserListResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => UserListResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'UserListResponse' from JSON`,
+  );
 }

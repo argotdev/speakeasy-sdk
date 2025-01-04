@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The object type, which is always `file`.
@@ -217,4 +220,18 @@ export namespace OpenAIFile$ {
   export const outboundSchema = OpenAIFile$outboundSchema;
   /** @deprecated use `OpenAIFile$Outbound` instead. */
   export type Outbound = OpenAIFile$Outbound;
+}
+
+export function openAIFileToJSON(openAIFile: OpenAIFile): string {
+  return JSON.stringify(OpenAIFile$outboundSchema.parse(openAIFile));
+}
+
+export function openAIFileFromJSON(
+  jsonString: string,
+): SafeParseResult<OpenAIFile, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => OpenAIFile$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'OpenAIFile' from JSON`,
+  );
 }

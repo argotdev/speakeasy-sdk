@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type CreateSpeechResponse = {
   headers: { [k: string]: Array<string> };
@@ -57,4 +60,22 @@ export namespace CreateSpeechResponse$ {
   export const outboundSchema = CreateSpeechResponse$outboundSchema;
   /** @deprecated use `CreateSpeechResponse$Outbound` instead. */
   export type Outbound = CreateSpeechResponse$Outbound;
+}
+
+export function createSpeechResponseToJSON(
+  createSpeechResponse: CreateSpeechResponse,
+): string {
+  return JSON.stringify(
+    CreateSpeechResponse$outboundSchema.parse(createSpeechResponse),
+  );
+}
+
+export function createSpeechResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateSpeechResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateSpeechResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateSpeechResponse' from JSON`,
+  );
 }

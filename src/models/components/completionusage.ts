@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Breakdown of tokens used in a completion.
@@ -81,6 +84,24 @@ export namespace CompletionTokensDetails$ {
   export type Outbound = CompletionTokensDetails$Outbound;
 }
 
+export function completionTokensDetailsToJSON(
+  completionTokensDetails: CompletionTokensDetails,
+): string {
+  return JSON.stringify(
+    CompletionTokensDetails$outboundSchema.parse(completionTokensDetails),
+  );
+}
+
+export function completionTokensDetailsFromJSON(
+  jsonString: string,
+): SafeParseResult<CompletionTokensDetails, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CompletionTokensDetails$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CompletionTokensDetails' from JSON`,
+  );
+}
+
 /** @internal */
 export const CompletionUsage$inboundSchema: z.ZodType<
   CompletionUsage,
@@ -140,4 +161,20 @@ export namespace CompletionUsage$ {
   export const outboundSchema = CompletionUsage$outboundSchema;
   /** @deprecated use `CompletionUsage$Outbound` instead. */
   export type Outbound = CompletionUsage$Outbound;
+}
+
+export function completionUsageToJSON(
+  completionUsage: CompletionUsage,
+): string {
+  return JSON.stringify(CompletionUsage$outboundSchema.parse(completionUsage));
+}
+
+export function completionUsageFromJSON(
+  jsonString: string,
+): SafeParseResult<CompletionUsage, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CompletionUsage$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CompletionUsage' from JSON`,
+  );
 }

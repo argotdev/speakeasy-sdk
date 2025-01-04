@@ -4,8 +4,11 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { blobLikeSchema } from "../../types/blobs.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   AudioResponseFormat,
   AudioResponseFormat$inboundSchema,
@@ -115,6 +118,26 @@ export namespace CreateTranslationRequestFile$ {
   export type Outbound = CreateTranslationRequestFile$Outbound;
 }
 
+export function createTranslationRequestFileToJSON(
+  createTranslationRequestFile: CreateTranslationRequestFile,
+): string {
+  return JSON.stringify(
+    CreateTranslationRequestFile$outboundSchema.parse(
+      createTranslationRequestFile,
+    ),
+  );
+}
+
+export function createTranslationRequestFileFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateTranslationRequestFile, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateTranslationRequestFile$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateTranslationRequestFile' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateTranslationRequestModel2$inboundSchema: z.ZodNativeEnum<
   typeof CreateTranslationRequestModel2
@@ -164,6 +187,26 @@ export namespace CreateTranslationRequestModel$ {
   export const outboundSchema = CreateTranslationRequestModel$outboundSchema;
   /** @deprecated use `CreateTranslationRequestModel$Outbound` instead. */
   export type Outbound = CreateTranslationRequestModel$Outbound;
+}
+
+export function createTranslationRequestModelToJSON(
+  createTranslationRequestModel: CreateTranslationRequestModel,
+): string {
+  return JSON.stringify(
+    CreateTranslationRequestModel$outboundSchema.parse(
+      createTranslationRequestModel,
+    ),
+  );
+}
+
+export function createTranslationRequestModelFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateTranslationRequestModel, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateTranslationRequestModel$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateTranslationRequestModel' from JSON`,
+  );
 }
 
 /** @internal */
@@ -222,4 +265,22 @@ export namespace CreateTranslationRequest$ {
   export const outboundSchema = CreateTranslationRequest$outboundSchema;
   /** @deprecated use `CreateTranslationRequest$Outbound` instead. */
   export type Outbound = CreateTranslationRequest$Outbound;
+}
+
+export function createTranslationRequestToJSON(
+  createTranslationRequest: CreateTranslationRequest,
+): string {
+  return JSON.stringify(
+    CreateTranslationRequest$outboundSchema.parse(createTranslationRequest),
+  );
+}
+
+export function createTranslationRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateTranslationRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateTranslationRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateTranslationRequest' from JSON`,
+  );
 }

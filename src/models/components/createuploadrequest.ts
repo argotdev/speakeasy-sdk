@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The intended purpose of the uploaded file.
@@ -133,4 +136,22 @@ export namespace CreateUploadRequest$ {
   export const outboundSchema = CreateUploadRequest$outboundSchema;
   /** @deprecated use `CreateUploadRequest$Outbound` instead. */
   export type Outbound = CreateUploadRequest$Outbound;
+}
+
+export function createUploadRequestToJSON(
+  createUploadRequest: CreateUploadRequest,
+): string {
+  return JSON.stringify(
+    CreateUploadRequest$outboundSchema.parse(createUploadRequest),
+  );
+}
+
+export function createUploadRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateUploadRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateUploadRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateUploadRequest' from JSON`,
+  );
 }

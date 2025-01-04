@@ -4,8 +4,11 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { blobLikeSchema } from "../../types/blobs.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   AudioResponseFormat,
   AudioResponseFormat$inboundSchema,
@@ -130,6 +133,20 @@ export namespace FileT$ {
   export type Outbound = FileT$Outbound;
 }
 
+export function fileToJSON(fileT: FileT): string {
+  return JSON.stringify(FileT$outboundSchema.parse(fileT));
+}
+
+export function fileFromJSON(
+  jsonString: string,
+): SafeParseResult<FileT, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FileT$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FileT' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateTranscriptionRequestModel2$inboundSchema: z.ZodNativeEnum<
   typeof CreateTranscriptionRequestModel2
@@ -179,6 +196,26 @@ export namespace CreateTranscriptionRequestModel$ {
   export const outboundSchema = CreateTranscriptionRequestModel$outboundSchema;
   /** @deprecated use `CreateTranscriptionRequestModel$Outbound` instead. */
   export type Outbound = CreateTranscriptionRequestModel$Outbound;
+}
+
+export function createTranscriptionRequestModelToJSON(
+  createTranscriptionRequestModel: CreateTranscriptionRequestModel,
+): string {
+  return JSON.stringify(
+    CreateTranscriptionRequestModel$outboundSchema.parse(
+      createTranscriptionRequestModel,
+    ),
+  );
+}
+
+export function createTranscriptionRequestModelFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateTranscriptionRequestModel, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateTranscriptionRequestModel$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateTranscriptionRequestModel' from JSON`,
+  );
 }
 
 /** @internal */
@@ -266,4 +303,22 @@ export namespace CreateTranscriptionRequest$ {
   export const outboundSchema = CreateTranscriptionRequest$outboundSchema;
   /** @deprecated use `CreateTranscriptionRequest$Outbound` instead. */
   export type Outbound = CreateTranscriptionRequest$Outbound;
+}
+
+export function createTranscriptionRequestToJSON(
+  createTranscriptionRequest: CreateTranscriptionRequest,
+): string {
+  return JSON.stringify(
+    CreateTranscriptionRequest$outboundSchema.parse(createTranscriptionRequest),
+  );
+}
+
+export function createTranscriptionRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateTranscriptionRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateTranscriptionRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateTranscriptionRequest' from JSON`,
+  );
 }

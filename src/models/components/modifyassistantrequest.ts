@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   AssistantsApiResponseFormatOption,
   AssistantsApiResponseFormatOption$inboundSchema,
@@ -185,6 +188,26 @@ export namespace ModifyAssistantRequestTools$ {
   export type Outbound = ModifyAssistantRequestTools$Outbound;
 }
 
+export function modifyAssistantRequestToolsToJSON(
+  modifyAssistantRequestTools: ModifyAssistantRequestTools,
+): string {
+  return JSON.stringify(
+    ModifyAssistantRequestTools$outboundSchema.parse(
+      modifyAssistantRequestTools,
+    ),
+  );
+}
+
+export function modifyAssistantRequestToolsFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyAssistantRequestTools, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ModifyAssistantRequestTools$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyAssistantRequestTools' from JSON`,
+  );
+}
+
 /** @internal */
 export const ModifyAssistantRequestCodeInterpreter$inboundSchema: z.ZodType<
   ModifyAssistantRequestCodeInterpreter,
@@ -231,6 +254,27 @@ export namespace ModifyAssistantRequestCodeInterpreter$ {
   export type Outbound = ModifyAssistantRequestCodeInterpreter$Outbound;
 }
 
+export function modifyAssistantRequestCodeInterpreterToJSON(
+  modifyAssistantRequestCodeInterpreter: ModifyAssistantRequestCodeInterpreter,
+): string {
+  return JSON.stringify(
+    ModifyAssistantRequestCodeInterpreter$outboundSchema.parse(
+      modifyAssistantRequestCodeInterpreter,
+    ),
+  );
+}
+
+export function modifyAssistantRequestCodeInterpreterFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyAssistantRequestCodeInterpreter, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ModifyAssistantRequestCodeInterpreter$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyAssistantRequestCodeInterpreter' from JSON`,
+  );
+}
+
 /** @internal */
 export const ModifyAssistantRequestFileSearch$inboundSchema: z.ZodType<
   ModifyAssistantRequestFileSearch,
@@ -273,6 +317,26 @@ export namespace ModifyAssistantRequestFileSearch$ {
   export const outboundSchema = ModifyAssistantRequestFileSearch$outboundSchema;
   /** @deprecated use `ModifyAssistantRequestFileSearch$Outbound` instead. */
   export type Outbound = ModifyAssistantRequestFileSearch$Outbound;
+}
+
+export function modifyAssistantRequestFileSearchToJSON(
+  modifyAssistantRequestFileSearch: ModifyAssistantRequestFileSearch,
+): string {
+  return JSON.stringify(
+    ModifyAssistantRequestFileSearch$outboundSchema.parse(
+      modifyAssistantRequestFileSearch,
+    ),
+  );
+}
+
+export function modifyAssistantRequestFileSearchFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyAssistantRequestFileSearch, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ModifyAssistantRequestFileSearch$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyAssistantRequestFileSearch' from JSON`,
+  );
 }
 
 /** @internal */
@@ -332,6 +396,27 @@ export namespace ModifyAssistantRequestToolResources$ {
   export type Outbound = ModifyAssistantRequestToolResources$Outbound;
 }
 
+export function modifyAssistantRequestToolResourcesToJSON(
+  modifyAssistantRequestToolResources: ModifyAssistantRequestToolResources,
+): string {
+  return JSON.stringify(
+    ModifyAssistantRequestToolResources$outboundSchema.parse(
+      modifyAssistantRequestToolResources,
+    ),
+  );
+}
+
+export function modifyAssistantRequestToolResourcesFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyAssistantRequestToolResources, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ModifyAssistantRequestToolResources$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyAssistantRequestToolResources' from JSON`,
+  );
+}
+
 /** @internal */
 export const ModifyAssistantRequestMetadata$inboundSchema: z.ZodType<
   ModifyAssistantRequestMetadata,
@@ -360,6 +445,26 @@ export namespace ModifyAssistantRequestMetadata$ {
   export const outboundSchema = ModifyAssistantRequestMetadata$outboundSchema;
   /** @deprecated use `ModifyAssistantRequestMetadata$Outbound` instead. */
   export type Outbound = ModifyAssistantRequestMetadata$Outbound;
+}
+
+export function modifyAssistantRequestMetadataToJSON(
+  modifyAssistantRequestMetadata: ModifyAssistantRequestMetadata,
+): string {
+  return JSON.stringify(
+    ModifyAssistantRequestMetadata$outboundSchema.parse(
+      modifyAssistantRequestMetadata,
+    ),
+  );
+}
+
+export function modifyAssistantRequestMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyAssistantRequestMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ModifyAssistantRequestMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyAssistantRequestMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -464,4 +569,22 @@ export namespace ModifyAssistantRequest$ {
   export const outboundSchema = ModifyAssistantRequest$outboundSchema;
   /** @deprecated use `ModifyAssistantRequest$Outbound` instead. */
   export type Outbound = ModifyAssistantRequest$Outbound;
+}
+
+export function modifyAssistantRequestToJSON(
+  modifyAssistantRequest: ModifyAssistantRequest,
+): string {
+  return JSON.stringify(
+    ModifyAssistantRequest$outboundSchema.parse(modifyAssistantRequest),
+  );
+}
+
+export function modifyAssistantRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyAssistantRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ModifyAssistantRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyAssistantRequest' from JSON`,
+  );
 }

@@ -4,8 +4,11 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { blobLikeSchema } from "../../types/blobs.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type CreateImageEditRequestImage = {
   fileName: string;
@@ -144,6 +147,26 @@ export namespace CreateImageEditRequestImage$ {
   export type Outbound = CreateImageEditRequestImage$Outbound;
 }
 
+export function createImageEditRequestImageToJSON(
+  createImageEditRequestImage: CreateImageEditRequestImage,
+): string {
+  return JSON.stringify(
+    CreateImageEditRequestImage$outboundSchema.parse(
+      createImageEditRequestImage,
+    ),
+  );
+}
+
+export function createImageEditRequestImageFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateImageEditRequestImage, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateImageEditRequestImage$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateImageEditRequestImage' from JSON`,
+  );
+}
+
 /** @internal */
 export const Mask$inboundSchema: z.ZodType<Mask, z.ZodTypeDef, unknown> = z
   .object({
@@ -185,6 +208,20 @@ export namespace Mask$ {
   export const outboundSchema = Mask$outboundSchema;
   /** @deprecated use `Mask$Outbound` instead. */
   export type Outbound = Mask$Outbound;
+}
+
+export function maskToJSON(mask: Mask): string {
+  return JSON.stringify(Mask$outboundSchema.parse(mask));
+}
+
+export function maskFromJSON(
+  jsonString: string,
+): SafeParseResult<Mask, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Mask$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Mask' from JSON`,
+  );
 }
 
 /** @internal */
@@ -236,6 +273,26 @@ export namespace CreateImageEditRequestModel$ {
   export const outboundSchema = CreateImageEditRequestModel$outboundSchema;
   /** @deprecated use `CreateImageEditRequestModel$Outbound` instead. */
   export type Outbound = CreateImageEditRequestModel$Outbound;
+}
+
+export function createImageEditRequestModelToJSON(
+  createImageEditRequestModel: CreateImageEditRequestModel,
+): string {
+  return JSON.stringify(
+    CreateImageEditRequestModel$outboundSchema.parse(
+      createImageEditRequestModel,
+    ),
+  );
+}
+
+export function createImageEditRequestModelFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateImageEditRequestModel, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateImageEditRequestModel$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateImageEditRequestModel' from JSON`,
+  );
 }
 
 /** @internal */
@@ -360,4 +417,22 @@ export namespace CreateImageEditRequest$ {
   export const outboundSchema = CreateImageEditRequest$outboundSchema;
   /** @deprecated use `CreateImageEditRequest$Outbound` instead. */
   export type Outbound = CreateImageEditRequest$Outbound;
+}
+
+export function createImageEditRequestToJSON(
+  createImageEditRequest: CreateImageEditRequest,
+): string {
+  return JSON.stringify(
+    CreateImageEditRequest$outboundSchema.parse(createImageEditRequest),
+  );
+}
+
+export function createImageEditRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateImageEditRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateImageEditRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateImageEditRequest' from JSON`,
+  );
 }

@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Always `other`.
@@ -87,4 +90,25 @@ export namespace OtherChunkingStrategyResponseParam$ {
     OtherChunkingStrategyResponseParam$outboundSchema;
   /** @deprecated use `OtherChunkingStrategyResponseParam$Outbound` instead. */
   export type Outbound = OtherChunkingStrategyResponseParam$Outbound;
+}
+
+export function otherChunkingStrategyResponseParamToJSON(
+  otherChunkingStrategyResponseParam: OtherChunkingStrategyResponseParam,
+): string {
+  return JSON.stringify(
+    OtherChunkingStrategyResponseParam$outboundSchema.parse(
+      otherChunkingStrategyResponseParam,
+    ),
+  );
+}
+
+export function otherChunkingStrategyResponseParamFromJSON(
+  jsonString: string,
+): SafeParseResult<OtherChunkingStrategyResponseParam, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      OtherChunkingStrategyResponseParam$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'OtherChunkingStrategyResponseParam' from JSON`,
+  );
 }

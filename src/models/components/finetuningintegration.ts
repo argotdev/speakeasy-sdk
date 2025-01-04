@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The type of the integration being enabled for the fine-tuning job
@@ -132,6 +135,20 @@ export namespace Wandb$ {
   export type Outbound = Wandb$Outbound;
 }
 
+export function wandbToJSON(wandb: Wandb): string {
+  return JSON.stringify(Wandb$outboundSchema.parse(wandb));
+}
+
+export function wandbFromJSON(
+  jsonString: string,
+): SafeParseResult<Wandb, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Wandb$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Wandb' from JSON`,
+  );
+}
+
 /** @internal */
 export const FineTuningIntegration$inboundSchema: z.ZodType<
   FineTuningIntegration,
@@ -169,4 +186,22 @@ export namespace FineTuningIntegration$ {
   export const outboundSchema = FineTuningIntegration$outboundSchema;
   /** @deprecated use `FineTuningIntegration$Outbound` instead. */
   export type Outbound = FineTuningIntegration$Outbound;
+}
+
+export function fineTuningIntegrationToJSON(
+  fineTuningIntegration: FineTuningIntegration,
+): string {
+  return JSON.stringify(
+    FineTuningIntegration$outboundSchema.parse(fineTuningIntegration),
+  );
+}
+
+export function fineTuningIntegrationFromJSON(
+  jsonString: string,
+): SafeParseResult<FineTuningIntegration, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FineTuningIntegration$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FineTuningIntegration' from JSON`,
+  );
 }

@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   VectorStoreFileObject,
   VectorStoreFileObject$inboundSchema,
@@ -77,4 +80,24 @@ export namespace ListVectorStoreFilesResponse$ {
   export const outboundSchema = ListVectorStoreFilesResponse$outboundSchema;
   /** @deprecated use `ListVectorStoreFilesResponse$Outbound` instead. */
   export type Outbound = ListVectorStoreFilesResponse$Outbound;
+}
+
+export function listVectorStoreFilesResponseToJSON(
+  listVectorStoreFilesResponse: ListVectorStoreFilesResponse,
+): string {
+  return JSON.stringify(
+    ListVectorStoreFilesResponse$outboundSchema.parse(
+      listVectorStoreFilesResponse,
+    ),
+  );
+}
+
+export function listVectorStoreFilesResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<ListVectorStoreFilesResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ListVectorStoreFilesResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListVectorStoreFilesResponse' from JSON`,
+  );
 }

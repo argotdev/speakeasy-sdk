@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Always `text`.
@@ -177,6 +180,20 @@ export namespace Three2$ {
   export type Outbound = Three2$Outbound;
 }
 
+export function three2ToJSON(three2: Three2): string {
+  return JSON.stringify(Three2$outboundSchema.parse(three2));
+}
+
+export function three2FromJSON(
+  jsonString: string,
+): SafeParseResult<Three2, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Three2$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Three2' from JSON`,
+  );
+}
+
 /** @internal */
 export const ThreeType$inboundSchema: z.ZodNativeEnum<typeof ThreeType> = z
   .nativeEnum(ThreeType);
@@ -232,6 +249,20 @@ export namespace ThreeImageUrl$ {
   export type Outbound = ThreeImageUrl$Outbound;
 }
 
+export function threeImageUrlToJSON(threeImageUrl: ThreeImageUrl): string {
+  return JSON.stringify(ThreeImageUrl$outboundSchema.parse(threeImageUrl));
+}
+
+export function threeImageUrlFromJSON(
+  jsonString: string,
+): SafeParseResult<ThreeImageUrl, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ThreeImageUrl$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ThreeImageUrl' from JSON`,
+  );
+}
+
 /** @internal */
 export const Three1$inboundSchema: z.ZodType<Three1, z.ZodTypeDef, unknown> = z
   .object({
@@ -276,6 +307,20 @@ export namespace Three1$ {
   export type Outbound = Three1$Outbound;
 }
 
+export function three1ToJSON(three1: Three1): string {
+  return JSON.stringify(Three1$outboundSchema.parse(three1));
+}
+
+export function three1FromJSON(
+  jsonString: string,
+): SafeParseResult<Three1, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Three1$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Three1' from JSON`,
+  );
+}
+
 /** @internal */
 export const Three$inboundSchema: z.ZodType<Three, z.ZodTypeDef, unknown> = z
   .union([
@@ -307,6 +352,20 @@ export namespace Three$ {
   export const outboundSchema = Three$outboundSchema;
   /** @deprecated use `Three$Outbound` instead. */
   export type Outbound = Three$Outbound;
+}
+
+export function threeToJSON(three: Three): string {
+  return JSON.stringify(Three$outboundSchema.parse(three));
+}
+
+export function threeFromJSON(
+  jsonString: string,
+): SafeParseResult<Three, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Three$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Three' from JSON`,
+  );
 }
 
 /** @internal */
@@ -354,6 +413,26 @@ export namespace CreateModerationRequestInput$ {
   export const outboundSchema = CreateModerationRequestInput$outboundSchema;
   /** @deprecated use `CreateModerationRequestInput$Outbound` instead. */
   export type Outbound = CreateModerationRequestInput$Outbound;
+}
+
+export function createModerationRequestInputToJSON(
+  createModerationRequestInput: CreateModerationRequestInput,
+): string {
+  return JSON.stringify(
+    CreateModerationRequestInput$outboundSchema.parse(
+      createModerationRequestInput,
+    ),
+  );
+}
+
+export function createModerationRequestInputFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateModerationRequestInput, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateModerationRequestInput$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateModerationRequestInput' from JSON`,
+  );
 }
 
 /** @internal */
@@ -405,6 +484,26 @@ export namespace CreateModerationRequestModel$ {
   export const outboundSchema = CreateModerationRequestModel$outboundSchema;
   /** @deprecated use `CreateModerationRequestModel$Outbound` instead. */
   export type Outbound = CreateModerationRequestModel$Outbound;
+}
+
+export function createModerationRequestModelToJSON(
+  createModerationRequestModel: CreateModerationRequestModel,
+): string {
+  return JSON.stringify(
+    CreateModerationRequestModel$outboundSchema.parse(
+      createModerationRequestModel,
+    ),
+  );
+}
+
+export function createModerationRequestModelFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateModerationRequestModel, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateModerationRequestModel$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateModerationRequestModel' from JSON`,
+  );
 }
 
 /** @internal */
@@ -460,4 +559,22 @@ export namespace CreateModerationRequest$ {
   export const outboundSchema = CreateModerationRequest$outboundSchema;
   /** @deprecated use `CreateModerationRequest$Outbound` instead. */
   export type Outbound = CreateModerationRequest$Outbound;
+}
+
+export function createModerationRequestToJSON(
+  createModerationRequest: CreateModerationRequest,
+): string {
+  return JSON.stringify(
+    CreateModerationRequest$outboundSchema.parse(createModerationRequest),
+  );
+}
+
+export function createModerationRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateModerationRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateModerationRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateModerationRequest' from JSON`,
+  );
 }

@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
 import * as components from "../components/index.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Return only events whose `effective_at` (Unix seconds) is in this range.
@@ -118,6 +121,20 @@ export namespace EffectiveAt$ {
   export type Outbound = EffectiveAt$Outbound;
 }
 
+export function effectiveAtToJSON(effectiveAt: EffectiveAt): string {
+  return JSON.stringify(EffectiveAt$outboundSchema.parse(effectiveAt));
+}
+
+export function effectiveAtFromJSON(
+  jsonString: string,
+): SafeParseResult<EffectiveAt, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => EffectiveAt$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'EffectiveAt' from JSON`,
+  );
+}
+
 /** @internal */
 export const ListAuditLogsRequest$inboundSchema: z.ZodType<
   ListAuditLogsRequest,
@@ -195,4 +212,22 @@ export namespace ListAuditLogsRequest$ {
   export const outboundSchema = ListAuditLogsRequest$outboundSchema;
   /** @deprecated use `ListAuditLogsRequest$Outbound` instead. */
   export type Outbound = ListAuditLogsRequest$Outbound;
+}
+
+export function listAuditLogsRequestToJSON(
+  listAuditLogsRequest: ListAuditLogsRequest,
+): string {
+  return JSON.stringify(
+    ListAuditLogsRequest$outboundSchema.parse(listAuditLogsRequest),
+  );
+}
+
+export function listAuditLogsRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ListAuditLogsRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ListAuditLogsRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ListAuditLogsRequest' from JSON`,
+  );
 }

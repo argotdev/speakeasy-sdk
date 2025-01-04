@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type ProjectUpdateRequest = {
   /**
@@ -45,4 +48,22 @@ export namespace ProjectUpdateRequest$ {
   export const outboundSchema = ProjectUpdateRequest$outboundSchema;
   /** @deprecated use `ProjectUpdateRequest$Outbound` instead. */
   export type Outbound = ProjectUpdateRequest$Outbound;
+}
+
+export function projectUpdateRequestToJSON(
+  projectUpdateRequest: ProjectUpdateRequest,
+): string {
+  return JSON.stringify(
+    ProjectUpdateRequest$outboundSchema.parse(projectUpdateRequest),
+  );
+}
+
+export function projectUpdateRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ProjectUpdateRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ProjectUpdateRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ProjectUpdateRequest' from JSON`,
+  );
 }

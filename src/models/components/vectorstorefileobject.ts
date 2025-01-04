@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   OtherChunkingStrategyResponseParam,
   OtherChunkingStrategyResponseParam$inboundSchema,
@@ -226,6 +229,26 @@ export namespace VectorStoreFileObjectLastError$ {
   export type Outbound = VectorStoreFileObjectLastError$Outbound;
 }
 
+export function vectorStoreFileObjectLastErrorToJSON(
+  vectorStoreFileObjectLastError: VectorStoreFileObjectLastError,
+): string {
+  return JSON.stringify(
+    VectorStoreFileObjectLastError$outboundSchema.parse(
+      vectorStoreFileObjectLastError,
+    ),
+  );
+}
+
+export function vectorStoreFileObjectLastErrorFromJSON(
+  jsonString: string,
+): SafeParseResult<VectorStoreFileObjectLastError, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => VectorStoreFileObjectLastError$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'VectorStoreFileObjectLastError' from JSON`,
+  );
+}
+
 /** @internal */
 export const VectorStoreFileObjectChunkingStrategy$inboundSchema: z.ZodType<
   VectorStoreFileObjectChunkingStrategy,
@@ -264,6 +287,27 @@ export namespace VectorStoreFileObjectChunkingStrategy$ {
     VectorStoreFileObjectChunkingStrategy$outboundSchema;
   /** @deprecated use `VectorStoreFileObjectChunkingStrategy$Outbound` instead. */
   export type Outbound = VectorStoreFileObjectChunkingStrategy$Outbound;
+}
+
+export function vectorStoreFileObjectChunkingStrategyToJSON(
+  vectorStoreFileObjectChunkingStrategy: VectorStoreFileObjectChunkingStrategy,
+): string {
+  return JSON.stringify(
+    VectorStoreFileObjectChunkingStrategy$outboundSchema.parse(
+      vectorStoreFileObjectChunkingStrategy,
+    ),
+  );
+}
+
+export function vectorStoreFileObjectChunkingStrategyFromJSON(
+  jsonString: string,
+): SafeParseResult<VectorStoreFileObjectChunkingStrategy, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      VectorStoreFileObjectChunkingStrategy$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'VectorStoreFileObjectChunkingStrategy' from JSON`,
+  );
 }
 
 /** @internal */
@@ -350,4 +394,22 @@ export namespace VectorStoreFileObject$ {
   export const outboundSchema = VectorStoreFileObject$outboundSchema;
   /** @deprecated use `VectorStoreFileObject$Outbound` instead. */
   export type Outbound = VectorStoreFileObject$Outbound;
+}
+
+export function vectorStoreFileObjectToJSON(
+  vectorStoreFileObject: VectorStoreFileObject,
+): string {
+  return JSON.stringify(
+    VectorStoreFileObject$outboundSchema.parse(vectorStoreFileObject),
+  );
+}
+
+export function vectorStoreFileObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<VectorStoreFileObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => VectorStoreFileObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'VectorStoreFileObject' from JSON`,
+  );
 }

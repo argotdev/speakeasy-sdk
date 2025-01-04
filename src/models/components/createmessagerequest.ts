@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
   AssistantToolsCode,
   AssistantToolsCode$inboundSchema,
@@ -185,6 +188,20 @@ export namespace Content2$ {
   export type Outbound = Content2$Outbound;
 }
 
+export function content2ToJSON(content2: Content2): string {
+  return JSON.stringify(Content2$outboundSchema.parse(content2));
+}
+
+export function content2FromJSON(
+  jsonString: string,
+): SafeParseResult<Content2, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Content2$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Content2' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateMessageRequestContent$inboundSchema: z.ZodType<
   CreateMessageRequestContent,
@@ -239,6 +256,26 @@ export namespace CreateMessageRequestContent$ {
   export type Outbound = CreateMessageRequestContent$Outbound;
 }
 
+export function createMessageRequestContentToJSON(
+  createMessageRequestContent: CreateMessageRequestContent,
+): string {
+  return JSON.stringify(
+    CreateMessageRequestContent$outboundSchema.parse(
+      createMessageRequestContent,
+    ),
+  );
+}
+
+export function createMessageRequestContentFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateMessageRequestContent, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateMessageRequestContent$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateMessageRequestContent' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateMessageRequestTools$inboundSchema: z.ZodType<
   CreateMessageRequestTools,
@@ -275,6 +312,24 @@ export namespace CreateMessageRequestTools$ {
   export const outboundSchema = CreateMessageRequestTools$outboundSchema;
   /** @deprecated use `CreateMessageRequestTools$Outbound` instead. */
   export type Outbound = CreateMessageRequestTools$Outbound;
+}
+
+export function createMessageRequestToolsToJSON(
+  createMessageRequestTools: CreateMessageRequestTools,
+): string {
+  return JSON.stringify(
+    CreateMessageRequestTools$outboundSchema.parse(createMessageRequestTools),
+  );
+}
+
+export function createMessageRequestToolsFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateMessageRequestTools, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateMessageRequestTools$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateMessageRequestTools' from JSON`,
+  );
 }
 
 /** @internal */
@@ -338,6 +393,20 @@ export namespace Attachments$ {
   export type Outbound = Attachments$Outbound;
 }
 
+export function attachmentsToJSON(attachments: Attachments): string {
+  return JSON.stringify(Attachments$outboundSchema.parse(attachments));
+}
+
+export function attachmentsFromJSON(
+  jsonString: string,
+): SafeParseResult<Attachments, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Attachments$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Attachments' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateMessageRequestMetadata$inboundSchema: z.ZodType<
   CreateMessageRequestMetadata,
@@ -366,6 +435,26 @@ export namespace CreateMessageRequestMetadata$ {
   export const outboundSchema = CreateMessageRequestMetadata$outboundSchema;
   /** @deprecated use `CreateMessageRequestMetadata$Outbound` instead. */
   export type Outbound = CreateMessageRequestMetadata$Outbound;
+}
+
+export function createMessageRequestMetadataToJSON(
+  createMessageRequestMetadata: CreateMessageRequestMetadata,
+): string {
+  return JSON.stringify(
+    CreateMessageRequestMetadata$outboundSchema.parse(
+      createMessageRequestMetadata,
+    ),
+  );
+}
+
+export function createMessageRequestMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateMessageRequestMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateMessageRequestMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateMessageRequestMetadata' from JSON`,
+  );
 }
 
 /** @internal */
@@ -440,4 +529,22 @@ export namespace CreateMessageRequest$ {
   export const outboundSchema = CreateMessageRequest$outboundSchema;
   /** @deprecated use `CreateMessageRequest$Outbound` instead. */
   export type Outbound = CreateMessageRequest$Outbound;
+}
+
+export function createMessageRequestToJSON(
+  createMessageRequest: CreateMessageRequest,
+): string {
+  return JSON.stringify(
+    CreateMessageRequest$outboundSchema.parse(createMessageRequest),
+  );
+}
+
+export function createMessageRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateMessageRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateMessageRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateMessageRequest' from JSON`,
+  );
 }

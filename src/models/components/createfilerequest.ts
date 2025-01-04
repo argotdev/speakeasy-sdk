@@ -3,8 +3,11 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { blobLikeSchema } from "../../types/blobs.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type CreateFileRequestFile = {
   fileName: string;
@@ -101,6 +104,24 @@ export namespace CreateFileRequestFile$ {
   export type Outbound = CreateFileRequestFile$Outbound;
 }
 
+export function createFileRequestFileToJSON(
+  createFileRequestFile: CreateFileRequestFile,
+): string {
+  return JSON.stringify(
+    CreateFileRequestFile$outboundSchema.parse(createFileRequestFile),
+  );
+}
+
+export function createFileRequestFileFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateFileRequestFile, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateFileRequestFile$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateFileRequestFile' from JSON`,
+  );
+}
+
 /** @internal */
 export const CreateFileRequestPurpose$inboundSchema: z.ZodNativeEnum<
   typeof CreateFileRequestPurpose
@@ -159,4 +180,22 @@ export namespace CreateFileRequest$ {
   export const outboundSchema = CreateFileRequest$outboundSchema;
   /** @deprecated use `CreateFileRequest$Outbound` instead. */
   export type Outbound = CreateFileRequest$Outbound;
+}
+
+export function createFileRequestToJSON(
+  createFileRequest: CreateFileRequest,
+): string {
+  return JSON.stringify(
+    CreateFileRequest$outboundSchema.parse(createFileRequest),
+  );
+}
+
+export function createFileRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateFileRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateFileRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateFileRequest' from JSON`,
+  );
 }

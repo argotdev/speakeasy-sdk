@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * `owner` or `reader`
@@ -81,4 +84,22 @@ export namespace UserRoleUpdateRequest$ {
   export const outboundSchema = UserRoleUpdateRequest$outboundSchema;
   /** @deprecated use `UserRoleUpdateRequest$Outbound` instead. */
   export type Outbound = UserRoleUpdateRequest$Outbound;
+}
+
+export function userRoleUpdateRequestToJSON(
+  userRoleUpdateRequest: UserRoleUpdateRequest,
+): string {
+  return JSON.stringify(
+    UserRoleUpdateRequest$outboundSchema.parse(userRoleUpdateRequest),
+  );
+}
+
+export function userRoleUpdateRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<UserRoleUpdateRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => UserRoleUpdateRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'UserRoleUpdateRequest' from JSON`,
+  );
 }

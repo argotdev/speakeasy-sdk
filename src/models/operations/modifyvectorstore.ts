@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
 import * as components from "../components/index.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type ModifyVectorStoreRequest = {
   /**
@@ -61,4 +64,22 @@ export namespace ModifyVectorStoreRequest$ {
   export const outboundSchema = ModifyVectorStoreRequest$outboundSchema;
   /** @deprecated use `ModifyVectorStoreRequest$Outbound` instead. */
   export type Outbound = ModifyVectorStoreRequest$Outbound;
+}
+
+export function modifyVectorStoreRequestToJSON(
+  modifyVectorStoreRequest: ModifyVectorStoreRequest,
+): string {
+  return JSON.stringify(
+    ModifyVectorStoreRequest$outboundSchema.parse(modifyVectorStoreRequest),
+  );
+}
+
+export function modifyVectorStoreRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ModifyVectorStoreRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ModifyVectorStoreRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ModifyVectorStoreRequest' from JSON`,
+  );
 }

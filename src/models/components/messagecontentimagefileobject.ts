@@ -4,7 +4,10 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Always `image_file`.
@@ -148,6 +151,20 @@ export namespace ImageFile$ {
   export type Outbound = ImageFile$Outbound;
 }
 
+export function imageFileToJSON(imageFile: ImageFile): string {
+  return JSON.stringify(ImageFile$outboundSchema.parse(imageFile));
+}
+
+export function imageFileFromJSON(
+  jsonString: string,
+): SafeParseResult<ImageFile, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ImageFile$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ImageFile' from JSON`,
+  );
+}
+
 /** @internal */
 export const MessageContentImageFileObject$inboundSchema: z.ZodType<
   MessageContentImageFileObject,
@@ -193,4 +210,24 @@ export namespace MessageContentImageFileObject$ {
   export const outboundSchema = MessageContentImageFileObject$outboundSchema;
   /** @deprecated use `MessageContentImageFileObject$Outbound` instead. */
   export type Outbound = MessageContentImageFileObject$Outbound;
+}
+
+export function messageContentImageFileObjectToJSON(
+  messageContentImageFileObject: MessageContentImageFileObject,
+): string {
+  return JSON.stringify(
+    MessageContentImageFileObject$outboundSchema.parse(
+      messageContentImageFileObject,
+    ),
+  );
+}
+
+export function messageContentImageFileObjectFromJSON(
+  jsonString: string,
+): SafeParseResult<MessageContentImageFileObject, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MessageContentImageFileObject$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MessageContentImageFileObject' from JSON`,
+  );
 }

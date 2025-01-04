@@ -3,7 +3,10 @@
  */
 
 import * as z from "zod";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * The type of the tool. If type is `function`, the function name must be set
@@ -96,6 +99,26 @@ export namespace AssistantsNamedToolChoiceFunction$ {
   export type Outbound = AssistantsNamedToolChoiceFunction$Outbound;
 }
 
+export function assistantsNamedToolChoiceFunctionToJSON(
+  assistantsNamedToolChoiceFunction: AssistantsNamedToolChoiceFunction,
+): string {
+  return JSON.stringify(
+    AssistantsNamedToolChoiceFunction$outboundSchema.parse(
+      assistantsNamedToolChoiceFunction,
+    ),
+  );
+}
+
+export function assistantsNamedToolChoiceFunctionFromJSON(
+  jsonString: string,
+): SafeParseResult<AssistantsNamedToolChoiceFunction, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AssistantsNamedToolChoiceFunction$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AssistantsNamedToolChoiceFunction' from JSON`,
+  );
+}
+
 /** @internal */
 export const AssistantsNamedToolChoice$inboundSchema: z.ZodType<
   AssistantsNamedToolChoice,
@@ -135,4 +158,22 @@ export namespace AssistantsNamedToolChoice$ {
   export const outboundSchema = AssistantsNamedToolChoice$outboundSchema;
   /** @deprecated use `AssistantsNamedToolChoice$Outbound` instead. */
   export type Outbound = AssistantsNamedToolChoice$Outbound;
+}
+
+export function assistantsNamedToolChoiceToJSON(
+  assistantsNamedToolChoice: AssistantsNamedToolChoice,
+): string {
+  return JSON.stringify(
+    AssistantsNamedToolChoice$outboundSchema.parse(assistantsNamedToolChoice),
+  );
+}
+
+export function assistantsNamedToolChoiceFromJSON(
+  jsonString: string,
+): SafeParseResult<AssistantsNamedToolChoice, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => AssistantsNamedToolChoice$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'AssistantsNamedToolChoice' from JSON`,
+  );
 }

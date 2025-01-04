@@ -4,6 +4,9 @@
 
 import * as z from "zod";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 /**
  * Usage statistics related to the run step. This value will be `null` while the run step's status is `in_progress`.
@@ -75,4 +78,22 @@ export namespace RunStepCompletionUsage$ {
   export const outboundSchema = RunStepCompletionUsage$outboundSchema;
   /** @deprecated use `RunStepCompletionUsage$Outbound` instead. */
   export type Outbound = RunStepCompletionUsage$Outbound;
+}
+
+export function runStepCompletionUsageToJSON(
+  runStepCompletionUsage: RunStepCompletionUsage,
+): string {
+  return JSON.stringify(
+    RunStepCompletionUsage$outboundSchema.parse(runStepCompletionUsage),
+  );
+}
+
+export function runStepCompletionUsageFromJSON(
+  jsonString: string,
+): SafeParseResult<RunStepCompletionUsage, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RunStepCompletionUsage$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RunStepCompletionUsage' from JSON`,
+  );
 }
